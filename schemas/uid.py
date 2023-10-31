@@ -1,5 +1,6 @@
-from pydantic import  BaseModel, Integer, String
+from pydantic import  BaseModel
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey, Nullable
+from datetime import datetime
 from typing import Optional
 
 class uid(BaseModel):
@@ -11,10 +12,6 @@ class uid(BaseModel):
     trangthai_id : Optional[int]
     type_id : Optional [int]
     ghichu : Optional[str]
-    Vaiao: Boolean
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    updated_at = Column(
-        DateTime,
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow,
-    )
+    Vaiao: bool
+    created_at: datetime
+    updated_at: datetime
