@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+
 class model_has_tags(BaseModel):
     id : Optional[int]
     model_id : Optional[int]
