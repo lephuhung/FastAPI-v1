@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 
 class ctnv(Base):
     """
-    Database model for an uid
+    Database model for an ctnv
     """
 
     id = Column(Integer, primary_key=True, index=True)
