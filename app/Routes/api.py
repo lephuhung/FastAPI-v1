@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.Routes.pages import page
+from app.Routes import pages
 api_router = APIRouter()
 
-api_router.include_router(page.router)
+api_router.include_router(pages.router)
