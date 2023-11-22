@@ -2,11 +2,11 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Security
 from typing import Annotated
 router = APIRouter(prefix="/uid", tags=["uid"])
 
-@router.get("/")
+@router.get("")
 async def get():
     return {'123':'123'}
 
-@router.post("/")
+@router.post("")
 async def post():
     return {'123':'123'}
 

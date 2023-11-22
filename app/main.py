@@ -17,7 +17,7 @@ app.include_router(api_router, prefix='/api')
 #     if not database.is_connected:
 #         await database.connect()
 #     # create a dummy entry
-#     await User.objects.get_or_create(email="test@test.com")
+#     await print('database connect')
 
 
 # @app.on_event("shutdown")

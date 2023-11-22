@@ -16,7 +16,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.fastapi.rule=Host(`fastapi.localhost`)"
   db:
-    image: postgres:15-alpine
+    build: 
+      context: .
+      dockerfile: postgres.dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
