@@ -1,8 +1,8 @@
 from functools import lru_cache
 from typing import Any, Dict, Optional
 
-from pydantic import BaseSettings, PostgresDsn, validator
-
+from pydantic import PostgresDsn, validator
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "FastAPI Role Based Access Control Auth Service"
@@ -16,13 +16,12 @@ class Settings(BaseSettings):
     FIRST_SUPER_ADMIN_EMAIL: str
     FIRST_SUPER_ADMIN_PASSWORD: str
     FIRST_SUPER_ADMIN_ACCOUNT_NAME: str
-
     DB_HOST: str
     DB_USER: str
     DB_PASSWORD: str
     DB_NAME: str
 
-    SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
+    SQLALCHEMY_DATABASE_URI: Optional[str] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(
