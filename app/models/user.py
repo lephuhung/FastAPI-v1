@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class user(Base):
+class User(Base):
     """
     Database model for an uid
     """
