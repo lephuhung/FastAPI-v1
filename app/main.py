@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from app.Routes.api import api_router
 from app.db.init_db import init_db
+from sqlalchemy.orm import Session
 from app.Routes import deps
 app = FastAPI(title="FastAPI, Docker, and Traefik")
 app.add_middleware(
@@ -14,9 +15,9 @@ app.add_middleware(
 app.include_router(api_router, prefix='/api')
 
 
-@app.on_event("startup")
-async def startup():
-   init_db(deps.get_db())
+# @app.on_event("startup")
+# async def startup():
+#    init_db(deps.get_db())
 
 
 # @app.on_event("shutdown")

@@ -9,3 +9,5 @@ python-multipart==0.0.6
 requests==2.31.0
 pytz==2023.3
 pydantic-settings==2.1.0
+inflect ==7.0.0
+sqlalchemy_utils ==0.41.1

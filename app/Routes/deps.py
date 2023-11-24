@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_db() -> Generator:
+def get_db():
     try:
         db = SessionLocal()
         yield db

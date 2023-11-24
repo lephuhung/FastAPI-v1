@@ -7,7 +7,8 @@ from datetime import datetime
 
 def init_db(db: Session)-> None:
     salt= get_salt()
-    user= crud.user.get_by_name(db, settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
+    # crud.crud_user.get_by_name(db=db, username= settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
+    user= crud.crud_user.get_by_name(db=db, username=settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
     if user is None:
         model_user_admin= schemas.user.UserCreate(
             username= settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME,
@@ -17,4 +18,4 @@ def init_db(db: Session)-> None:
             created_at= datetime.timestamp(),
             updated_at= datetime.timestamp()
         )
-        crud.user.create(model_user_admin)
+        crud.crud_user.create(model_user_admin) 
