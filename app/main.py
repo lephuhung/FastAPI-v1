@@ -4,6 +4,15 @@ from app.Routes.api import api_router
 from app.db.init_db import init_db
 from sqlalchemy.orm import Session
 from app.Routes import deps
+from app.core import sercurity, config
+from typing import Annotated
+from app import models, schemas
+from datetime import timedelta
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    OAuth2PasswordRequestForm,
+    SecurityScopes,
+)
 app = FastAPI(title="FastAPI, Docker, and Traefik")
 app.add_middleware(
     CORSMiddleware,
@@ -15,12 +24,3 @@ app.add_middleware(
 app.include_router(api_router, prefix='/api')
 
 
-# @app.on_event("startup")
-# async def startup():
-#    init_db(deps.get_db())
-
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     if database.is_connected:
-#         await database.disconnect()

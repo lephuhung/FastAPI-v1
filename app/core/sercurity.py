@@ -5,6 +5,8 @@ import string
 from app.core.config import settings
 from jose import jwt
 from passlib.context import CryptContext
+from app import schemas, models, crud
+from sqlalchemy.orm import Session
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -42,3 +44,11 @@ def generate_random_string(length=8):
 def get_salt()->str:
     salt= generate_random_string()
     return salt
+
+def authenticate_user(username: str, password:str, db: Session):
+    user = crud.crud_user.get_by_name(db=db, username=username)
+    if not user:
+        return False
+    if not verify_password(f'{password}{user.salt}', user.password):
+        return False
+    return user

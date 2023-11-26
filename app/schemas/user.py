@@ -8,15 +8,13 @@ from pydantic import UUID4, BaseModel, EmailStr
 # Shared properties
 class UserBase(BaseModel):
     username: Optional[str]
-    active: Optional[bool] = True
 
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     salt: Optional[str]
+    active: Optional[bool] = True
     password: str
-    # created_at: datetime
-    # updated_at: datetime
 
 
 # Properties to receive via API on update
@@ -25,11 +23,9 @@ class UserUpdate(UserBase):
     updated_at: datetime
 
 
-# class UserInDBBase(UserBase):
-#     id: UUID4
-#     user_role: Optional[UserRole]
-#     created_at: datetime
-#     updated_at: datetime
+class UserOutDB(UserCreate):
+    username: Optional[str]
+    active: Optional[bool]
 
 #     class Config:
 #         orm_mode = True
@@ -40,6 +36,16 @@ class UserUpdate(UserBase):
 #     pass
 
 
-# # Additional properties stored in DB
-# class UserInDB(UserInDBBase):
-#     hashed_password: str
+# Additional properties stored in DB
+class UserInDB(UserBase):
+    password: str
+
+class AcessToken(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class AcessTokenData(BaseModel):
+    username: str | None = None
+    Role: list[str] = []
+    Permission: list[str] = []

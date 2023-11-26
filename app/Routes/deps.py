@@ -35,57 +35,57 @@ def get_db():
         db.close()
 
 
-# def get_current_user(
-#     security_scopes: SecurityScopes,
-#     db: Session = Depends(get_db),
-#     token: str = Depends(reusable_oauth2),
-# ) -> models.user:
-#     if security_scopes.scopes:
-#         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
-#     else:
-#         authenticate_value = "Bearer"
-#     credentials_exception = HTTPException(
-#         status_code=401,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": authenticate_value},
-#     )
-#     try:
-#         payload = jwt.decode(
-#             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
-#         )
-#         if payload.get("id") is None:
-#             raise credentials_exception
-#         token_data = schemas.TokenPayload(**payload)
-#     except (jwt.JWTError, ValidationError):
-#         logger.error("Error Decoding Token", exc_info=True)
-#         raise HTTPException(
-#             status_code=status.HTTP_403_FORBIDDEN,
-#             detail="Could not validate credentials",
-#         )
-#     user = crud.user.get(db, id=token_data.id)
-#     if not user:
-#         raise credentials_exception
-#     if security_scopes.scopes and not token_data.role:
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Not enough permissions",
-#             headers={"WWW-Authenticate": authenticate_value},
-#         )
-#     if (
-#         security_scopes.scopes
-#         and token_data.role not in security_scopes.scopes
-#     ):
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Not enough permissions",
-#             headers={"WWW-Authenticate": authenticate_value},
-#         )
-#     return user
+def get_current_user(
+    security_scopes: SecurityScopes,
+    db: Session = Depends(get_db),
+    token: str = Depends(reusable_oauth2),
+) -> models.user:
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
+    else:
+        authenticate_value = "Bearer"
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
+        if payload.get("username") is None:
+            raise credentials_exception
+        token_data = schemas.user.AcessTokenData(**payload)
+    except (jwt.JWTError, ValidationError):
+        logger.error("Error Decoding Token", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+    user = crud.crud_user.get(db, id=2)
+    if not user:
+        raise credentials_exception
+    if security_scopes.scopes and not token_data.Role:
+        raise HTTPException(
+            status_code=401,
+            detail="Not enough permissions",
+            headers={"WWW-Authenticate": authenticate_value},
+        )
+    if (
+        security_scopes.scopes
+        and token_data.Role not in security_scopes.scopes
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Not enough permissions",
+            headers={"WWW-Authenticate": authenticate_value},
+        )
+    return user
 
 
-# def get_current_active_user(
-#     current_user: models.User = Security(get_current_user, scopes=[],),
-# ) -> models.User:
-#     if not crud.user.is_active(current_user):
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user
+def get_current_active_user(
+    current_user: schemas.user.UserCreate = Security(get_current_user, scopes=[],),
+) -> models.user:
+    if not crud.crud_user.is_active(current_user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
