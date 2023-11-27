@@ -27,13 +27,7 @@ class UserOutDB(UserCreate):
     username: Optional[str]
     active: Optional[bool]
 
-#     class Config:
-#         orm_mode = True
 
-
-# # Additional properties to return via API
-# class User(UserInDBBase):
-#     pass
 
 
 # Additional properties stored in DB
@@ -46,6 +40,7 @@ class AcessToken(BaseModel):
 
 
 class AcessTokenData(BaseModel):
+    id: int
     username: str | None = None
-    Role: list[str] = []
-    Permission: list[str] = []
+    role: list[str] = []
+    permission: list[str] = []

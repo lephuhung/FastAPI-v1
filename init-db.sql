@@ -206,5 +206,5 @@ CREATE TABLE "user" (
   "salt" varchar,
   "active" varchar,
   "created_at" timestamp,
-  "uptimestampd_at" timestamp
+  "updated_at" timestamp
 );

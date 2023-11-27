@@ -62,25 +62,23 @@ def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = crud.crud_user.get(db, id=2)
+    user = crud.crud_user.get(db, token_data.id)
     if not user:
         raise credentials_exception
-    if security_scopes.scopes and not token_data.Role:
+    if security_scopes.scopes and not token_data.role:
         raise HTTPException(
             status_code=401,
             detail="Not enough permissions",
             headers={"WWW-Authenticate": authenticate_value},
         )
-    if (
-        security_scopes.scopes
-        and token_data.Role not in security_scopes.scopes
-    ):
-        raise HTTPException(
-            status_code=401,
-            detail="Not enough permissions",
-            headers={"WWW-Authenticate": authenticate_value},
-        )
-    return user
+    for scope in security_scopes.scopes:
+        if scope in token_data.role:
+            return user
+    raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not enough permissions",
+                headers={"WWW-Authenticate": authenticate_value},
+            )
 
 
 def get_current_active_user(

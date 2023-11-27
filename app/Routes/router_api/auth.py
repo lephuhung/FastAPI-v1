@@ -22,7 +22,7 @@ async def login_for_access_token(
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     access_token_expires = timedelta(minutes=config.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = sercurity.create_access_token(
-        subject={"id": 2, "username": user.username, "Role": ["guest"], "Permission":[]},
+        subject={"id": user.id, "username": user.username, "role": ["admin"], "permission":[]},
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
