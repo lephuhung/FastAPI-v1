@@ -1,12 +1,13 @@
 from pydantic import  BaseModel
 
 
-class AcessToken(BaseModel):
+class AccessToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class AcessTokenData(BaseModel):
+class AccessTokenData(BaseModel):
+    id: int
     username: str | None = None
-    Role: list[str] = []
-    Permission: list[str] = []
+    role: list[str] = []
+    permission: list[str] = []

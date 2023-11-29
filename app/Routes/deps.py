@@ -11,7 +11,7 @@ from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
-
+from app.schemas.access_token import AccessTokenData
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/access-token",
     scopes={
@@ -55,7 +55,7 @@ def get_current_user(
         )
         if payload.get("username") is None:
             raise credentials_exception
-        token_data = schemas.user.AcessTokenData(**payload)
+        token_data = AccessTokenData(**payload)
     except (jwt.JWTError, ValidationError):
         logger.error("Error Decoding Token", exc_info=True)
         raise HTTPException(
