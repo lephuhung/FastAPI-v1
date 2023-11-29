@@ -51,14 +51,11 @@ async def post(
             status_code=400,
             detail="Username Exist"
         )
-    
-    
-    
 
-@router.get("/")
-async def update():
-    return {'123':'123'}
-
-@router.delete("/{uid}")
-async def delete(uid: Annotated[int, 0]):
-    return {'123':uid}
+# @router.get("/get_all")
+# async def get_all (
+#     db: Session = Depends(deps.get_db),
+#     current_user: models.user.User = Security(deps.get_current_active_user(), scopes=[])
+# ):
+#     id = current_user.get('id')
+#     Users= crud.crud_user.get_all()

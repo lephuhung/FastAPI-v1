@@ -2,25 +2,20 @@ class Role:
     """
     Constants for the various roles scoped in the application ecosystem
     """
-
-    GUEST = {
-        "name": "GUEST",
-        "description": "A Guest Account",
-    }
-    ACCOUNT_ADMIN = {
-        "name": "ACCOUNT_ADMIN",
+    PA05 = {
+        "name": "PA05",
         "description": "Primary Administrator/Superuser For an Account",
     }
 
-    ACCOUNT_MANAGER = {
-        "name": "ACCOUNT_MANAGER",
+    PHONG_CAT = {
+        "name": "PHONG_CAT",
         "description": "Day to Day Administrator of Events For an Account",
     }
-    ADMIN = {
-        "name": "ADMIN",
+    CA_HUYEN = {
+        "name": "CA_HUYEN",
         "description": "Admin of Application Ecosystem",
     }
-    SUPER_ADMIN = {
-        "name": "SUPER_ADMIN",
+    CAPDOI = {
+        "name": "CAPDOI",
         "description": "Super Administrator of Application Ecosystem",
     }

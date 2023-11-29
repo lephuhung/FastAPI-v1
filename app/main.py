@@ -8,6 +8,8 @@ from app.core import sercurity, config
 from typing import Annotated
 from app import models, schemas
 from datetime import timedelta
+from app.db.session import SessionLocal
+
 from fastapi.security import (
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,
@@ -23,4 +25,10 @@ app.add_middleware(
 )
 app.include_router(api_router, prefix='/api')
 
+def init() -> None:
+    db = SessionLocal()
+    init_db(db)
 
+@app.on_event("startup")
+async def startup_event():
+    init()

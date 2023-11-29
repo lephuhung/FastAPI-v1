@@ -14,13 +14,13 @@ from sqlalchemy.orm import Session
 from app.schemas.access_token import AccessTokenData
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/access-token",
-    scopes={
-        Role.GUEST["name"]: Role.GUEST["description"],
-        Role.ACCOUNT_ADMIN["name"]: Role.ACCOUNT_ADMIN["description"],
-        Role.ACCOUNT_MANAGER["name"]: Role.ACCOUNT_MANAGER["description"],
-        Role.ADMIN["name"]: Role.ADMIN["description"],
-        Role.SUPER_ADMIN["name"]: Role.SUPER_ADMIN["description"],
-    },
+    # scopes={
+    #     Role.GUEST["name"]: Role.GUEST["description"],
+    #     Role.ACCOUNT_ADMIN["name"]: Role.ACCOUNT_ADMIN["description"],
+    #     Role.ACCOUNT_MANAGER["name"]: Role.ACCOUNT_MANAGER["description"],
+    #     Role.ADMIN["name"]: Role.ADMIN["description"],
+    #     Role.SUPER_ADMIN["name"]: Role.SUPER_ADMIN["description"],
+    # },
 )
 
 logging.basicConfig(level=logging.INFO)
