@@ -12,7 +12,7 @@ class Donvi(Base):
     Database model for an donvi
     """
     __tablename__ = 'donvi'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
     name = Column(String(255))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(

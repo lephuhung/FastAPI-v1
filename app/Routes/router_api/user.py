@@ -13,7 +13,7 @@ from fastapi.security import (
 )
 
 router = APIRouter(prefix="/user", tags=["user"])
-
+# Migrate accounts super admin
 @router.get("")
 async def get(db: Session = Depends(deps.get_db) ):
     user = crud.crud_user.get_by_name(db=db, username=settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
@@ -28,7 +28,7 @@ async def get(db: Session = Depends(deps.get_db) ):
         crud.crud_user.create(db, obj_in=model_user_admin) 
         return model_user_admin
 
-
+# Create new User
 @router.post("/create")
 async def post(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], 

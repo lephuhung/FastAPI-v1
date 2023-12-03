@@ -12,7 +12,7 @@ class User(Base):
     Database model for an uid
     """
     __tablename__ = 'user'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
     username = Column(String(255),nullable=False)
     password = Column(String(255),nullable=False) 
     salt = Column(String(20), nullable=False)
@@ -23,3 +23,4 @@ class User(Base):
         default=datetime.datetime.now(),
         onupdate=datetime.datetime.now(),
     )
+    user_donvi = relationship("user_donvi", back_populates="user")

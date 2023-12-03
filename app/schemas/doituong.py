@@ -1,6 +1,5 @@
-from pydantic import UUID4, BaseModel, Datetime, Boolean
+from pydantic import UUID4, BaseModel, Boolean, datetime
 from typing import Optional
-from datetime import datetime
 
 
 class doituong(BaseModel):
