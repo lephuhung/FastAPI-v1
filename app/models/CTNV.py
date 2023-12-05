@@ -12,7 +12,7 @@ class ctnv(Base):
     Database model for an ctnv
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     ctnv_name = Column(String(255))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(

@@ -12,7 +12,7 @@ class Doituong(Base):
     Database model for an Doituong
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     name = Column(String(255))
     CMND = Column(String(20), default=Nullable)
     CCCD = Column(String(20), default=Nullable)

@@ -12,7 +12,7 @@ class trangthai_hoinhom(Base):
     Database model for an trangthai_hoinhom
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     trangthai_uid = Column(Integer, ForeignKey('trangthai.id'), nullable=False)
     uid = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

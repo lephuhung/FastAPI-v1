@@ -12,7 +12,7 @@ class trichtin(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     uid = Column(String(20), ForeignKey('uid.uid'), nullable=False)
     ghichu_noidung = Column(String(1000), ForeignKey('uid.uid'), nullable=False) 
     nhanxet = Column(String(255), nullable= True)

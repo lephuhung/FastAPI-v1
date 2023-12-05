@@ -12,7 +12,7 @@ class trangthai(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     trangtha_name = Column(String(255))
     color_id = Column(Integer, ForeignKey('color.id'))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

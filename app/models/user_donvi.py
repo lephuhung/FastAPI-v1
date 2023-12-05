@@ -13,7 +13,7 @@ class user_donvi(Base):
     Database model for an user_donvi table
     """
     __tablename__ = 'user_donvi'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     user_id = Column(UUID(as_uuid=True),ForeignKey("user.id"),primary_key=True,nullable=False)
     donvi_id = Column(UUID(as_uuid=True),ForeignKey("donvi.id"),primary_key=True,nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

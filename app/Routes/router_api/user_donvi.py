@@ -5,8 +5,12 @@ from app.Routes import deps
 from app.core.Utils import return_json_data
 from app.crud.crud_user_donvi import CRUDUser_donvi
 from pydantic import UUID4
-from app.schemas.user_donvi import userdonvioutDB
-
+from app.schemas.user_donvi import userdonvioutDB, UserDonviCreate
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    OAuth2PasswordRequestForm,
+    SecurityScopes,
+)
 router = APIRouter(prefix="/usr-dvi", tags=["usr-dvi"])
 
 # @router.get("")
@@ -35,3 +39,12 @@ async def count_user_by_donvi(uuid: UUID4, db: Session = Depends(deps.get_db)):
 async def count_all_user_by_donvi(db: Session = Depends(deps.get_db)):
     data= CRUDUser_donvi.count_all_user_in_donvi(db)
     return return_json_data(data)
+
+#create new user donvi
+@router.post("/create-new-user")
+async def create_new_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session= Depends(deps.get_db)):
+    data = UserDonviCreate(
+        user_id= form_data.user_id,
+        donvi_id=form_data.donvi_id
+    )
+    return CRUDUser_donvi.create_user(data)

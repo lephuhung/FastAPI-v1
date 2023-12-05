@@ -12,7 +12,7 @@ class UID(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     uid = Column(String(20))
     name = Column(String(255))
     reaction = Column(Integer)

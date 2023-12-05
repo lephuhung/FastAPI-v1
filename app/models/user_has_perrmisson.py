@@ -12,7 +12,7 @@ class user_has_permissions(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     permission_id = Column(Integer, ForeignKey('permission.id'), nullable=False) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

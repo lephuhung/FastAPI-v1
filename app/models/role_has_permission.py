@@ -12,7 +12,7 @@ class role_has_permission(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
     permission_id = Column(String(20), ForeignKey('permission.uid'), nullable=False) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

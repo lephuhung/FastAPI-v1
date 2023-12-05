@@ -12,7 +12,7 @@ class vaiao(Base):
     Database model for an uid
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     uid_hoinhom = Column(String(20), ForeignKey('uid.uid'), nullable=False)
     uid_vaiao = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
     active = Column(Boolean, default=False)

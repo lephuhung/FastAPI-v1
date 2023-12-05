@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, joinedload, aliased
 from sqlalchemy import func
 from app.schemas.user_donvi import UserDonviCreate, UserDonviUpdate
 from pydantic import UUID4
+from app import crud
 import json
 class CRUDUser_Donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
     # View detail user in Donvi
@@ -37,5 +38,7 @@ class CRUDUser_Donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
         user_count_by_donvi = db.query(Donvi.name, func.count(user_donvi.user_id).label('user_count')).join(user_donvi).group_by(Donvi.name).all()
         result_dict_list = [{'Donvi': name ,'Number_User': user_count} for name,user_count in user_count_by_donvi]
         return result_dict_list
-        
+    #Create test
+    def create_user(self, data: UserDonviCreate, db: Session):
+        return crud.CRUDUser_donvi.create(db, obj_in= data)
 CRUDUser_donvi = CRUDUser_Donvi(user_donvi) 

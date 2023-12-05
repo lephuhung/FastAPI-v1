@@ -12,7 +12,7 @@ class Doituong_UID(Base):
     Database model for an Doituong UUID
     """
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     doituong_id = Column(Integer, ForeignKey("doituong.id"))
     uid = Column(String(20) )
     moiquanhe_id= Column(Integer, ForeignKey("moiquanhe.id"))
