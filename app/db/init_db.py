@@ -2,6 +2,8 @@ from app import crud, schemas, models
 from app.schemas.user_donvi import UserDonviCreate
 from app.core.sercurity import get_salt, get_password_hash
 from app.constants.role import Role
+from app.schemas.role import RoleCreate, RoleUpdate
+from app.schemas.permission import PermissionCreate, PermissionUpdate
 from app.core.config import settings
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -48,5 +50,19 @@ def init_db(db: Session)-> None:
         crud.CRUDUser_donvi.create(db, obj_in=user_item)
 
     # Create Role
-
+    roles= ["superadmin", "admin", "Phong", "CAH", "DOI" ]
+    for item in roles:
+        role = RoleCreate(name=item)
+        crud.CURD_Role.create(db, obj_in=role)
     # Create Permission
+    permissions= ["user.read", "user.update", "user.delete", "user.create", "role.read", "role.update", "role.delete", "role.create", 
+                    "ctnv.read", "ctnv.update", "ctnv.delete", "ctnv.create", "doituong.create", "doituong.update", "doituong.delete", "doituong.read"
+                    "tags.read", "tags.update", "tags.delete", "tags.create", "tinhchat.create", "tinhchat.update", "tinhchat.delete", "tinhchat.create"
+                    "trangthai.read", "trangthai.update", "trangthai.delete", "trangthai.create", "trichtin.create", "trichtin.update", "trichtin.delete", "trichtin.read",
+                    "uid.read", "uid.delete", "uid.create", "uid.update"
+                     ]
+    for item in permissions:
+        per = PermissionCreate(name=item)
+        crud.CURD_Permission.create(db, obj_in=per)
+    # Create permissions of role
+    roleinDB= crud.CURD_Role.get_roleid_by_name(name="superadmin", db=db)

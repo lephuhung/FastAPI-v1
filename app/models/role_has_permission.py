@@ -2,7 +2,7 @@ import datetime
 from uuid import uuid4
 
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey, Nullable
+from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -13,8 +13,8 @@ class role_has_permission(Base):
     """
 
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
-    role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
-    permission_id = Column(String(20), ForeignKey('permission.uid'), nullable=False) 
+    role_id = Column(Integer, ForeignKey('Role.id'), nullable=False)
+    permission_id = Column(Integer, ForeignKey('Permission.id'), nullable=False) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,
