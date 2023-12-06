@@ -40,8 +40,7 @@ CREATE TABLE "UID" (
   "ghichu" varchar,
   "Vaiao" boolean,
   "created_at" timestamp,
-  "updated_at" timestamp,
-  PRIMARY KEY ("id", "uid")
+  "updated_at" timestamp
 );
 
 CREATE TABLE "Doituong_UID" (
@@ -189,7 +188,7 @@ CREATE TABLE "user_has_permissions" (
 CREATE TABLE "user_has_role" (
   "id" SERIAL PRIMARY KEY,
   "user_id" uuid,
-  "role" uuid,
+  "role_id" uuid,
   "created_at" timestamp,
   "updated_at" timestamp
 );

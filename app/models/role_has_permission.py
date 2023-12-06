@@ -7,11 +7,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class role_has_permission(Base):
+class Role_has_permission(Base):
     """
     Database model for an uid
     """
-
+    __tablename__='role_has_permission'
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     role_id = Column(Integer, ForeignKey('Role.id'), nullable=False)
     permission_id = Column(Integer, ForeignKey('Permission.id'), nullable=False) 
@@ -21,4 +21,4 @@ class role_has_permission(Base):
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
     )
-    permission = relationship("role", back_populates="permission")
+    # permission = relationship("role", back_populates="permission")

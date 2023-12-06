@@ -41,4 +41,5 @@ class CRUDUser_Donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
     #Create test
     def create_user(self, data: UserDonviCreate, db: Session):
         return crud.CRUDUser_donvi.create(db, obj_in= data)
+    
 CRUDUser_donvi = CRUDUser_Donvi(user_donvi) 
