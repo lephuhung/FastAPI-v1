@@ -1,6 +1,6 @@
 import logging
 from typing import Generator
-
+from pydantic import UUID4
 from app import crud, models, schemas
 from app.constants.role import Role
 from app.core import sercurity
@@ -9,6 +9,7 @@ from app.db.session import SessionLocal
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jose import jwt
+from app.models.role_has_permission import Role_has_permission
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from app.schemas.access_token import AccessTokenData
@@ -72,7 +73,9 @@ def get_current_user(
             headers={"WWW-Authenticate": authenticate_value},
         )
     for scope in security_scopes.scopes:
-        if scope in token_data.role:
+        print(scope)
+        print(token_data.role[0])
+        if check_permission_in_role(scope, role_id=token_data.role[0], db=db):
             return user
     raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -87,3 +90,9 @@ def get_current_active_user(
     if not crud.crud_user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+def check_permission_in_role(permission_id: str, role_id: UUID4, db: Session):
+    data =db.query(Role_has_permission).filter(Role_has_permission.role_id==role_id, Role_has_permission.permission_id==permission_id).first()
+    if data is None:
+        return False
+    return True

@@ -24,10 +24,10 @@ async def login_for_access_token(
     # Get role id by user id
     role_user_id = crud.crud_user_has_role.get_user_has_role_by_userid(user_id=user.id, db=db)
     # Get Permission id by user id
-    
+    permision= crud.crud_user_has_permission.get_permission_user(user_id=user.id, db=db)
     # Create access token
     access_token = sercurity.create_access_token(
-        subject={"id": str(user.id), "username": user.username, "role": [f'{role_user_id.role_id}'], "permission":[2, 4,5,6]},
+        subject={"id": str(user.id), "username": user.username, "role": [f'{role_user_id.role_id}'], "permission":permision},
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}

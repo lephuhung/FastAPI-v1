@@ -33,7 +33,7 @@ async def get(db: Session = Depends(deps.get_db) ):
 async def post(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], 
     db: Session = Depends(deps.get_db),
-    current_user: models.user.User = Security(deps.get_current_user, scopes=['guest','admin'])
+    current_user: models.user.User = Security(deps.get_current_user, scopes=['5', "7"])
     ):
     user = crud.crud_user.get_by_name(db=db, username=form_data.username)
     salt= get_salt()

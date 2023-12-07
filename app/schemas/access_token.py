@@ -1,4 +1,4 @@
-from pydantic import  BaseModel
+from pydantic import  BaseModel, UUID4
 
 
 class AccessToken(BaseModel):
@@ -7,7 +7,7 @@ class AccessToken(BaseModel):
 
 
 class AccessTokenData(BaseModel):
-    id: int
+    id: UUID4
     username: str | None = None
-    role: list[str] = []
+    role: list[str] =[]
     permission: list[str] = []

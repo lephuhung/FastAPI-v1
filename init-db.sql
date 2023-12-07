@@ -112,7 +112,7 @@ CREATE TABLE "type" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "Moiquanhe" (
+CREATE TABLE "moiquanhe" (
   "id" SERIAL PRIMARY KEY,
   "Moiquanhe_name" varchar,
   "created_at" timestamp,
@@ -126,7 +126,7 @@ CREATE TABLE "donvi" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "Trichtin" (
+CREATE TABLE "trichtin" (
   "id" SERIAL PRIMARY KEY,
   "uid" varchar,
   "ghichu_noidung" varchar,
@@ -163,14 +163,14 @@ CREATE TABLE "vaiao" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "Role" (
+CREATE TABLE "role" (
   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "Permission" (
+CREATE TABLE "permission" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
@@ -180,7 +180,7 @@ CREATE TABLE "Permission" (
 CREATE TABLE "user_has_permissions" (
   "id" SERIAL PRIMARY KEY,
   "user_id" uuid,
-  "Permission_id" int,
+  "permission_id" int,
   "created_at" timestamp,
   "updated_at" timestamp
 );
