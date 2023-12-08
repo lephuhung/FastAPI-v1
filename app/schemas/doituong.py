@@ -1,9 +1,8 @@
-from pydantic import UUID4, BaseModel, Boolean, datetime
+from pydantic import UUID4, BaseModel
 from typing import Optional
-
+from datetime import datetime
 
 class doituong(BaseModel):
-    id : int
     name : Optional[str]
     CMND : Optional[str]
     CCCD : Optional[str]
@@ -15,5 +14,14 @@ class doituong(BaseModel):
     Thongtinbosung : Optional[str]
     SDT : Optional[str]
     KOL: bool
+    Image:Optional[str]
+
+class doituongcreate (doituong):
+    pass
+
+class doituongupdate(doituong):
+    pass
+
+class doituongoutDB(doituong):
     created_at : datetime
-    updated_at : datetime
+    updated_at: datetime

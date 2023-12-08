@@ -6,3 +6,4 @@ from .crud_role import CURD_Role
 from .crud_role_permission import CrudRole_has_Permission
 from .crud_user_has_role import crud_user_has_role
 from .crud_user_has_permission import crud_user_has_permission
+from .crud_doituong import crud_doituong
