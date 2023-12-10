@@ -7,7 +7,7 @@ class doituong_uid(BaseModel):
     doituong_id: Optional[int]
     uid: Optional[str]
     moiquanhe_id: Optional[int]
-    color_id: Optional[int]
+    color: Optional[str]
     class Config:
         from_attributes = True
 

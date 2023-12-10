@@ -11,7 +11,7 @@ class Permission(Base):
     """
     Database model for an uid
     """
-    __tablename__ = 'Permission'
+    __tablename__ = 'permission'
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

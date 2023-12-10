@@ -13,8 +13,8 @@ class Role_has_permission(Base):
     """
     __tablename__='role_has_permission'
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
-    role_id = Column(Integer, ForeignKey('Role.id'), nullable=False)
-    permission_id = Column(Integer, ForeignKey('Permission.id'), nullable=False) 
+    role_id = Column(UUID(as_uuid=True),ForeignKey("role.id"),primary_key=True,nullable=False)
+    permission_id = Column(Integer, ForeignKey('permission.id'), nullable=False) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

@@ -14,7 +14,7 @@ class tinhchat(Base):
 
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     tinhchat_name = Column(String(255), primary_key=True, index=True)
-    color_id = Column(Integer, ForeignKey('color.id'))
+    color = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

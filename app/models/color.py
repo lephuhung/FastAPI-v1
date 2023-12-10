@@ -11,9 +11,10 @@ class color(Base):
     """
     Database model for an color
     """
-
+    __tablename__ ='color'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    color = Column(String(20), ForeignKey('uid.uid'), nullable=False)
+    name= Column(String(20), nullable=False)
+    color = Column(String(20), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Optional
 
 class uid(BaseModel):
-    id : Optional[int]
     uid : Optional[str]
     name : Optional[str]
     reaction : Optional[int]
@@ -15,3 +14,8 @@ class uid(BaseModel):
     Vaiao: bool
     created_at: datetime
     updated_at: datetime
+class uidCreate(uid):
+    pass
+
+class uidUpdate(uid):
+    id : Optional[int]

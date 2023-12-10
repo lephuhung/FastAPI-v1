@@ -7,14 +7,14 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class user_has_role(Base):
+class Doituong_Donvi(Base):
     """
-    Database model for an user_has_role
+    Database model for an Doituong UUID
     """
-    __tablename__='user_has_role'
+    __tablename__ = 'doituong_donvi'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    user_id = Column(UUID(as_uuid=True),ForeignKey("user.id"),primary_key=True,nullable=False)
-    role_id = Column(UUID(as_uuid=True),ForeignKey("role.id"),primary_key=True,nullable=False)
+    doituong_id = Column(UUID(as_uuid=True),ForeignKey("doituong.id"),primary_key=True,nullable=False)
+    donvi_id = Column(UUID(as_uuid=True),ForeignKey("donvi.id"),primary_key=True,nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

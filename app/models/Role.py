@@ -11,7 +11,7 @@ class Role(Base):
     """
     Database model for an uid
     """
-    __tablename__="Role"
+    __tablename__="role"
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     name = Column(String(255)) 
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

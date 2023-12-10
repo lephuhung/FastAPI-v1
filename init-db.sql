@@ -2,12 +2,12 @@
 CREATE EXTENSION "uuid-ossp";
 
 CREATE TABLE "Doituong" (
-  "id" SERIAL PRIMARY KEY,
+  "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   "client_name" varchar,
   "CMND" varchar,
   "CCCD" varchar,
   "Image" varchar,
-  "Ngaysinh" timestamp,
+  "Ngaysinh" date,
   "Gioitinh" boolean,
   "Quequan" varchar,
   "Thongtinbosung" varchar,
@@ -20,7 +20,9 @@ CREATE TABLE "Doituong" (
 CREATE TABLE "tags" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
-  "color_id" int
+  "color" varchar,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "model_has_tags" (
@@ -45,7 +47,7 @@ CREATE TABLE "UID" (
 
 CREATE TABLE "Doituong_UID" (
   "id" SERIAL PRIMARY KEY,
-  "doituong_id" int,
+  "doituong_id" uuid,
   "uid" varchar,
   "Moiquanhe_id" int,
   "created_at" timestamp,
@@ -64,7 +66,7 @@ CREATE TABLE "quantrivien" (
 CREATE TABLE "trangthai" (
   "id" SERIAL PRIMARY KEY,
   "trangthai_name" varchar,
-  "color_id" int,
+  "color" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -72,13 +74,14 @@ CREATE TABLE "trangthai" (
 CREATE TABLE "tinhchat" (
   "id" SERIAL PRIMARY KEY,
   "tinhchat_name" varchar,
-  "color_id" int,
+  "color" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
 CREATE TABLE "color" (
-  "color_id" SERIAL PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
+  "name"varchar,
   "color" varchar
 );
 
@@ -136,7 +139,14 @@ CREATE TABLE "trichtin" (
   "created_at" timestamp,
   "updated_at" timestamp
 );
-
+CREATE TABLE "doituong_donvi" (
+  "id" SERIAL PRIMARY KEY,
+  "donvi_id" uuid NOT NULL,
+  "doituong_id" uuid,
+  "CTNV_ID" int,
+  "created_at" timestamp,
+  "updated_at" timestamp
+);
 CREATE TABLE "donvi_hoinhom" (
   "id" SERIAL PRIMARY KEY,
   "donvi_id" uuid NOT NULL,

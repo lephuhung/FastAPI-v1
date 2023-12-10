@@ -4,12 +4,18 @@ from typing import Optional
 
 
 class tags (BaseModel):
-    id: Optional[int]
-    name: Optional[str]
-    
 
+    name: Optional[str]
+    color: Optional[str]
     class Config:
         from_attributes = True
+
+class tagscreate (tags):
+    pass
+
+class tagsupdate (tags):
+    id: Optional[int]
+
 
 class tags_without_date(tags):
     created_at : datetime

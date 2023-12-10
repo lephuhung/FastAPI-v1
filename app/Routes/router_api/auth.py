@@ -23,11 +23,13 @@ async def login_for_access_token(
     access_token_expires = timedelta(minutes=config.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     # Get role id by user id
     role_user_id = crud.crud_user_has_role.get_user_has_role_by_userid(user_id=user.id, db=db)
+    # Get Donvi id of User
+    donvi = crud.crud_user_donvi.get_donvi_by_user_id(user_id=user.id, db=db)
     # Get Permission id by user id
     permision= crud.crud_user_has_permission.get_permission_user(user_id=user.id, db=db)
     # Create access token
     access_token = sercurity.create_access_token(
-        subject={"id": str(user.id), "username": user.username, "role": [f'{role_user_id.role_id}'], "permission":permision},
+        subject={"id": str(user.id), "username": user.username, "donvi_id": str(donvi[0]['donvi_id']) ,"role": [f'{role_user_id.role_id}'], "permission":permision},
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}

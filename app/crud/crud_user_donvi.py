@@ -9,7 +9,7 @@ from app.schemas.user_donvi import UserDonviCreate, UserDonviUpdate
 from pydantic import UUID4
 from app import crud
 import json
-class CRUDUser_Donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
+class crud_user_donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
     # View detail user in Donvi
     def get_user_by_uid_donvi(self, uid_donvi: UUID4 ,db: Session)->Optional[list[User]]:
         user_alias = aliased(User)
@@ -40,6 +40,6 @@ class CRUDUser_Donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
         return result_dict_list
     #Create test
     def create_user(self, data: UserDonviCreate, db: Session):
-        return crud.CRUDUser_donvi.create(db, obj_in= data)
+        return crud.crud_user_donvi.create(db, obj_in= data)
     
-CRUDUser_donvi = CRUDUser_Donvi(user_donvi) 
+crud_user_donvi = crud_user_donvi(user_donvi) 

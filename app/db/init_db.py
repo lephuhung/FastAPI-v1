@@ -51,7 +51,7 @@ def init_db(db: Session)-> None:
             user_id= item.id,
             donvi_id=pa05.id
         )
-        crud.CRUDUser_donvi.create(db, obj_in=user_item)
+        crud.crud_user_donvi.create(db, obj_in=user_item)
 
     # Create Role
     roles= ["superadmin", "admin", "Phong", "CAH", "DOI" ]
@@ -78,7 +78,7 @@ def init_db(db: Session)-> None:
 
     # Create permissions of role
     roleinDB= crud.CURD_Role.get_roleid_by_name(name="superadmin", db=db)
-    if roleinDB is not None:
+    if roleinDB is None:
         for i in range(1, 50):
             data = Role_has_PermissionCreate(
                 role_id=roleinDB.id,
@@ -97,3 +97,4 @@ def init_db(db: Session)-> None:
             role_id= roleoutDB.id
         )
         crud.crud_user_has_role.create(db, obj_in=user_has_role_instance)
+    # create color table

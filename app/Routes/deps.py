@@ -73,8 +73,6 @@ def get_current_user(
             headers={"WWW-Authenticate": authenticate_value},
         )
     for scope in security_scopes.scopes:
-        print(scope)
-        print(token_data.role[0])
         if check_permission_in_role(scope, role_id=token_data.role[0], db=db):
             return user
     raise HTTPException(

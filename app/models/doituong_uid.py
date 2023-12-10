@@ -16,7 +16,7 @@ class Doituong_UID(Base):
     doituong_id = Column(Integer, ForeignKey("doituong.id"))
     uid = Column(String(20) )
     moiquanhe_id= Column(Integer, ForeignKey("moiquanhe.id"))
-    color_id = Column(Integer, ForeignKey('color.id')) 
+    color = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

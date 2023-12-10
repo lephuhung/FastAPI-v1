@@ -1,13 +1,12 @@
 from pydantic import UUID4, BaseModel
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 class doituong(BaseModel):
-    name : Optional[str]
+    client_name : Optional[str]
     CMND : Optional[str]
     CCCD : Optional[str]
-    Image : Optional[str]
-    Ngaysinh : Optional[datetime]
+    Ngaysinh : Optional[date]
     # True is Nam, False is Nu
     Gioitinh : bool
     Quequan : Optional[str]
@@ -20,6 +19,7 @@ class doituongcreate (doituong):
     pass
 
 class doituongupdate(doituong):
+    id: UUID4
     pass
 
 class doituongoutDB(doituong):
