@@ -17,6 +17,7 @@ CREATE TABLE "Doituong" (
   "updated_at" timestamp
 );
 
+
 CREATE TABLE "tags" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
@@ -217,6 +218,7 @@ CREATE TABLE "user" (
   "password" varchar,
   "salt" varchar,
   "active" varchar,
+  "donvi_id" uuid NULL,
   "created_at" timestamp,
   "updated_at" timestamp
 );

@@ -20,7 +20,7 @@ def init_db(db: Session)-> None:
             donviinDB= schemas.donvi.DonviCreate(name= item)
             crud.crud_donvi.create(db, obj_in=donviinDB)
 
-    
+    donvi_PA05= crud.crud_donvi.get_donvi_by_name(db=db, name="PA05")
     # Create superadmin PA05
     username_pao5=["Luongvinhlong", "Nguyendangphi", "Dangdonthang"]
     user = crud.crud_user.get_by_name(db=db, username=settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
@@ -38,18 +38,19 @@ def init_db(db: Session)-> None:
                 username= item,
                 active= True,
                 salt= get_salt(),
-                password= get_password_hash(f'123456{salt}')
+                password= get_password_hash(f'123456{salt}'),
+                donvi_id=donvi_PA05.id
             )
             crud.crud_user.create(db, obj_in= user_pa05)
 
             
     # Create user for Phong PA05 
-    pa05 = crud.crud_donvi.get_donvi_by_name(name="PA05", db=db)
+
     user_admin = crud.crud_user.get_multi(db)
     for item in user_admin:
         user_item = UserDonviCreate(
             user_id= item.id,
-            donvi_id=pa05.id
+            donvi_id=donvi_PA05.id
         )
         crud.crud_user_donvi.create(db, obj_in=user_item)
 

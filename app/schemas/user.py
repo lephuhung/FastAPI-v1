@@ -15,10 +15,13 @@ class UserCreate(UserBase):
     salt: Optional[str]
     active: Optional[bool] = True
     password: str
+    donvi_id: Optional[UUID4]
+
 
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):
+    donvi_id: Optional[UUID4]
     password: Optional[str]
     updated_at: datetime
 

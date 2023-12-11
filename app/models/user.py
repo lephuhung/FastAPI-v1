@@ -17,10 +17,11 @@ class User(Base):
     password = Column(String(255),nullable=False) 
     salt = Column(String(20), nullable=False)
     active = Column(Boolean, default=True)
+    donvi_id = Column(UUID(as_uuid=True), ForeignKey("donvi.id"), default=None )
     created_at = Column(DateTime, default=datetime.datetime.now())
     updated_at = Column(
         DateTime,
         default=datetime.datetime.now(),
         onupdate=datetime.datetime.now(),
     )
-    user_donvi = relationship("user_donvi", back_populates="user")
+    # user_donvi = relationship("user_donvi", back_populates="user")
