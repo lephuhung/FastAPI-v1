@@ -22,5 +22,3 @@ class user_donvi(Base):
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
     )
-    user = relationship("User", back_populates="user_donvi", uselist=True)
-    donvi = relationship("Donvi")

@@ -9,7 +9,10 @@ from app.schemas.user_has_role import User_has_RoleCreate
 from app.core.config import settings
 from sqlalchemy.orm import Session
 from datetime import datetime
-
+from app.schemas.color import colorcreate
+from app.schemas.moiquanhe import moiquanhecreate
+from app.schemas.tinhchat import tinhchatcreate
+from app.core.Utils import random_hex_color
 def init_db(db: Session)-> None:
 
     # Create donvi
@@ -30,6 +33,7 @@ def init_db(db: Session)-> None:
             username= settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME,
             active= True,
             salt= salt,
+            donvi_id = donvi_PA05.id,
             password= get_password_hash(f'lph77{salt}'),
         )
         crud.crud_user.create(db, obj_in=model_user_admin) 
@@ -99,3 +103,29 @@ def init_db(db: Session)-> None:
         )
         crud.crud_user_has_role.create(db, obj_in=user_has_role_instance)
     # create color table
+    color_name_array=['red', 'blue', 'green', 'yellow']
+    color_hex_array = ['#CB1D1D', '#3C14C9', '#37C914',  "#FFFA91"]
+    color_db = crud.crud_color.get_color_by_name(db= db, name="red")
+    if color_db is None:
+        for i in range (0, len(color_name_array)):
+            item = colorcreate(name=color_name_array[i], color=color_hex_array[i])
+            crud.crud_color.create(db=db, obj_in= item)
+    # create  tags, tinhchat, type, moiquanhe
+    moiquanhe_array= ['quản trị viên', 'kiểm duyệt viên', 'nghi ngờ có liên quan']
+    moiquanhe_db = crud.crud_moiquanhe.get_name_by_id(db= db, id=1)
+    if moiquanhe_db is None:
+        for item in moiquanhe_array:
+            mqh = moiquanhecreate(name=item)
+            crud.crud_moiquanhe.create(db= db, obj_in=mqh)
+
+    #  tinhchat
+    tinhchat_array = ['công giáo', 'đông thành viên', 'phản động', 'thông tin']
+    tinhchat_db = crud.crud_tinhchat.find_tinhchat_byid(db=db, id=1)
+    if tinhchat_db is None:
+        for item in tinhchat_array:
+            tchat = tinhchatcreate(name=item, color=random_hex_color())
+            crud.crud_tinhchat.create(db=db, obj_in= tchat)
+
+    #  tags
+    
+    # moiquanhe

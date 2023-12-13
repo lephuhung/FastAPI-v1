@@ -9,3 +9,6 @@ from .crud_user_has_permission import crud_user_has_permission
 from .crud_doituong import crud_doituong
 from .crud_tags import crud_tags
 from .crud_doituong_donvi import crud_doituong_donvi
+from .crud_color import crud_color
+from .crud_moiquanhe import crud_moiquanhe
+from .crud_tinhchat import crud_tinhchat

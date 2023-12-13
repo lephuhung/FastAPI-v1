@@ -29,7 +29,9 @@ CREATE TABLE "tags" (
 CREATE TABLE "model_has_tags" (
   "id" SERIAL PRIMARY KEY,
   "model_id" int,
-  "tags_id" int
+  "tags_id" int,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "UID" (
@@ -83,7 +85,9 @@ CREATE TABLE "tinhchat" (
 CREATE TABLE "color" (
   "id" SERIAL PRIMARY KEY,
   "name"varchar,
-  "color" varchar
+  "color" varchar,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "trangthai_hoinhom" (
@@ -118,7 +122,7 @@ CREATE TABLE "type" (
 
 CREATE TABLE "moiquanhe" (
   "id" SERIAL PRIMARY KEY,
-  "Moiquanhe_name" varchar,
+  "name" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
