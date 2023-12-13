@@ -68,7 +68,7 @@ CREATE TABLE "quantrivien" (
 
 CREATE TABLE "trangthai" (
   "id" SERIAL PRIMARY KEY,
-  "trangthai_name" varchar,
+  "name" varchar,
   "color" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
@@ -76,7 +76,7 @@ CREATE TABLE "trangthai" (
 
 CREATE TABLE "tinhchat" (
   "id" SERIAL PRIMARY KEY,
-  "tinhchat_name" varchar,
+  "name" varchar,
   "color" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
@@ -100,7 +100,7 @@ CREATE TABLE "trangthai_hoinhom" (
 
 CREATE TABLE "CTNV" (
   "id" SERIAL PRIMARY KEY,
-  "CTNV_name" varchar,
+  "name" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );

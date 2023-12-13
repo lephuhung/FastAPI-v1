@@ -12,6 +12,8 @@ from datetime import datetime
 from app.schemas.color import colorcreate
 from app.schemas.moiquanhe import moiquanhecreate
 from app.schemas.tinhchat import tinhchatcreate
+from app.schemas.tags import tagscreate
+from app.schemas.ctnv import ctnvcreate
 from app.core.Utils import random_hex_color
 def init_db(db: Session)-> None:
 
@@ -127,5 +129,17 @@ def init_db(db: Session)-> None:
             crud.crud_tinhchat.create(db=db, obj_in= tchat)
 
     #  tags
-    
-    # moiquanhe
+    tags_array = ['']
+    tags_db= crud.crud_tags.get_tags_by_id(db=db, id=1)
+    if tags_db is None:
+        for item in tags_array:
+            tags_in_db = tagscreate(name=item, color=random_hex_color())
+            crud.crud_tags.create(db=db, obj_in=tags_in_db)
+
+    # CTNV
+    ctnv_array = ['ĐTCB', 'Theo dõi', 'Gọi hỏi răn đe', 'QLNV']
+    ctnv_db= crud.crud_ctnv.get_ctnv_by_id(db=db, id=1)
+    if ctnv_db is None:
+        for item in ctnv_array:
+            ctnv_in_db = ctnvcreate(name=item)
+            crud.crud_ctnv.create(db=db, obj_in=ctnv_in_db)

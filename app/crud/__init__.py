@@ -12,3 +12,4 @@ from .crud_doituong_donvi import crud_doituong_donvi
 from .crud_color import crud_color
 from .crud_moiquanhe import crud_moiquanhe
 from .crud_tinhchat import crud_tinhchat
+from .crud_ctnv import crud_ctnv

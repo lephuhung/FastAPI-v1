@@ -7,3 +7,4 @@ from .role_has_permission import Role_has_PermissionCreate, Role_has_PermissionU
 from .user_has_role import User_has_RoleCreate, User_has_RoleUpdate
 from .tags import tagscreate, tagsupdate
 from .uid import uidCreate, uidUpdate
+from .ctnv import ctnvcreate, ctnvupdate
