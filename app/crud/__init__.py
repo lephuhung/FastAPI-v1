@@ -13,3 +13,5 @@ from .crud_color import crud_color
 from .crud_moiquanhe import crud_moiquanhe
 from .crud_tinhchat import crud_tinhchat
 from .crud_ctnv import crud_ctnv
+from .crud_type import crud_type
+from .crud_trangthai import crud_trangthai

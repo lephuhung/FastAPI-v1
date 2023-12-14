@@ -8,3 +8,5 @@ from .user_has_role import User_has_RoleCreate, User_has_RoleUpdate
 from .tags import tagscreate, tagsupdate
 from .uid import uidCreate, uidUpdate
 from .ctnv import ctnvcreate, ctnvupdate
+from .type import typecreate, typeupdate
+from .trangthai import trangthaicreate, trangthaiupdate

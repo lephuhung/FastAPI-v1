@@ -14,6 +14,8 @@ from app.schemas.moiquanhe import moiquanhecreate
 from app.schemas.tinhchat import tinhchatcreate
 from app.schemas.tags import tagscreate
 from app.schemas.ctnv import ctnvcreate
+from app.schemas.type import typecreate
+from app.schemas.trangthai import trangthaicreate
 from app.core.Utils import random_hex_color
 def init_db(db: Session)-> None:
 
@@ -104,6 +106,8 @@ def init_db(db: Session)-> None:
             role_id= roleoutDB.id
         )
         crud.crud_user_has_role.create(db, obj_in=user_has_role_instance)
+
+
     # create color table
     color_name_array=['red', 'blue', 'green', 'yellow']
     color_hex_array = ['#CB1D1D', '#3C14C9', '#37C914',  "#FFFA91"]
@@ -112,6 +116,8 @@ def init_db(db: Session)-> None:
         for i in range (0, len(color_name_array)):
             item = colorcreate(name=color_name_array[i], color=color_hex_array[i])
             crud.crud_color.create(db=db, obj_in= item)
+
+
     # create  tags, tinhchat, type, moiquanhe
     moiquanhe_array= ['quản trị viên', 'kiểm duyệt viên', 'nghi ngờ có liên quan']
     moiquanhe_db = crud.crud_moiquanhe.get_name_by_id(db= db, id=1)
@@ -121,7 +127,7 @@ def init_db(db: Session)-> None:
             crud.crud_moiquanhe.create(db= db, obj_in=mqh)
 
     #  tinhchat
-    tinhchat_array = ['công giáo', 'đông thành viên', 'phản động', 'thông tin']
+    tinhchat_array = ['công giáo', 'đông thành viên', 'phản động', 'thông tin', 'tích cực', "tiêu cực"]
     tinhchat_db = crud.crud_tinhchat.find_tinhchat_byid(db=db, id=1)
     if tinhchat_db is None:
         for item in tinhchat_array:
@@ -143,3 +149,20 @@ def init_db(db: Session)-> None:
         for item in ctnv_array:
             ctnv_in_db = ctnvcreate(name=item)
             crud.crud_ctnv.create(db=db, obj_in=ctnv_in_db)
+
+    # type
+    type_array= ['Nhóm Facebook', "Tài khoản Facebook cá nhân", "Trang Facbook", "Tài khoản TikTok", "Tài khoản Zalo"]
+    type_db= crud.crud_type.get_type_by_id(db=db, id=1)
+    if type_db is None:
+        for item in type_array:
+            type_in_db= typecreate(name=item)
+            crud.crud_type.create(db=db, obj_in=type_in_db)
+
+
+    # trangthai
+    trangthai_array =['Chỉ hiện thị bạn bè', 'Nhóm riêng tư', "Nhóm bí mật","Nhóm công khai", "Chỉ hiện thị với bạn bè"]
+    trangthai_db = crud.crud_trangthai.get_trangthai_by_id(db=db, id=1)
+    if trangthai_db is None:
+        for item in trangthai_array:
+            trangthai_in_db = trangthaicreate(name=item, color=random_hex_color())
+            crud.crud_trangthai.create(db=db, obj_in=trangthai_in_db)

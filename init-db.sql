@@ -28,7 +28,7 @@ CREATE TABLE "tags" (
 
 CREATE TABLE "model_has_tags" (
   "id" SERIAL PRIMARY KEY,
-  "model_id" int,
+  "model_id" varchar,
   "tags_id" int,
   "created_at" timestamp,
   "updated_at" timestamp
