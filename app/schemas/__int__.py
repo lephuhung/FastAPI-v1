@@ -10,3 +10,4 @@ from .uid import uidCreate, uidUpdate
 from .ctnv import ctnvcreate, ctnvupdate
 from .type import typecreate, typeupdate
 from .trangthai import trangthaicreate, trangthaiupdate
+from .model_has_tags import model_has_tagscreate, model_has_tagsupdate

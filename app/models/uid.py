@@ -1,25 +1,22 @@
 import datetime
-from uuid import uuid4
-
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey, Nullable
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class UID(Base):
+class uid(Base):
     """
     Database model for an uid
     """
-
+    __tablename__ = 'UID'
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     uid = Column(String(20))
     name = Column(String(255))
     reaction = Column(Integer)
-    SDT = Column(String(10), default=Nullable)
+    SDT = Column(String(10), default="Unknown")
     trangthai_id = Column(Integer, ForeignKey('trangthai.id'))
     type_id = Column(Integer, ForeignKey('type.id'))
-    ghichu = Column(String(5000), default=Nullable)
+    ghichu = Column(String(5000), nullable=True)
     Vaiao= Column(Boolean(), default=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(

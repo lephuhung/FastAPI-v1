@@ -15,3 +15,5 @@ from .crud_tinhchat import crud_tinhchat
 from .crud_ctnv import crud_ctnv
 from .crud_type import crud_type
 from .crud_trangthai import crud_trangthai
+from .crud_model_has_tags import crud_model_has_tags
+from .crud_uid import crud_uid

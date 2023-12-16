@@ -1,16 +1,20 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, Security
 from typing import Annotated
+from app.schemas.uid import uidCreate, uidUpdate
+from app.crud import crud_uid
+from app.Routes import deps
+from sqlalchemy.orm import Session
 router = APIRouter(prefix="/uid", tags=["uid"])
 
 @router.get("")
 async def get():
     return {'123':'123'}
 
-@router.post("")
-async def post():
-    return {'123':'123'}
+@router.post("/create")
+async def create(uid: uidCreate, db: Session = Depends(deps.get_db)):
+    return crud_uid.create(db=db, obj_in=uid)
 
-@router.put("/{uid}")
+@router.put("/update/{uid}")
 async def update():
     return {'123':'123'}
 

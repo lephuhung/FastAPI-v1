@@ -135,7 +135,7 @@ def init_db(db: Session)-> None:
             crud.crud_tinhchat.create(db=db, obj_in= tchat)
 
     #  tags
-    tags_array = ['']
+    tags_array = ['tài khoản mới tạo', 'KOL mới nổi', 'đăng tải hoạt động từ thiện']
     tags_db= crud.crud_tags.get_tags_by_id(db=db, id=1)
     if tags_db is None:
         for item in tags_array:
