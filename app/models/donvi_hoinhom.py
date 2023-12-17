@@ -2,7 +2,7 @@ import datetime
 from uuid import uuid4
 
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey, Nullable
+from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -14,8 +14,8 @@ class donvi_hoinhom(Base):
     __tablename__ = 'donvi_hoinhom'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     donvi_id = Column(UUID(as_uuid=True),ForeignKey("donvi.id"),primary_key=True,nullable=False)
-    uid = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
-    ctnv_id = Column(Integer, ForeignKey('ctnv.id'))
+    uid = Column(String(20), ForeignKey('UID.uid'), nullable=False) 
+    CTNV_ID = Column(Integer, ForeignKey('CTNV.id'))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

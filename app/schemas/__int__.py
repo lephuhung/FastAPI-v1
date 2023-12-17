@@ -11,3 +11,6 @@ from .ctnv import ctnvcreate, ctnvupdate
 from .type import typecreate, typeupdate
 from .trangthai import trangthaicreate, trangthaiupdate
 from .model_has_tags import model_has_tagscreate, model_has_tagsupdate
+from .donvi_hoinhom import hoinhom_donvicreate, hoinhom_donviupdate
+from .trichtin import trichtinCreate, trichtinUpdate
+from .tinhchat_hoinhom import tinhchat_hoinhomcreate, tinhchat_hoinhomupdate

@@ -9,7 +9,7 @@ from fastapi import Form
 
 router = APIRouter(prefix="/model_has_tags", tags=["model_has_tags"])
 
-@router.get("/get-tags-by-model_id/{model_id}")
+@router.get("/get-tags-by-model-id/{model_id}")
 async def get(model_id:str, db: Session = Depends(deps.get_db)):
     return crud.crud_model_has_tags.get_tags_by_model_id(model_id=model_id, db= db)
 

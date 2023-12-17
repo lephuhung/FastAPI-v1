@@ -17,3 +17,7 @@ from .crud_type import crud_type
 from .crud_trangthai import crud_trangthai
 from .crud_model_has_tags import crud_model_has_tags
 from .crud_uid import crud_uid
+from .crud_hoinhom_donvi import crud_donvihoinhom
+from .crud_trichtin import crud_trichtin
+from .crud_tinhchat_hoinhom import crud_tinhchat_hoinhom
+
