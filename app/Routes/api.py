@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.Routes.router_api import uid, user, auth, user_donvi, donvi_hoinhom ,trichtin,role_has_permission, user_has_permission, doituong,tags, model_has_tags, doituong_donvi, tinhchat_hoinhom
+from app.Routes.router_api import uid, user, auth, user_donvi, donvi_hoinhom ,trichtin,role_has_permission, user_has_permission, doituong,tags, model_has_tags, doituong_donvi, tinhchat_hoinhom, doituong_uid
 api_router = APIRouter()
 
 api_router.include_router(uid.router)
@@ -15,3 +15,4 @@ api_router.include_router(doituong_donvi.router)
 api_router.include_router(donvi_hoinhom.router)
 api_router.include_router(trichtin.router)
 api_router.include_router(tinhchat_hoinhom.router)
+api_router.include_router(doituong_uid.router)

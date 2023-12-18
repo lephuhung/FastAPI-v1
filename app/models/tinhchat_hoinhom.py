@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 
 class tinhchat_hoinhom(Base):
     """
-    Database model for an uid
+    Database model for an tinhchat hoinhom
     """
     __tablename__='tinhchat_hoinhom'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
