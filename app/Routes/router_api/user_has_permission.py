@@ -6,7 +6,7 @@ from app import crud
 from fastapi import APIRouter, Depends
 from fastapi import Form
 
-router = APIRouter(prefix="/user-has-permission", tags=["rhp"])
+router = APIRouter(prefix="/user-has-permission", tags=["User has permission"])
 
 # @router.get("/get-all-by-roleid")
 # async def get():

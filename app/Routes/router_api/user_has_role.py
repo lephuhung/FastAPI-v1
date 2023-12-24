@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.Routes import deps
 from pydantic import UUID4
 from app import crud
-router = APIRouter(prefix="/user-has-role", tags=["uhr"])
+router = APIRouter(prefix="/user-has-role", tags=["User has Role"])
 
 @router.get("")
 async def get():

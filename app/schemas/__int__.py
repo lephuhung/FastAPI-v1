@@ -18,4 +18,6 @@ from .quantrivien import quantriviencreate, quantrivienupdate
 from .vaiao import vaiaocreate, vaiaoupdate
 from .trangthai_hoinhom import trangthai_hoinhomcreate, trangthai_hoinhomupdate
 from .tinhchat import tinhchatcreate,tinhchatupdate
+from .type import typecreate, typeupdate
 from .moiquanhe import moiquanhecreate, moiquanheupdate
+from .donvi import DonviCreate, DonviUpdate

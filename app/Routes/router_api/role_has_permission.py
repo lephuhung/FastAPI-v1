@@ -6,7 +6,7 @@ from pydantic import UUID4
 from app import crud
 from fastapi import Form
 
-router = APIRouter(prefix="/role-has-permission", tags=["rhp"])
+router = APIRouter(prefix="/role-has-permission", tags=["Role has Permission"])
 
 # @router.get("/get-all-by-roleid")
 # async def get():

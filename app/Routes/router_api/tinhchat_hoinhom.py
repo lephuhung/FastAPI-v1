@@ -7,7 +7,7 @@ from app import crud
 from app.schemas.tinhchat_hoinhom import tinhchat_hoinhomcreate
 from fastapi import Form
 
-router = APIRouter(prefix="/tinhchat-hoinhom", tags=["tinhchat-hoinhom"])
+router = APIRouter(prefix="/tinhchat-hoinhom", tags=["Tính chất của hội nhóm"])
 
 @router.get("/get/{model_id}")
 async def get(model_id:str, db: Session = Depends(deps.get_db)):

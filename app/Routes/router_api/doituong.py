@@ -9,7 +9,7 @@ from app.schemas.doituong import doituongcreate, doituongupdate
 from app.schemas.doituong_donvi import doituong_donvicreate
 from fastapi import Form
 
-router = APIRouter(prefix="/doituong", tags=["user"])
+router = APIRouter(prefix="/doituong", tags=["Đối tượng"])
 
 # create a new Doituong
 @router.post("/create")

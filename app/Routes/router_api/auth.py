@@ -10,7 +10,7 @@ from fastapi.security import (
     OAuth2PasswordRequestForm,
     SecurityScopes,
 )
-router = APIRouter()
+router = APIRouter(tags=['auth'])
 
 @router.post("/login" )
 async def login_for_access_token(

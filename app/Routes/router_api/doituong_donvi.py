@@ -7,7 +7,7 @@ from app import crud
 from app.schemas.doituong_donvi import doituong_donvicreate
 from fastapi import Form
 
-router = APIRouter(prefix="/doituong-donvi", tags=["doituong-donvi"])
+router = APIRouter(prefix="/doituong-donvi", tags=["Đối tượng thuộc đơn vị"])
 
 @router.get("/get/{model_id}")
 async def get(model_id:str, db: Session = Depends(deps.get_db)):

@@ -4,7 +4,7 @@ from app.schemas.trichtin import trichtinCreate, trichtinUpdate
 from app.crud.crud_trichtin import crud_trichtin
 from app.Routes import deps
 from sqlalchemy.orm import Session
-router = APIRouter(prefix="/trichtin", tags=["trichtin"])
+router = APIRouter(prefix="/trichtin", tags=["Trích tin"])
 
 
 @router.post("/create")

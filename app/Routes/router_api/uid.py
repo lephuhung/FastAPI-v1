@@ -4,7 +4,7 @@ from app.schemas.uid import uidCreate, uidUpdate
 from app.crud import crud_uid
 from app.Routes import deps
 from sqlalchemy.orm import Session
-router = APIRouter(prefix="/uid", tags=["uid"])
+router = APIRouter(prefix="/uid", tags=["UID"])
 
 @router.get("")
 async def get():

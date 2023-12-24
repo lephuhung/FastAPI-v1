@@ -4,7 +4,7 @@ from app.schemas.vaiao import vaiaocreate
 from app.crud.crud_vaiao import crud_vaiao
 from app.Routes import deps
 from sqlalchemy.orm import Session
-router = APIRouter(prefix="/vaiao", tags=["vaiao"])
+router = APIRouter(prefix="/vaiao", tags=["Vai ảo"])
 
 
 @router.post("/create")

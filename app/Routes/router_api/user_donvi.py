@@ -11,7 +11,7 @@ from fastapi.security import (
     OAuth2PasswordRequestForm,
     SecurityScopes,
 )
-router = APIRouter(prefix="/usr-dvi", tags=["usr-dvi"])
+router = APIRouter(prefix="/usr-dvi", tags=["User Đơn vị"])
 
 # @router.get("")
 # async def get():

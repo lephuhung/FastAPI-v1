@@ -7,7 +7,7 @@ from app import crud
 from app.schemas.model_has_tags import model_has_tagscreate
 from fastapi import Form
 
-router = APIRouter(prefix="/model_has_tags", tags=["model_has_tags"])
+router = APIRouter(prefix="/model_has_tags", tags=["Model has tags"])
 
 @router.get("/get-tags-by-model-id/{model_id}")
 async def get(model_id:str, db: Session = Depends(deps.get_db)):

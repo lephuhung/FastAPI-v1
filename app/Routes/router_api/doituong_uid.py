@@ -7,7 +7,7 @@ from app import crud
 from app.schemas.doituong_uid import doituong_uidcreate
 from fastapi import Form
 
-router = APIRouter(prefix="/doituong-uid", tags=["doituong-uid"])
+router = APIRouter(prefix="/doituong-uid", tags=["UID liên quan đối tượng"])
 
 @router.get("/get/{model_id}")
 async def get(model_id:str, db: Session = Depends(deps.get_db)):

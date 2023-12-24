@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.Routes import deps
 from app import crud
 from app.schemas.tags import tagscreate
-router = APIRouter(prefix='/tags')
+router = APIRouter(prefix='/tags', tags=['tags'])
 
 @router.get('/get-all')
 def get_tags_all(db: Session = Depends(deps.get_db)):
