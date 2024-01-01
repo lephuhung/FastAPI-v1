@@ -6,6 +6,7 @@ class trangthai_hoinhom(BaseModel):
     
     trangthai_id: Optional[int]
     uid: Optional[str]
+    
     class Config:
         from_attributes = True
         

@@ -11,7 +11,7 @@ class trangthai_hoinhom(Base):
     """
     Database model for an trangthai_hoinhom
     """
-
+    __tablename__ = 'trangthai_hoinhom'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     trangthai_id = Column(Integer, ForeignKey('trangthai.id'), nullable=False)
     uid = Column(String(20), ForeignKey('UID.uid'), nullable=False) 
