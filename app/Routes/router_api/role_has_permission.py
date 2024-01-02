@@ -16,10 +16,3 @@ router = APIRouter(prefix="/role-has-permission", tags=["Role has Permission"])
 async def get_all_permission_by_role(uid: Annotated[UUID4, Form()] ,db: Session = Depends(deps.get_db)):
     return crud.CrudRole_has_Permission.get_all_permission_in_role(role_id=uid, db=db)
 
-@router.put("/{uid}")
-async def update():
-    return {'123':'123'}
-
-@router.delete("/{uid}")
-async def delete(uid: Annotated[int, 0]):
-    return {'123':uid}
