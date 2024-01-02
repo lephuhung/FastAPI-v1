@@ -18,4 +18,4 @@ class uidCreate(uid):
     pass
 
 class uidUpdate(uid):
-    id : Optional[int]
+    pass
