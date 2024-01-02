@@ -8,10 +8,14 @@ from sqlalchemy.sql import text
 router = APIRouter(prefix="/uid", tags=["UID"])
 
 @router.get("/get-last/{id}")
-async def get(id: str, db: Session = Depends(deps.get_db)):
+async def getlast(id: str, db: Session = Depends(deps.get_db)):
     data = crud_uid.get_last_uid_by_id( id=id, db=db)
     return data
 
+@router.get("/get-history/{uid_uid}")
+async def gethistory(uid_uid: str, db: Session = Depends(deps.get_db)):
+    data = crud_uid.get_all_by_uid( uid_uid=uid_uid, db=db)
+    return data
 
 @router.post("/create")
 async def create(uid: uidCreate, db: Session = Depends(deps.get_db)):

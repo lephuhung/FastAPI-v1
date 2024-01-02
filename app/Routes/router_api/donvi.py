@@ -7,9 +7,10 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/donvi", tags=["Đơn vị"])
 
 
-@router.get('/')
+@router.get('/getAll')
 async def getAll(db: Session = Depends(deps.get_db)):
     return crud_donvi.get_multi(db)
+    
 @router.post("/create")
 async def create(donvi: DonviCreate, db: Session = Depends(deps.get_db)):
     return crud_donvi.create(db=db, obj_in=donvi)

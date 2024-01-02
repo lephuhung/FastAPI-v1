@@ -11,10 +11,17 @@ router = APIRouter(prefix="/trichtin", tags=["Trích tin"])
 async def create(trichtin: trichtinCreate, db: Session = Depends(deps.get_db)):
     return crud_trichtin.create(db=db, obj_in=trichtin)
 
-@router.put("/update/{uid}")
-async def update():
-    return {'123':'123'}
+@router.get("/get-all-by-uid/{uid}")
+async def update(uid: str, db: Session = Depends(deps.get_db)):
+    return crud_trichtin.get_all_by_uid(uid=uid, db= db)
 
-@router.delete("/{uid}")
-async def delete(uid: Annotated[int, 0]):
-    return {'123':uid}
+@router.put("/update/{trichtin_id}")
+async def delete(trichtin_id: int, trichtin: trichtinUpdate ,db: Session = Depends(deps.get_db)):
+    trichtin_data = crud_trichtin.get_trichtin_by_id(id=trichtin_id, db=db)
+    crud_trichtin.update(db=db, obj_in=trichtin, db_obj= trichtin_data)
+    return {"message": "Success"}
+
+@router.get("/get-trichtin/{trichtin_id}")
+async def getTrichtin(trichtin_id:int, db: Session = Depends(deps.get_db)):
+    trichtin_data = crud_trichtin.get_trichtin_by_id(id=trichtin_id, db=db)
+    return trichtin_data

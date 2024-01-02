@@ -6,7 +6,7 @@ from app.Routes import deps
 from sqlalchemy.orm import Session
 router = APIRouter(prefix="/type", tags=["type"])
 
-@router.get('/')
+@router.get('/get-all')
 async def getAll(db: Session = Depends(deps.get_db)):
     return crud_type.get_multi(db)
 
