@@ -7,11 +7,15 @@ from app import crud
 from app.schemas.donvi_hoinhom import hoinhom_donvicreate
 from fastapi import Form
 
-router = APIRouter(prefix="/hoinhom-donvi", tags=["Đối tượng thuộc đơn vị"])
+router = APIRouter(prefix="/hoinhom-donvi", tags=[" Hội nhóm thuộc đơn vị"])
 
-@router.get("/get/{model_id}")
-async def get(model_id:str, db: Session = Depends(deps.get_db)):
-    return crud.crud_model_has_tags.get_tags_by_model_id(model_id=model_id, db= db)
+@router.get("/get-by-donvi/{donvi_id}")
+async def get(donvi_id:str, db: Session = Depends(deps.get_db)):
+    return crud.crud_donvihoinhom.get_hoinhom_by_donvi(donvi_id=donvi_id, db=db)
+
+@router.get("/get-all-by-admin")
+async def get_all(db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=['admin'])):
+    return crud.crud_donvihoinhom.get_all_hoinhom(db)
 
 @router.post("/create")
 async def create_tags_model(hoinhom_donvi: hoinhom_donvicreate ,db: Session = Depends(deps.get_db)):
