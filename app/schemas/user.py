@@ -26,7 +26,8 @@ class UserUpdate(UserBase):
     updated_at: datetime
 
 
-class UserOutDB(UserCreate):
+class UserOutDB(UserBase):
+    id: UUID4
     username: Optional[str]
     active: Optional[bool]
 

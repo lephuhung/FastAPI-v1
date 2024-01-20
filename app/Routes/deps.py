@@ -75,9 +75,11 @@ def get_current_user(
     for scope in security_scopes.scopes:
         if check_permission_in_role(scope, role_id=token_data.role[0], db=db):
             return user
+    if security_scopes.scopes == []:
+        return user
     raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
+                detail="Not enough permissionse",
                 headers={"WWW-Authenticate": authenticate_value},
             )
 

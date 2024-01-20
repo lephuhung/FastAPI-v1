@@ -18,7 +18,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     # get user by id
     def get_by_id(self, db: Session, *, id: int):
         return db.query(User).filter(User.id==id).first()
-
+    
+    # get current user
+    # def get_current_user(self, db: Session, *, id: UUID4):
+    #     current_user = db.get(User).filter(
     # def get_multiple_users_withid(self, db: Session, *,id: int):
     #     return db.query(User).filter(User.id==id).
 
