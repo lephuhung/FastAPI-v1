@@ -26,3 +26,18 @@ async def update(id: int, uid_data: uidUpdate  ,db: Session = Depends(deps.get_d
     uid_has_update = crud_uid.get_uid_by_id(id= id, db=db)
     data = crud_uid.update(obj_in=uid_data, db_obj=uid_has_update, db=db)
     return data
+
+@router.get("/get-facebook")
+async def get_facebook(type_id:int =1, db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=[])):
+    facebook_data = crud_uid.get_all_by_type_id(type_id=type_id, db=db)
+    return facebook_data
+
+@router.get("/get-groups")
+async def get_groups(type_id:int =0, db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=[])):
+    facebook_data = crud_uid.get_all_by_type_id(type_id=type_id, db=db)
+    return facebook_data
+
+@router.get("/get-pages")
+async def get_groups(type_id:int =2, db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=[])):
+    facebook_data = crud_uid.get_all_by_type_id(type_id=type_id, db=db)
+    return facebook_data
