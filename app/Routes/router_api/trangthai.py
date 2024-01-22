@@ -9,6 +9,7 @@ router = APIRouter(prefix="/trangthai", tags=["Trạng thái"])
 @router.get('/')
 async def getAll(db: Session = Depends(deps.get_db)):
     return crud_trangthai.get_multi(db)
+    
 @router.post("/create")
 async def create(trangthai: trangthaicreate, db: Session = Depends(deps.get_db)):
     return crud_trangthai.create(db=db, obj_in=trangthai)
