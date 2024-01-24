@@ -10,3 +10,7 @@ router = APIRouter(prefix="/vaiao", tags=["Vai ảo"])
 @router.post("/create")
 async def create(vaiao: vaiaocreate, db: Session = Depends(deps.get_db)):
     return crud_vaiao.create(db=db, obj_in=vaiao)
+
+@router.get("/")
+async def getall(db: Session= Depends(deps.get_db)):
+    return crud_vaiao.get_all(db=db)

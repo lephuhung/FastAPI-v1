@@ -173,7 +173,7 @@ CREATE TABLE "vaiao" (
   "id" SERIAL PRIMARY KEY,
   "uid_hoinhom" varchar,
   "uid_vaiao" varchar,
-  "andanh" boolean,
+  "active" boolean,
   "created_at" timestamp,
   "updated_at" timestamp
 );

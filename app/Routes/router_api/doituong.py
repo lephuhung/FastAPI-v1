@@ -10,7 +10,11 @@ from app.schemas.doituong_donvi import doituong_donvicreate
 from fastapi import Form
 
 router = APIRouter(prefix="/doituong", tags=["Đối tượng"])
-
+# get all doituong
+@router.get('')
+async def get_all(db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=[])):
+    data= crud.crud_doituong.get_multi(db)
+    return data
 # create a new Doituong
 @router.post("/create")
 async def create_doituong( doituong: doituongcreate,db: Session = Depends(deps.get_db)):
