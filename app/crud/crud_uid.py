@@ -1,8 +1,10 @@
 from app.crud.base import CRUDBase
 from app.models.uid import uid
+from app.models.trangthai import trangthai
 from app.schemas.uid import uidCreate, uidUpdate
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
+from fastapi.responses import JSONResponse
 
 class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
     def get_uid_by_id(self, id:int, db: Session):
@@ -18,7 +20,32 @@ class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
         return data 
     def get_all_by_type_id(self, type_id: int, db: Session):
         subquery = (db.query(uid.uid, func.max(uid.updated_at).label('max_updated_at')).group_by(uid.uid).subquery())
-        data = (db.query(uid).join(subquery, (uid.uid == subquery.c.uid) & (uid.updated_at == subquery.c.max_updated_at))).filter(uid.type_id==type_id).all()
-        return data
+        data = ((db.query(uid.uid.label('uid'),uid.name.label('name'), uid.reaction.label('reaction'),
+         uid.SDT.label('SDT'), uid.trangthai_id.label('trangthai_id'), uid.type_id.label('type_id'), uid.ghichu.label('ghichu'),
+          uid.Vaiao.label('Vaiao'), uid.updated_at.label('updated_at'), trangthai.name.label('trangthai_name'))
+        .join(subquery, (uid.uid == subquery.c.uid) & (uid.updated_at == subquery.c.max_updated_at)))
+        .join(trangthai, trangthai.id == uid.trangthai_id)
+        .filter(uid.type_id==type_id)
+        # .add_columns(uid.name, uid.reaction, uid.SDT, uid.trangthai_id, uid.type_id, uid.ghichu, uid.Vaiao, uid.updated_at)
+        .all())
+        print(data)
+        formatted_result = [
+        {
+            'uid': row.uid,
+            'name': row.name,
+            'reaction': row.reaction,
+            'SDT': row.SDT,
+            'trangthai_id': row.trangthai_id,
+            'type_id': row.type_id,
+            'ghichu_id': row.ghichu,
+            'Vaiao': row.Vaiao,
+            'updated_at': str(row.updated_at),
+            "trangthai_name": row.trangthai_name
+        }
+        for row in data
+        ]
+        formatted_result_as_dict = [dict(item) for item in formatted_result]
+        return JSONResponse(content=formatted_result_as_dict)
+        # return data
 
 crud_uid = CRUDUid(uid)
