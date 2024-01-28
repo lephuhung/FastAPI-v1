@@ -58,7 +58,7 @@ def get_current_user(
             raise credentials_exception
         token_data = AccessTokenData(**payload)
     except (jwt.JWTError, ValidationError):
-        logger.error("Error Decoding Token", exc_info=True)
+        # logger.error("Error Decoding Token", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
