@@ -25,7 +25,7 @@ class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
         subquery = (db.query(uid.uid, func.max(uid.updated_at).label('max_updated_at')).group_by(uid.uid).subquery())
         data = ((db.query(uid.uid.label('uid'),uid.name.label('name'), uid.reaction.label('reaction'),
          uid.SDT.label('SDT'), uid.trangthai_id.label('trangthai_id'), uid.type_id.label('type_id'), uid.ghichu.label('ghichu'),
-          uid.Vaiao.label('Vaiao'), uid.updated_at.label('updated_at'), trangthai.name.label('trangthai_name'), Donvi.name.label('donvi_name'), ctnv.name.label('ctnv_name'))
+          uid.Vaiao.label('Vaiao'), uid.updated_at.label('updated_at'), trangthai.name.label('trangthai_name'), trangthai.color.label('trangthai_color') ,Donvi.name.label('donvi_name'), ctnv.name.label('ctnv_name'))
         .join(subquery, (uid.uid == subquery.c.uid) & (uid.updated_at == subquery.c.max_updated_at)))
         .join(trangthai, trangthai.id == uid.trangthai_id)
         .join(donvi_hoinhom, donvi_hoinhom.uid == uid.uid)
@@ -45,6 +45,7 @@ class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
             'Vaiao': row.Vaiao,
             'updated_at': str(row.updated_at),
             "trangthai_name": row.trangthai_name,
+            "trangthai_color": row.trangthai_color,
             'donvi_name': row.donvi_name,
             'ctnv_name': row.ctnv_name,
         }
