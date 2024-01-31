@@ -26,3 +26,10 @@ async def create_doituong( doituong: doituongcreate,db: Session = Depends(deps.g
 async def update_doituong(doituong_id: UUID4, doituonginupdate: doituongupdate, db: Session = Depends(deps.get_db)):
     doituong = crud.crud_doituong.get_doituong_by_id(doituong_id=doituong_id, db=db)
     return crud.crud_doituong.update(db=db, db_obj=doituong, obj_in=doituonginupdate)
+
+# get details doituong
+@router.get("/details/{doituong_id}")
+async def get_details(doituong_id: UUID4, db: Session = Depends(deps.get_db), current_user= Security(deps.get_current_active_user,scopes=[])):
+    data= crud.crud_doituong.get_details(db=db, doituong_id=doituong_id)
+    return data
+
