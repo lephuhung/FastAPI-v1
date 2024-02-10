@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.Routes.router_api import (uid, ctnv, moiquanhe, vaiao, user_has_role, trangthai_hoinhom,type,
 user, auth, user_donvi, donvi_hoinhom ,trichtin,role_has_permission,role, quantrivien, permission,
 user_has_permission, doituong,tags, model_has_tags, doituong_donvi, 
-tinhchat_hoinhom, doituong_uid, trangthai, tinhchat, color, donvi)
+tinhchat_hoinhom, doituong_uid, trangthai, tinhchat, color, donvi, thongke)
 api_router = APIRouter()
 
 api_router.include_router(uid.router)
@@ -32,3 +32,4 @@ api_router.include_router(donvi.router)
 api_router.include_router(role.router)
 api_router.include_router(quantrivien.router)
 api_router.include_router(permission.router)
+api_router.include_router(thongke.router)

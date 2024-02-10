@@ -41,7 +41,7 @@ class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
             'SDT': row.SDT,
             'trangthai_id': row.trangthai_id,
             'type_id': row.type_id,
-            'ghichu_id': row.ghichu,
+            'ghichu': row.ghichu,
             'Vaiao': row.Vaiao,
             'updated_at': str(row.updated_at),
             "trangthai_name": row.trangthai_name,

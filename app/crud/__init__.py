@@ -24,3 +24,4 @@ from .crud_doituong_uid import crud_doituong_uid
 from .crud_vaiao import crud_vaiao
 from .crud_trangthai_hoinhom import crud_trangthai_hoinhom
 from .crud_quantrivien import crud_quantrivien
+from .crud_thongke import crud_thongke

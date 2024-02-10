@@ -20,3 +20,4 @@ class tinhchat_hoinhom(Base):
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
     )
+    # tinchat = relationship('tinhchat')
