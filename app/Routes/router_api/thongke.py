@@ -22,3 +22,13 @@ def create_tags(db: Session = Depends(deps.get_db), current_user = Security(deps
 def create_tags(db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
     return crud.crud_thongke.thongketinhchat(db)
 
+@router.get('/details/donvi/{donvi_id}')
+def create_tags(donvi_id: UUID4, db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
+    return crud.crud_thongke.details_uid(donvi_id=donvi_id, db=db)
+
+@router.get('/details/doituong/{donvi_id}')
+def create_tags(donvi_id: UUID4, db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
+    return crud.crud_thongke.deatails_doituong(donvi_id=donvi_id, db=db)
+
+
+

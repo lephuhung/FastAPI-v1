@@ -6,6 +6,8 @@ from app.models.doituong_donvi import Doituong_Donvi
 from app.models.tinhchat_hoinhom import tinhchat_hoinhom
 from app.models.uid import uid
 from app.models.ctnv import ctnv
+# from app.crud import crud_doituong
+from app.models.trangthai import trangthai
 from app.models.doituong import Doituong
 from app.schemas.tinhchat import tinhchatcreate, tinhchatupdate
 from sqlalchemy.orm import Session
@@ -14,6 +16,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import desc, func, String
 from sqlalchemy.orm import joinedload 
 class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
+    # thống kê uid thuộc đơn vị
     def thongkedonvi_uid(self, donvi_id: UUID4 ,db: Session):
         donvihoinhom_details = (db.query(donvi_hoinhom.uid.label('uid'), uid.name.label('uid_name'), ctnv.name.label('ctnv_name'), ctnv.id.label('ctnv_id'), uid.Vaiao.label('Vaiao'))
         .join(uid, donvi_hoinhom.uid == uid.uid)
@@ -40,6 +43,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             ]
         }
         return thongke_counts
+    # thống kê đối tượng thuộc đơn vị
     def thongkedonvi_doituong(self, donvi_id: UUID4, db: Session):
         donvi_doituong = (db.query(Doituong_Donvi.id.label('id'),Doituong.id.label('doituong_id'), Doituong.KOL.label('KOL'), ctnv.name.label('ctnv_name'))
         .join(Doituong, Doituong.id == Doituong_Donvi.doituong_id)
@@ -65,6 +69,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             ]
         }
         return thongke_counts
+    # thống kê đơn vị
     def thongkedonvi(self, db: Session):
         json_data= []
         donvi_list = db.query(Donvi).all()
@@ -74,6 +79,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             output ={'donvi': donvi.name, 'id': donvi.id, 'hoinhom': hoinhom, 'doituong': doituong}
             json_data.append(output)
         return json_data
+    # thống kê tính chất theo đonq vị
     def thongketinhchat(self, db: Session):
         data = (
         db.query(
@@ -104,4 +110,43 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             if not found:
                 result.append({"id": key[0], "name": key[1], "count": entry["count"], "uids": [entry["uid_name"]]})
         return JSONResponse(content=result)
+    #  liệt kê uid thuộc đơn vị
+    def details_uid(self, donvi_id: UUID4, db: Session):
+        subquery = (db.query(uid.uid, func.max(uid.updated_at).label('max_updated_at')).group_by(uid.uid).subquery())
+        data = ((db.query(uid.uid.label('uid'),uid.name.label('name'), uid.reaction.label('reaction'),
+         uid.SDT.label('SDT'), uid.trangthai_id.label('trangthai_id'), uid.type_id.label('type_id'), uid.ghichu.label('ghichu'),
+          uid.Vaiao.label('Vaiao'), uid.updated_at.label('updated_at'), trangthai.name.label('trangthai_name'), trangthai.color.label('trangthai_color') ,Donvi.name.label('donvi_name'), ctnv.name.label('ctnv_name'))
+        .join(subquery, (uid.uid == subquery.c.uid) & (uid.updated_at == subquery.c.max_updated_at)))
+        .join(trangthai, trangthai.id == uid.trangthai_id)
+        .join(donvi_hoinhom, donvi_hoinhom.uid == uid.uid)
+        .join(ctnv, donvi_hoinhom.CTNV_ID == ctnv.id)
+        .join(Donvi, donvi_hoinhom.donvi_id == Donvi.id)
+        .filter(donvi_hoinhom.donvi_id==donvi_id)
+        .all())
+        formatted_result = [
+        {
+            'uid': row.uid,
+            'name': row.name,
+            'reaction': row.reaction,
+            'SDT': row.SDT,
+            'trangthai_id': row.trangthai_id,
+            'type_id': row.type_id,
+            'ghichu': row.ghichu,
+            'Vaiao': row.Vaiao,
+            'updated_at': str(row.updated_at),
+            "trangthai_name": row.trangthai_name,
+            "trangthai_color": row.trangthai_color,
+            'donvi_name': row.donvi_name,
+            'ctnv_name': row.ctnv_name,
+        }
+        for row in data
+        ]
+        formatted_result_as_dict = [dict(item) for item in formatted_result]
+        return JSONResponse(content=formatted_result_as_dict)
+    # liet ke doituong thuoc don vi
+
+    def deatails_doituong(self, donvi_id:UUID4, db: Session):
+        result = db.query(Doituong).join(Doituong_Donvi, Doituong.id == Doituong_Donvi.doituong_id ).filter(Doituong_Donvi.donvi_id==donvi_id).all()
+        return result
+        
 crud_thongke=CRUDThongKe(tinhchat)

@@ -20,7 +20,10 @@ async def get_all(db: Session = Depends(deps.get_db), current_user=Security(deps
 async def create_doituong( doituong: doituongcreate,db: Session = Depends(deps.get_db)):
     doituongoutDB = crud.crud_doituong.create(db=db, obj_in=doituong)
     return doituongoutDB
-
+@router.get("/view/{doituong_id}")
+async def view_doituong(doituong_id: UUID4, db: Session = Depends(deps.get_db), current_user=Security(deps.get_current_active_user, scopes=[])):
+    doituong = crud.crud_doituong.get_doituong_by_id(doituong_id=doituong_id, db=db)
+    return doituong
 # update not work yet
 @router.post("/update/{doituong_id}")
 async def update_doituong(doituong_id: UUID4, doituonginupdate: doituongupdate, db: Session = Depends(deps.get_db)):

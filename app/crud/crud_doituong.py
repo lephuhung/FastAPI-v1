@@ -3,6 +3,7 @@ from pydantic import UUID4
 from app.models.doituong import Doituong
 from app.models.doituong_uid import Doituong_UID
 from app.models.trichtin import trichtin
+from app.models.doituong_donvi import Doituong_Donvi
 from app.models.moiquanhe import moiquanhe
 from app.models.uid import uid
 from sqlalchemy.orm import Session
@@ -14,6 +15,10 @@ class CRUD_DOITUONG (CRUDBase[Doituong, doituongcreate, doituongupdate]):
     def get_doituong_by_id(self, doituong_id: UUID4, db: Session):
         return db.query(Doituong).filter(Doituong.id == doituong_id).first()
 
+    def get_doituong_by_donvi_id(self, donvi_id: UUID4, db:Session):
+        result = db.query(Doituong).join(Doituong_Donvi, Doituong.id == Doituong_Donvi.doituong_id ).filter(Doituong_Donvi.donvi_id==donvi_id).all()
+        return result
+        
     def get_details(self, doituong_id: UUID4, db:Session):
         details_uid = (
             db.query(
