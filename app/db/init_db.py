@@ -151,7 +151,7 @@ def init_db(db: Session)-> None:
             crud.crud_ctnv.create(db=db, obj_in=ctnv_in_db)
 
     # type
-    type_array= ['Nhóm Facebook', "Tài khoản Facebook cá nhân", "Trang Facbook", "Tài khoản TikTok", "Tài khoản Zalo"]
+    type_array= ['Nhóm Facebook', "Facebook cá nhân", "Trang Facebook", "Tài khoản TikTok", "Tài khoản Zalo"]
     type_db= crud.crud_type.get_type_by_id(db=db, id=1)
     if type_db is None:
         for item in type_array:

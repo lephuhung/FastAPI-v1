@@ -6,7 +6,7 @@ from app.Routes import deps
 from sqlalchemy.orm import Session
 router = APIRouter(prefix="/ctnv", tags=["Công tác nghiệp vụ"])
 
-@router.get('/')
+@router.get('/getAll')
 async def getAll(db: Session = Depends(deps.get_db)):
     return crud_ctnv.get_multi(db)
 

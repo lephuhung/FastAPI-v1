@@ -2,11 +2,15 @@ from app.crud.base import CRUDBase
 from app.models.uid import uid
 from app.models.trangthai import trangthai
 from app.models.donvi import Donvi
+from app.crud.crud_hoinhom_donvi import crud_donvihoinhom
 from app.models.donvi_hoinhom import donvi_hoinhom
+from fastapi.encoders import jsonable_encoder
 from app.models.ctnv import ctnv
+from fastapi import HTTPException
 from app.schemas.uid import uidCreate, uidUpdate
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
+from app.schemas.uid import uidCreate
 from fastapi.responses import JSONResponse
 
 class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
