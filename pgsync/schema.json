@@ -1,0 +1,312 @@
+[
+  {
+    "database": "postgres",
+    "index": "datadoc_index",
+    "setting": {
+      "analysis": {
+        "analyzer": {
+          "vi_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "vi_tokenizer"
+          }
+        },
+        "tokenizer": {
+          "vi_tokenizer": {
+            "token_chars": [
+              "letter",
+              "digit",
+              "punctuation",
+              "symbol"
+            ],
+            "min_gram": "9",
+            "type": "ngram",
+            "max_gram": "10"
+          }
+        }
+      }
+    },
+    "nodes": {
+      "table": "datadoc",
+      "columns": [
+        "article_id",
+        "topic",
+        "href",
+        "publish_date",
+        "newspaper",
+        "created_date",
+        "language",
+        "sapo",
+        "content",
+        "feature_image"
+      ],
+      "transform": {
+        "mapping": {
+          "article_id": {
+            "type": "text",
+            "copy_to": "article_id"
+          },
+          "topic": {
+            "type": "text",
+            "copy_to": "topic",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "href": {
+            "type": "text",
+            "copy_to": "href"
+          },
+          "publish_date": {
+            "type": "date",
+            "copy_to": "publish_date"
+          },
+          "newspaper": {
+            "type": "keyword",
+            "copy_to": "newspaper"
+          },
+          "created_date": {
+            "type": "date",
+            "copy_to": "created_date"
+          },
+          "language": {
+            "type": "text",
+            "copy_to": "language"
+          },
+          "sapo": {
+            "type": "text",
+            "copy_to": "sapo"
+          },
+          "content": {
+            "type": "text",
+            "copy_to": "content",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "feature_image": {
+            "type": "text",
+            "copy_to": "feature_image"
+          }
+        }
+      }
+    }
+  },
+  {
+    "database": "postgres",
+    "index": "post_index",
+    "nodes": {
+      "table": "post",
+      "columns": [
+        "uid",
+        "message",
+        "from_uid",
+        "created_time",
+        "shares",
+        "reaction",
+        "id_uid",
+        "updated_time",
+        "created_at",
+        "updated_at"
+      ],
+      "transform": {
+        "mapping": {
+          "uid": {
+            "type": "text",
+            "copy_to": "uid",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "message": {
+            "type": "text",
+            "copy_to": "message",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "from_uid": {
+            "type": "text",
+            "copy_to": "from_uid"
+          },
+          "created_time": {
+            "type": "date",
+            "copy_to": "created_time"
+          },
+          "updated_time": {
+            "type": "date",
+            "copy_to": "updated_time"
+          },
+          "shares": {
+            "type": "integer",
+            "copy_to": "shares"
+          },
+          "reaction": {
+            "type": "integer",
+            "copy_to": "reaction"
+          },
+          "id_uid": {
+            "type": "text",
+            "copy_to": "id_uid"
+          },
+          "type_id": {
+            "type": "integer",
+            "copy_to": "type_id"
+          },
+          "created_at": {
+            "type": "date",
+            "copy_to": "created_at"
+          },
+          "updated_at": {
+            "type": "date",
+            "copy_to": "updated_at"
+          }
+        }
+      }
+    }
+  },
+  {
+    "database": "postgres",
+    "index": "comment_index",
+    "nodes": {
+      "table": "comment",
+      "columns": [
+        "uid",
+        "message",
+        "from_uid",
+        "created_time",
+        "shares",
+        "reaction",
+        "uid_post",
+        "created_at",
+        "updated_at"
+      ],
+      "transform": {
+        "mapping": {
+          "uid": {
+            "type": "text",
+            "copy_to": "uid"
+          },
+          "message": {
+            "type": "text",
+            "copy_to": "message",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "from_uid": {
+            "type": "text",
+            "copy_to": "from_uid"
+          },
+          "created_time": {
+            "type": "date",
+            "copy_to": "created_time"
+          },
+          "shares": {
+            "type": "integer",
+            "copy_to": "shares"
+          },
+          "reaction": {
+            "type": "integer",
+            "copy_to": "reaction"
+          },
+          "uid_post": {
+            "type": "text",
+            "copy_to": "uid_post"
+          },
+          "created_at": {
+            "type": "date",
+            "copy_to": "created_at"
+          },
+          "updated_at": {
+            "type": "date",
+            "copy_to": "updated_at"
+          }
+        }
+      }
+    }
+  },
+  {
+    "database": "postgres",
+    "index": "uid_index",
+    "nodes": {
+      "table": "uid",
+      "columns": [
+        "uid",
+        "image",
+        "name",
+        "reaction",
+        "type_id",
+        "created_at",
+        "updated_at"
+      ],
+      "transform": {
+        "mapping": {
+          "uid": {
+            "type": "text",
+            "copy_to": "uid",
+            "fields":{
+              "ngram": {
+                  "type": "text",
+                  "analyzer": "vi_analyzer",
+                  "search_analyzer": "vi_analyzer",
+                  "fielddata": true
+              }
+          }
+          },
+          "name": {
+            "type": "text",
+            "copy_to": "name"
+          },
+          "image": {
+            "type": "text",
+            "copy_to": "image"
+          },
+          "reaction": {
+            "type": "integer",
+            "copy_to": "reaction"
+          },
+          "type_id": {
+            "type": "integer",
+            "copy_to": "type_id"
+          },
+          "created_at": {
+            "type": "date",
+            "copy_to": "created_at"
+          },
+          "updated_at": {
+            "type": "date",
+            "copy_to": "updated_at"
+          }
+        }
+      }
+    }
+  }
+]
