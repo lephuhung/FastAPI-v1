@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: org.elasticsearch.index.analysis.VietnameseAnalysisIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 1,208.978 s <<< FAILURE! - in org.elasticsearch.index.analysis.VietnameseAnalysisIntegrationTests
+testVietnameseAnalyzer(org.elasticsearch.index.analysis.VietnameseAnalysisIntegrationTests)  Time elapsed: 1,200.058 s  <<< ERROR!
+java.lang.Exception: Test abandoned because suite timeout was reached.
+
+org.elasticsearch.index.analysis.VietnameseAnalysisIntegrationTests  Time elapsed: 1,208.001 s  <<< ERROR!
+java.lang.Exception: Suite timeout exceeded (>= 1200000 msec).
+
+org.elasticsearch.index.analysis.VietnameseAnalysisIntegrationTests  Time elapsed: 1,208.002 s  <<< ERROR!
+com.carrotsearch.randomizedtesting.UncaughtExceptionError: Captured an uncaught exception in thread: Thread[id=80, name=elasticsearch[node_s0][masterService#updateTask][T#1], state=RUNNABLE, group=TGRP-VietnameseAnalysisIntegrationTests]
+Caused by: java.lang.UnsatisfiedLinkError: no coccoc_tokenizer_jni in java.library.path: /usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
+
