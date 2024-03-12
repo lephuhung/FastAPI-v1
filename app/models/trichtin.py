@@ -18,6 +18,7 @@ class trichtin(Base):
     nhanxet = Column(String(255), nullable= True)
     xuly= Column(String(255))
     uid_vaiao = Column(String(20), nullable= False)
+    user_id = Column(UUID(as_uuid=True), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
         DateTime,

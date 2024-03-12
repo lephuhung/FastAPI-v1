@@ -2,6 +2,7 @@ from pydantic import  BaseModel
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from datetime import datetime
 from typing import Optional
+from pydantic import UUID4
 
 class trichtin(BaseModel):
     uid : Optional[str]
@@ -12,7 +13,8 @@ class trichtin(BaseModel):
 
     
 class trichtinCreate(trichtin):
-    pass
+    user_id: UUID4
+    
 
 class trichtinUpdate(trichtin):
     pass
