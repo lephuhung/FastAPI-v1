@@ -1,7 +1,7 @@
 [
   {
-    "database": "postgres",
-    "index": "datadoc_index",
+    "database": "fastapi_treafik",
+    "index": "Doituong_index",
     "setting": {
       "analysis": {
         "analyzer": {
@@ -29,95 +29,101 @@
       }
     },
     "nodes": {
-      "table": "datadoc",
+      "table": "Doituong",
       "columns": [
-        "article_id",
-        "topic",
-        "href",
-        "publish_date",
-        "newspaper",
-        "created_date",
-        "language",
-        "sapo",
-        "content",
-        "feature_image"
+        "id",
+        "client_name",
+        "CMND",
+        "CCCD",
+        "Image",
+        "Ngaysinh",
+        "Gioitinh",
+        "Quequan",
+        "Thongtinbosung",
+        "SDT",
+        "KOL",
+        "created_at",
+        "updated_at"
       ],
       "transform": {
         "mapping": {
-          "article_id": {
+          "id": {
             "type": "text",
-            "copy_to": "article_id"
+            "copy_to": "id"
           },
-          "topic": {
+          "client_name": {
             "type": "text",
-            "copy_to": "topic",
-            "fields":{
+            "copy_to": "",
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
-          "href": {
+          "CMND": {
             "type": "text",
-            "copy_to": "href"
+            "copy_to": "CMND"
           },
-          "publish_date": {
+          "CCCD": {
+            "type": "text",
+            "copy_to": "CCCD"
+          },
+          "created_at": {
             "type": "date",
-            "copy_to": "publish_date"
+            "copy_to": "created_at"
           },
-          "newspaper": {
+          "Thongtinbosung": {
             "type": "keyword",
-            "copy_to": "newspaper"
+            "copy_to": "Thongtinbosung"
           },
-          "created_date": {
+          "updated_at": {
             "type": "date",
-            "copy_to": "created_date"
+            "copy_to": "updated_at"
           },
-          "language": {
+          "Quequan": {
             "type": "text",
-            "copy_to": "language"
+            "copy_to": "Quequan"
           },
-          "sapo": {
+          "SDT": {
             "type": "text",
-            "copy_to": "sapo"
+            "copy_to": "SDT"
           },
-          "content": {
+          "Image": {
             "type": "text",
             "copy_to": "content",
-            "fields":{
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
-          "feature_image": {
-            "type": "text",
-            "copy_to": "feature_image"
+          "Gioitinh": {
+            "type": "boolen",
+            "copy_to": "Gioitinh"
           }
         }
       }
     }
   },
   {
-    "database": "postgres",
-    "index": "post_index",
+    "database": "fastapi_treafik",
+    "index": "trichtin_index",
     "nodes": {
-      "table": "post",
+      "table": "trichtin",
       "columns": [
+        "id",
         "uid",
-        "message",
-        "from_uid",
-        "created_time",
-        "shares",
-        "reaction",
-        "id_uid",
-        "updated_time",
+        "ghichu_noidung",
+        "nhanxet",
+        "xuly",
+        "uid_vaiao",
+        "user_id",
         "created_at",
         "updated_at"
       ],
@@ -126,54 +132,46 @@
           "uid": {
             "type": "text",
             "copy_to": "uid",
-            "fields":{
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
-          "message": {
+          "ghichu_noidung": {
             "type": "text",
-            "copy_to": "message",
-            "fields":{
+            "copy_to": "ghichu_noidung",
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
-          "from_uid": {
+          "nhanxet": {
             "type": "text",
-            "copy_to": "from_uid"
+            "copy_to": "nhanxet"
           },
-          "created_time": {
-            "type": "date",
-            "copy_to": "created_time"
-          },
-          "updated_time": {
-            "type": "date",
-            "copy_to": "updated_time"
-          },
-          "shares": {
-            "type": "integer",
-            "copy_to": "shares"
+          "xuly": {
+            "type": "text",
+            "copy_to": "xuly"
           },
           "reaction": {
             "type": "integer",
             "copy_to": "reaction"
           },
-          "id_uid": {
+          "uid_vaiao": {
             "type": "text",
-            "copy_to": "id_uid"
+            "copy_to": "uid_vaiao"
           },
-          "type_id": {
-            "type": "integer",
-            "copy_to": "type_id"
+          "user_id": {
+            "type": "text",
+            "copy_to": "user_id"
           },
           "created_at": {
             "type": "date",
@@ -188,18 +186,20 @@
     }
   },
   {
-    "database": "postgres",
-    "index": "comment_index",
+    "database": "fastapi_treafik",
+    "index": "uid_index",
     "nodes": {
-      "table": "comment",
+      "table": "UID",
       "columns": [
+        "id",
         "uid",
-        "message",
-        "from_uid",
-        "created_time",
-        "shares",
+        "name",
         "reaction",
-        "uid_post",
+        "SDT",
+        "trangthai_id",
+        "type_id",
+        "ghichu",
+        "Vaiao",
         "created_at",
         "updated_at"
       ],
@@ -209,37 +209,37 @@
             "type": "text",
             "copy_to": "uid"
           },
-          "message": {
+          "ghichu": {
             "type": "text",
-            "copy_to": "message",
-            "fields":{
+            "copy_to": "ghichu",
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
-          "from_uid": {
+          "name": {
             "type": "text",
-            "copy_to": "from_uid"
+            "copy_to": "name"
           },
-          "created_time": {
-            "type": "date",
-            "copy_to": "created_time"
-          },
-          "shares": {
-            "type": "integer",
-            "copy_to": "shares"
-          },
-          "reaction": {
-            "type": "integer",
-            "copy_to": "reaction"
-          },
-          "uid_post": {
+          "SDT": {
             "type": "text",
-            "copy_to": "uid_post"
+            "copy_to": "SDT"
+          },
+          "type_id": {
+            "type": "text",
+            "copy_to": "ty"
+          },
+          "Vaiao": {
+            "type": "boolen",
+            "copy_to": "Vaiao"
+          },
+          "trangthai_id": {
+            "type": "integer",
+            "copy_to": "trangthai_id"
           },
           "created_at": {
             "type": "date",
@@ -272,14 +272,14 @@
           "uid": {
             "type": "text",
             "copy_to": "uid",
-            "fields":{
+            "fields": {
               "ngram": {
-                  "type": "text",
-                  "analyzer": "vi_analyzer",
-                  "search_analyzer": "vi_analyzer",
-                  "fielddata": true
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
               }
-          }
+            }
           },
           "name": {
             "type": "text",
