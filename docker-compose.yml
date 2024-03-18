@@ -122,17 +122,17 @@ services:
       - elk
   rediss:
     image: 'redis:alpine'
-    container_name: redis
+    container_name: rediss
     ports:
       - '6379:6379'
     networks:
       - elk
 
-  pgsync:
+  pgsyncs:
     build:
       context: .
       dockerfile: PgsyncDockerfile
-    container_name: pgsync
+    container_name: pgsyncs
     restart: always
     environment:
       - PG_USER=fastapi_traefik
@@ -144,7 +144,7 @@ services:
       - ELASTICSEARCH_PORT=9200
       - ELASTICSEARCH_USER=elastic
       - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
-      - REDIS_HOST=redis
+      - REDIS_HOST=rediss
     networks:
       - elk
 networks:
