@@ -78,6 +78,21 @@ services:
     depends_on:
       - elasticsearch
 
+  db:
+    build:
+      context: .
+      dockerfile: PostgresDockerfile
+    container_name: db
+    ports:
+      - '5432:5432'
+    networks:
+      - elk
+    environment:
+      - POSTGRES_USER=fastapi_traefik
+      - POSTGRES_PASSWORD=fastapi_traefik
+      - POSTGRES_DB=fastapi_traefik
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
   web:
     build: .
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --reload';  
@@ -94,22 +109,7 @@ services:
       - "traefik.http.routers.fastapi.rule=Host(`fastapi.localhost`)"
     networks:
       - elk
-
-  db:
-    build:
-      context: .
-      dockerfile: PostgresDockerfile
-    container_name: db
-    ports:
-      - '5432:5432'
-    networks:
-      - elk
-    environment:
-      - POSTGRES_USER=fastapi_traefik
-      - POSTGRES_PASSWORD=fastapi_traefik
-      - POSTGRES_DB=fastapi_traefik
-      - POSTGRES_HOST_AUTH_METHOD=trust
-
+      
   traefik:
     image: traefik:v2.9.6
     ports:
