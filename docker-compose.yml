@@ -120,6 +120,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - elk
+      
   rediss:
     image: 'redis:alpine'
     container_name: rediss
