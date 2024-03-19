@@ -1,7 +1,7 @@
 [
   {
     "database": "fastapi_treafik",
-    "index": "Doituong_index",
+    "index": "doituong_index",
     "setting": {
       "analysis": {
         "analyzer": {
@@ -29,7 +29,7 @@
       }
     },
     "nodes": {
-      "table": "Doituong",
+      "table": "doituong",
       "columns": [
         "id",
         "client_name",
@@ -53,7 +53,7 @@
           },
           "client_name": {
             "type": "text",
-            "copy_to": "",
+            "copy_to": "client_name",
             "fields": {
               "ngram": {
                 "type": "text",
@@ -104,7 +104,7 @@
             }
           },
           "Gioitinh": {
-            "type": "boolen",
+            "type": "boolean",
             "copy_to": "Gioitinh"
           }
         }
@@ -161,10 +161,6 @@
             "type": "text",
             "copy_to": "xuly"
           },
-          "reaction": {
-            "type": "integer",
-            "copy_to": "reaction"
-          },
           "uid_vaiao": {
             "type": "text",
             "copy_to": "uid_vaiao"
@@ -189,7 +185,7 @@
     "database": "fastapi_treafik",
     "index": "uid_index",
     "nodes": {
-      "table": "UID",
+      "table": "uid",
       "columns": [
         "id",
         "uid",
@@ -231,71 +227,15 @@
           },
           "type_id": {
             "type": "text",
-            "copy_to": "ty"
+            "copy_to": "type_id"
           },
           "Vaiao": {
-            "type": "boolen",
+            "type": "boolean",
             "copy_to": "Vaiao"
           },
           "trangthai_id": {
             "type": "integer",
             "copy_to": "trangthai_id"
-          },
-          "created_at": {
-            "type": "date",
-            "copy_to": "created_at"
-          },
-          "updated_at": {
-            "type": "date",
-            "copy_to": "updated_at"
-          }
-        }
-      }
-    }
-  },
-  {
-    "database": "postgres",
-    "index": "uid_index",
-    "nodes": {
-      "table": "uid",
-      "columns": [
-        "uid",
-        "image",
-        "name",
-        "reaction",
-        "type_id",
-        "created_at",
-        "updated_at"
-      ],
-      "transform": {
-        "mapping": {
-          "uid": {
-            "type": "text",
-            "copy_to": "uid",
-            "fields": {
-              "ngram": {
-                "type": "text",
-                "analyzer": "vi_analyzer",
-                "search_analyzer": "vi_analyzer",
-                "fielddata": true
-              }
-            }
-          },
-          "name": {
-            "type": "text",
-            "copy_to": "name"
-          },
-          "image": {
-            "type": "text",
-            "copy_to": "image"
-          },
-          "reaction": {
-            "type": "integer",
-            "copy_to": "reaction"
-          },
-          "type_id": {
-            "type": "integer",
-            "copy_to": "type_id"
           },
           "created_at": {
             "type": "date",
