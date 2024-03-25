@@ -8,7 +8,7 @@ class uid(Base):
     """
     Database model for an uid
     """
-    __tablename__ = 'uid'
+    __tablename__ = 'UID'
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     uid = Column(String(20))
     name = Column(String(255))

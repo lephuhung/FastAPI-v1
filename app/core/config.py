@@ -22,10 +22,6 @@ class Settings(BaseSettings):
     POSTGRES_USER: Optional[str] 
     POSTGRES_PASSWORD: Optional[str] 
     POSTGRES_DB: Optional[str] 
-    ELASTIC_VERSION: Optional[str]
-    ELASTIC_PASSWORD: Optional[str]
-    LOGSTASH_INTERNAL_PASSWORD:Optional[str]
-    KIBANA_SYSTEM_PASSWORD: Optional[str]
 
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
     @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
