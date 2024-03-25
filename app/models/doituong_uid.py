@@ -11,7 +11,7 @@ class Doituong_UID(Base):
     """
     Database model for an Doituong UUID
     """
-    __tablename__="doituong_uid"
+    __tablename__="Doituong_UID"
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     doituong_id = Column(Integer, ForeignKey("Doituong.id"))
     uid = Column(String(20), ForeignKey("UID.uid") )

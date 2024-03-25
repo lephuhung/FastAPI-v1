@@ -11,7 +11,7 @@ class ctnv(Base):
     """
     Database model for an ctnv
     """
-    __tablename__ = 'ctnv'
+    __tablename__ = 'CTNV'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     name = Column(String(255))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
