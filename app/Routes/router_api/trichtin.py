@@ -19,10 +19,6 @@ async def create(trichtin: trichtin, db: Session = Depends(deps.get_db), current
 async def update(uid: str, db: Session = Depends(deps.get_db)):
     return crud_trichtin.get_all_by_uid(uid=uid, db= db)
 
-@router.get("/get-all-by-vaiao/{uid_vaiao}")
-async def update(uid_vaiao: str, db: Session = Depends(deps.get_db)):
-    return crud_trichtin.get_trichtin_by_uid_vaiao(uid_vaiao=uid_vaiao, db= db)
-
 @router.put("/update/{trichtin_id}")
 async def delete(trichtin_id: int, trichtin: trichtinUpdate ,db: Session = Depends(deps.get_db)):
     trichtin_data = crud_trichtin.get_trichtin_by_id(id=trichtin_id, db=db)
