@@ -21,3 +21,4 @@ from .tinhchat import tinhchatcreate,tinhchatupdate
 from .type import typecreate, typeupdate
 from .moiquanhe import moiquanhecreate, moiquanheupdate
 from .donvi import DonviCreate, DonviUpdate
+from .donvi_hoinhom import doituong_donvicreate, doituong_donviupdate

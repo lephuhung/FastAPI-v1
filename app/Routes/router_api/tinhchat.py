@@ -6,7 +6,7 @@ from app.Routes import deps
 from sqlalchemy.orm import Session
 router = APIRouter(prefix="/tinhchat", tags=["Tính chất"])
 
-@router.get('/')
+@router.get('/getAll')
 async def getAll(db: Session = Depends(deps.get_db)):
     return crud_tinhchat.get_multi(db)
 

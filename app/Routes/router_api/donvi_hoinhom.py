@@ -21,3 +21,4 @@ async def get_all(db: Session = Depends(deps.get_db), current_user=Security(deps
 async def create_tags_model(hoinhom_donvi: hoinhom_donvicreate ,db: Session = Depends(deps.get_db)):
     data = crud.crud_donvihoinhom.create(db=db, obj_in=hoinhom_donvi)
     return {"success": True, "data": data}
+    

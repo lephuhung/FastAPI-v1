@@ -16,6 +16,7 @@ class uid(BaseModel):
 class uidCreate(uid):
     ctnv_id: Optional[int]
     donvi_id: Optional[UUID4]
+    tinhchat_id: Optional[int]
     def get_uid_instance(self) -> uid:
         return uid(
             uid=self.uid,
@@ -28,5 +29,6 @@ class uidCreate(uid):
             Vaiao=self.Vaiao
         )
 
-class uidUpdate(uid):
+class uidUpdate(uidCreate):
+    id_hoinhomdonvi: Optional[int]
     pass
