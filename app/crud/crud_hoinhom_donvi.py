@@ -11,4 +11,8 @@ class CRUDHoinhom_donvi(CRUDBase[donvi_hoinhom, hoinhom_donvicreate, hoinhom_don
     def get_all_hoinhom(self, db: Session):
         return db.query(donvi_hoinhom).all()
     
+    def find_donvi_hoinhom(self, id: int, db: Session):
+        data = db.query(donvi_hoinhom).filter(donvi_hoinhom.id==id).first()
+        return data
+
 crud_donvihoinhom = CRUDHoinhom_donvi(donvi_hoinhom)
