@@ -15,12 +15,17 @@ def get_tags_all(donvi_id: UUID4, db: Session = Depends(deps.get_db)):
     return crud.crud_thongke.thongkedonvi_doituong(db=db, donvi_id = donvi_id)
 
 @router.get('/thongkedonvi/')
-def create_tags(db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
+def create_tags(db: Session = Depends(deps.get_db)):
     return crud.crud_thongke.thongkedonvi(db=db)
 
 @router.get('/thongketinhchat/')
 def create_tags(db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
     return crud.crud_thongke.thongketinhchat(db)
+
+@router.get('/thongkephanloai/')
+def create_tags(db: Session = Depends(deps.get_db)):
+    
+    return crud.crud_thongke.thongkephanloai(db)
 
 @router.get('/details/donvi/{donvi_id}')
 def create_tags(donvi_id: UUID4, db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):

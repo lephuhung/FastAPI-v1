@@ -3,12 +3,11 @@ from typing import Annotated
 from app.Routes import deps
 from sqlalchemy.orm import Session
 from pydantic import UUID4
+from app.schemas.doituong_donvi import doituong_donviupdate, doituong_donvicreate
 from app import crud
 from app.crud.crud_doituong_donvi import crud_doituong_donvi
 from app.models.doituong import Doituong
-from app.schemas.doituong_donvi import doituong_donvicreate, doituong_donviupdate
 from app.schemas.doituong import doituongcreate, doituongupdate
-from app.schemas.doituong_donvi import doituong_donvicreate
 from fastapi import Form
 
 router = APIRouter(prefix="/doituong", tags=["Đối tượng"])
@@ -20,13 +19,13 @@ async def get_all(
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
-    data = crud.crud_doituong.get_multi(db)
+    data = crud.crud_doituong.get_doituong_with_ctnv(db=db)
     return data
 
 
 # create a new Doituong
 @router.post("/create")
-async def create_doituong(data: doituongcreate, db: Session = Depends(deps.get_db)):
+async def create_doituong(data: doituongcreate,response: Response ,db: Session = Depends(deps.get_db)):
     try:
         doituong_format = data.get_doituong_instance()
         doituongoutDB = crud.crud_doituong.create(db=db, obj_in=doituong_format)
@@ -36,10 +35,12 @@ async def create_doituong(data: doituongcreate, db: Session = Depends(deps.get_d
             CTNV_ID=data.ctnv_id,
         )
         data = crud_doituong_donvi.create(db=db, obj_in=doituong_donvi_instance)
+        db.commit()
         return doituongoutDB
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail=e)
+        response.status_code=444
+        return {"message": "fail to created"}
 
 
 @router.get("/view/{doituong_id}")
@@ -57,10 +58,29 @@ async def view_doituong(
 async def update_doituong(
     doituong_id: UUID4,
     doituonginupdate: doituongupdate,
+    response: Response,
     db: Session = Depends(deps.get_db),
 ):
-    doituong = crud.crud_doituong.get_doituong_by_id(doituong_id=doituong_id, db=db)
-    return crud.crud_doituong.update(db=db, db_obj=doituong, obj_in=doituonginupdate)
+    try:
+        doituong_format = doituonginupdate.get_doituong_instance()
+        doituong_donvi_result = crud.crud_doituong_donvi.get_doituong_by_doituong_id(doituong_id=doituong_id, db=db)
+        update_doituong_donvi = doituong_donvicreate(
+            doituong_id= doituong_id,
+            CTNV_ID= doituonginupdate.ctnv_id,
+            donvi_id = doituonginupdate.donvi_id
+        )
+        # Cập nhật lại code bổ sung thêm tách ctnv_id để cập nhập bảng donvi_doituong
+        crud.crud_doituong_donvi.update(db=db, db_obj= doituong_donvi_result, obj_in=update_doituong_donvi)
+        doituong = crud.crud_doituong.get_doituong_by_id(doituong_id=doituong_id, db=db)
+        crud.crud_doituong.update(db=db, db_obj=doituong, obj_in=doituong_format)
+        db.commit()
+        return {"message": "success to updated"}
+    except Exception as e:
+        # raise HTTPException(status_code=500, detail= e)
+        # print(e)
+        db.rollback()
+        response.status_code=444
+        return {"message": "fail to updated"}
 
 
 # get details doituong
@@ -83,3 +103,6 @@ async def delete_doituongs(doituong_id: UUID4, response: Response ,db: Session =
         response.status_code=444
         return {"message": e}
 
+@router.get("/test")
+async def test_doituongs(db: Session = Depends(deps.get_db)):
+    return crud.crud_doituong.get_doituong_with_ctnv(db=db)

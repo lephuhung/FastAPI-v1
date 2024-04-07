@@ -13,7 +13,7 @@ from app.schemas.tinhchat import tinhchatcreate, tinhchatupdate
 from sqlalchemy.orm import Session
 from pydantic import UUID4
 from fastapi.responses import JSONResponse
-from sqlalchemy import desc, func, String
+from sqlalchemy import desc, func, String, select
 from sqlalchemy.orm import joinedload 
 class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
     # thống kê uid thuộc đơn vị
@@ -36,7 +36,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
         # export output
         thongke_counts ={
             'VaiAo': vaiao_count,
-            'NVCB': ctnv_id_count - vaiao_count,
+            'NVCB': len(formatted_result) - vaiao_count,
             'ctnv':[
                 {'ctnv_name':ctnv_id, 'count':count} for ctnv_id, count in ctnv_id_counts.items()
             
@@ -92,8 +92,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
         .join(tinhchat_hoinhom, tinhchat_hoinhom.tinhchat_id == tinhchat.id)
         .join(uid, uid.uid == tinhchat_hoinhom.uid)
         .group_by(tinhchat.id, tinhchat_hoinhom.uid, uid.name)
-        .all()
-)
+        .all())
         formatted_result = [{'id':row.id, 'name':row.name, 'count':row.count, 'uid': row.uid, 'uid_name': row.uid_name} for row in data]
         result = []
 
@@ -110,6 +109,19 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             if not found:
                 result.append({"id": key[0], "name": key[1], "count": entry["count"], "uids": [entry["uid_name"]]})
         return JSONResponse(content=result)
+    # thongke by phanloai
+    def thongkephanloai(self, db: Session):
+        data = (db.query(
+        trangthai.id.label('id'),
+        trangthai.name.label('name'),
+        func.count(trangthai.id).label('count'),
+        tinhchat_hoinhom.uid.label('uid'),
+        uid.name.label('uid_name'),
+        )
+        .join(trangthai, trangthai.id == uid.trangthai_id)
+        .group_by(trangthai.name, uid.uid, uid.trangthai_id)
+        .all())
+        print(data)
     #  liệt kê uid thuộc đơn vị
     def details_uid(self, donvi_id: UUID4, db: Session):
         subquery = (db.query(uid.uid, func.max(uid.updated_at).label('max_updated_at')).group_by(uid.uid).subquery())

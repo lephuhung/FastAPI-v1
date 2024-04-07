@@ -43,17 +43,17 @@ async def create(data: uidCreate, response: Response,db: Session = Depends(deps.
             result = crud_donvihoinhom.create(db=db, obj_in=instance)
             tinchathoinhom_ins= tinhchat_hoinhomcreate(uid = uid_result.uid, tinhchat_id=data.tinhchat_id)
             result2 = crud_tinhchat_hoinhom.create(db=db, obj_in=tinchathoinhom_ins)
-            return resul2
+            db.commit()
+            return result2
     except Exception as e:
         db.rollback()
-        # response.status_code=444
-        # print(e)
-        # return {"message": "fail to created"}
-        raise HTTPException(status_code=400, details=e)
+        response.status_code=444
+        return {"message": "fail to created"}
+        # raise HTTPException(status_code=400, detail=e)
 
 
 @router.put("/update/{id}")
-async def update(id: str, uid_data: uidUpdate, db: Session = Depends(deps.get_db)):
+async def update(id: str, uid_data: uidUpdate,response: Response, db: Session = Depends(deps.get_db)):
     try:
         uid_format = uid_data.get_uid_instance()
         uid_has_update = crud_uid.get_uid_by_uid(uid_id=id, db=db)
@@ -70,10 +70,12 @@ async def update(id: str, uid_data: uidUpdate, db: Session = Depends(deps.get_db
         print(donvihoinhom)
         print(update_donvihoinhom)
         donvihoinhom_update = crud_donvihoinhom.update(obj_in=update_donvihoinhom, db_obj=donvihoinhom, db=db)
-        return {}
+        db.commit()
+        return donvihoinhom_update
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail=e)
+        response.status_code=444
+        return {"message": "fail to created"}
 
 
 @router.delete("/delete/{id}")
@@ -105,7 +107,6 @@ async def get_groups(
     facebook_data = crud_uid.get_all_by_type_id(type_id=type_id, db=db)
     return facebook_data
 
-
 @router.get("/get-pages")
 async def get_pages(
     type_id: int = 3,
@@ -114,3 +115,27 @@ async def get_pages(
 ):
     facebook_data = crud_uid.get_all_by_type_id(type_id=type_id, db=db)
     return facebook_data
+
+@router.get("/get-vaiao")
+async def get_vaiao(
+    db: Session = Depends(deps.get_db),
+    vaiao: bool = True,
+    # current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    vaiao_data = crud_uid.get_vaiao(Vaiao=vaiao, db=db)
+    return vaiao_data
+@router.get("/get-uid")
+async def get_uid(
+    db: Session = Depends(deps.get_db),
+    vaiao: bool = False,
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    vaiao_data = crud_uid.get_vaiao(Vaiao=vaiao, db=db)
+    return vaiao_data
+@router.get("/get-page-group")
+async def get_pages(
+    db: Session = Depends(deps.get_db),
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    page_group_data = crud_uid.get_all_by_page_group(db=db, type_group=0, type_page=3)
+    return page_group_data
