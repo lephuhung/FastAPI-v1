@@ -6,7 +6,7 @@ from pydantic import UUID4
 class doituong_uid(BaseModel):
     doituong_id: Optional[UUID4]
     uid: Optional[str]
-    Moiquanhe_id: Optional[int]
+    moiquanhe_id: Optional[int]
     class Config:
         from_attributes = True
 class doituong_uidcreate(doituong_uid):

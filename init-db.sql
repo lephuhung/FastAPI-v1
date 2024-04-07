@@ -61,7 +61,7 @@ CREATE TABLE "quantrivien" (
   "id" SERIAL PRIMARY KEY,
   "uid_facebook" varchar,
   "uid" varchar,
-  "Moiquanhe_id" int,
+  "moiquanhe_id" int,
   "created_at" timestamp,
   "updated_at" timestamp
 );
