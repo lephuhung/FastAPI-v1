@@ -24,8 +24,15 @@ def create_tags(db: Session = Depends(deps.get_db), current_user = Security(deps
 
 @router.get('/thongkephanloai/')
 def create_tags(db: Session = Depends(deps.get_db)):
-    
     return crud.crud_thongke.thongkephanloai(db)
+
+@router.get('/thongkectnv/')
+def create_tags(db: Session = Depends(deps.get_db)):
+    return crud.crud_thongke.thongkectnv(db)
+
+@router.get('/thongkedoituongctnv/')
+def create_tags(db: Session = Depends(deps.get_db)):
+    return crud.crud_thongke.thongkedoituongctnv(db)
 
 @router.get('/details/donvi/{donvi_id}')
 def create_tags(donvi_id: UUID4, db: Session = Depends(deps.get_db), current_user = Security(deps.get_current_active_user, scopes=[])):
