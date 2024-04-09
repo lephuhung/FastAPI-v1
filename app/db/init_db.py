@@ -127,7 +127,7 @@ def init_db(db: Session)-> None:
             crud.crud_moiquanhe.create(db= db, obj_in=mqh)
 
     #  tinhchat
-    tinhchat_array = ['Trung tính', 'Chưa xác định','Tích cực', "Tiêu cực"]
+    tinhchat_array = ['Trung tính', 'Chưa phân loại','Tích cực', "Tiêu cực"]
     tinhchat_db = crud.crud_tinhchat.find_tinhchat_byid(db=db, id=1)
     if tinhchat_db is None:
         for item in tinhchat_array:
@@ -143,7 +143,7 @@ def init_db(db: Session)-> None:
             crud.crud_tags.create(db=db, obj_in=tags_in_db)
 
     # CTNV
-    ctnv_array = ['ĐTCB', 'Theo dõi', 'Gọi hỏi răn đe', 'QLNV', 'Vai ảo']
+    ctnv_array = ['ĐTCB', 'Theo dõi', 'Gọi hỏi răn đe', 'QLNV', 'Vai ảo', 'KTNV', 'Công tác công an', 'CA', 'Khởi tố']
     ctnv_db= crud.crud_ctnv.get_ctnv_by_id(db=db, id=1)
     if ctnv_db is None:
         for item in ctnv_array:
@@ -160,7 +160,7 @@ def init_db(db: Session)-> None:
 
 
     # trangthai
-    trangthai_array =['Tôn giáo', 'Đông thành viên', "Công nhân","Sinh viên", "Buôn bán", "Hội Đồng Hương"]
+    trangthai_array =['Tôn giáo', 'Đông thành viên', "Công nhân", "Sinh viên", "Buôn bán", "Hội Đồng Hương"]
     trangthai_db = crud.crud_trangthai.get_trangthai_by_id(db=db, id=1)
     if trangthai_db is None:
         for item in trangthai_array:
