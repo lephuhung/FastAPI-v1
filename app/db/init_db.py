@@ -20,7 +20,9 @@ from app.core.Utils import random_hex_color
 def init_db(db: Session)-> None:
 
     # Create donvi
-    donvi_list= ["PA05", "PA02", "PA03", "PA04", "PA06", "PA09", "PA08", "PA01"]
+    donvi_list= ["PA01", "PA02", "PA03", "PA04", "PA05", "PA06", "PA08", "PA09", "PC01", "PC02", "PC03", "PC04", "PC06", "PC07", "PC08", "PC09", "PC10", "PC11", "PK02", "Thành phố Hà Tĩnh", "Thị xã Hồng Lĩnh", "Thị xã Kỳ Anh", "Huyện Nghi Xuân",
+        "Huyện Đức Thọ", "Huyện Hương Sơn", "Huyện Hương Khê", "Huyện Vũ Quang", "Huyện Can Lộc", "Huyện Thạch Hà", "Huyện Lộc Hà", "Huyện Cẩm Xuyên", "Huyện Kỳ Anh"
+        ]
     donvi= crud.crud_donvi.get_donvi_by_name(db=db, name="PA05")
     if donvi is None:
         for item in donvi_list:
@@ -29,7 +31,7 @@ def init_db(db: Session)-> None:
 
     donvi_PA05= crud.crud_donvi.get_donvi_by_name(db=db, name="PA05")
     # Create superadmin PA05
-    username_pao5=["Luongvinhlong", "Nguyendangphi", "Dangdonthang"]
+    username_pao5=["Luongvinhlong", "Nguyendangphi", "Dangdonthang", "Tranquangphat", "Levantu"]
     user = crud.crud_user.get_by_name(db=db, username=settings.FIRST_SUPER_ADMIN_ACCOUNT_NAME)
     salt= get_salt()
     if user is None:
@@ -160,7 +162,7 @@ def init_db(db: Session)-> None:
 
 
     # trangthai
-    trangthai_array =['Tôn giáo', 'Đông thành viên', "Công nhân", "Sinh viên", "Buôn bán", "Hội Đồng Hương"]
+    trangthai_array =["Tôn giáo", "Đông thành viên", "Công nhân", "Sinh viên", "Buôn bán", "Hội Đồng Hương", "Thông thường", "Công chức, viên chức", "Giáo dục", "Công nghệ", "Khác"]
     trangthai_db = crud.crud_trangthai.get_trangthai_by_id(db=db, id=1)
     if trangthai_db is None:
         for item in trangthai_array:
