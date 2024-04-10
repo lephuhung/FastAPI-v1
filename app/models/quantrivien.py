@@ -14,7 +14,7 @@ class quantrivien(Base):
     __tablename__='quantrivien'
     id = Column(Integer, primary_key=True, index=True)
     uid = Column(String(20), nullable=False)
-    uid_facebook = Column(String(20), ForeignKey('UID.uid'), nullable=False) 
+    uid_facebook = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
     moiquanhe_id = Column(String(20), ForeignKey('moiquanhe.id'))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(
