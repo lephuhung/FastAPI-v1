@@ -21,7 +21,7 @@ def init_db(db: Session)-> None:
 
     # Create donvi
     donvi_list= ["PA01", "PA02", "PA03", "PA04", "PA05", "PA06", "PA08", "PA09", "PC01", "PC02", "PC03", "PC04", "PC06", "PC07", "PC08", "PC09", "PC10", "PC11", "PK02", "Thành phố Hà Tĩnh", "Thị xã Hồng Lĩnh", "Thị xã Kỳ Anh", "Huyện Nghi Xuân",
-        "Huyện Đức Thọ", "Huyện Hương Sơn", "Huyện Hương Khê", "Huyện Vũ Quang", "Huyện Can Lộc", "Huyện Thạch Hà", "Huyện Lộc Hà", "Huyện Cẩm Xuyên", "Huyện Kỳ Anh"
+        "Huyện Đức Thọ", "Huyện Hương Sơn", "Huyện Hương Khê", "Huyện Vũ Quang", "Huyện Can Lộc", "Huyện Thạch Hà", "Huyện Lộc Hà", "Huyện Cẩm Xuyên", "Huyện Kỳ Anh", "Đơn vị khác"
         ]
     donvi= crud.crud_donvi.get_donvi_by_name(db=db, name="PA05")
     if donvi is None:
@@ -145,7 +145,7 @@ def init_db(db: Session)-> None:
             crud.crud_tags.create(db=db, obj_in=tags_in_db)
 
     # CTNV
-    ctnv_array = ['ĐTCB', 'Theo dõi', 'Gọi hỏi răn đe', 'QLNV', 'Vai ảo', 'KTNV', 'Công tác công an', 'CA', 'Khởi tố']
+    ctnv_array = ['ĐTCB', 'Theo dõi', 'Gọi hỏi răn đe', 'QLNV', 'Vai ảo', 'KTNV', 'Công tác công an', 'CA', 'Khởi tố', "Khác"]
     ctnv_db= crud.crud_ctnv.get_ctnv_by_id(db=db, id=1)
     if ctnv_db is None:
         for item in ctnv_array:
