@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/search", tags=["Elastic Search"])
 es = Elasticsearch(
     "http://elasticsearch:9200",
-    api_key="RXRVdnlJNEJqUWQwZndGTXFlQVc6LWVZQnNUdG1SZm15UkZhZDRaUDJsQQ==",
+    api_key="UDV4V3pZNEJRNEZFaVdoU1VRcnI6TkRfakctNjBTeDJFNGdzM1J5Z1Uxdw==",
 )
 
 @router.post("/trichtin")
