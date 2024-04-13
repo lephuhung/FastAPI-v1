@@ -162,7 +162,7 @@ def init_db(db: Session)-> None:
 
 
     # trangthai
-    trangthai_array =["Tôn giáo", "Đông thành viên", "Công nhân", "Sinh viên", "Buôn bán", "Hội Đồng Hương", "Thông thường", "Công chức, viên chức", "Giáo dục", "Công nghệ", "Khác"]
+    trangthai_array =["Tôn giáo", "Đông thành viên", "Công nhân", "Sinh viên", "Buôn bán", "Hội Đồng Hương", "Thông thường", "Công chức, viên chức", "Giáo dục", "Công nghệ","Khác", "KOL Mạng", "KOL Ẩn", "KOL Uy tín", "Phản động"]
     trangthai_db = crud.crud_trangthai.get_trangthai_by_id(db=db, id=1)
     if trangthai_db is None:
         for item in trangthai_array:
