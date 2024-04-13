@@ -44,7 +44,7 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             }
             for row in donvihoinhom_details
         ]
-        vaiao_count = sum(item["Vaiao"] for item in formatted_result)
+        KOL = sum(item["Vaiao"] for item in formatted_result)
         # Count number of unique ctnv_id
         ctnv_id_count = len(set(item["ctnv_id"] for item in formatted_result))
         # count ctnv_id
@@ -54,8 +54,8 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             ctnv_id_counts[ctnv_id] = ctnv_id_counts.get(ctnv_id, 0) + 1
         # export output
         thongke_counts = {
-            "VaiAo": vaiao_count,
-            "NVCB": len(formatted_result) - vaiao_count,
+            "VaiAo": KOL,
+            "NVCB": len(formatted_result) - KOL,
             "ctnv": [
                 {"ctnv_name": ctnv_id, "count": count}
                 for ctnv_id, count in ctnv_id_counts.items()
@@ -86,8 +86,8 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             }
             for row in donvi_doituong
         ]
-        vaiao_count = sum(item["KOL"] for item in formatted_result)
-        ctnv_name_count = len(set(item["ctnv_name"] for item in formatted_result))
+        KOL = sum(item["KOL"] for item in formatted_result)
+        ctnv_name_count = len(donvi_doituong)
         # count ctnv_id
         ctnv_id_counts = {}
         for item in formatted_result:
@@ -95,8 +95,8 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             ctnv_id_counts[ctnv_id] = ctnv_id_counts.get(ctnv_id, 0) + 1
         # export output
         thongke_counts = {
-            "KOL": vaiao_count,
-            "THEODOI": ctnv_name_count - vaiao_count,
+            "KOL": KOL,
+            "THEODOI": ctnv_name_count,
             "ctnv": [
                 {"ctnv_name": ctnv_id, "count": count}
                 for ctnv_id, count in ctnv_id_counts.items()
