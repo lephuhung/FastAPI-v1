@@ -6,6 +6,8 @@ from app.models.doituong_donvi import Doituong_Donvi
 from app.models.tinhchat_hoinhom import tinhchat_hoinhom
 from app.models.uid import uid
 from app.models.ctnv import ctnv
+from app.models.type import type
+from app.models.trichtin import trichtin
 from app.models.trangthai import trangthai
 from app.models.doituong import Doituong
 from app.models.doituong_donvi import Doituong_Donvi
@@ -181,7 +183,8 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
             .join(uid, uid.trangthai_id == trangthai.id)
             .filter(uid.Vaiao == False)
             .group_by(trangthai.id, trangthai.name)
-            .all())
+            .all()
+        )
         # Transforming results to JSON serializable format
         formatted_results = [
             {
@@ -194,13 +197,21 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
         ]
 
         return JSONResponse(content=formatted_results)
+
     def thongkectnv(self, db: Session):
-        result = (db.query(donvi_hoinhom.CTNV_ID, ctnv.name.label('name') ,func.array_agg(uid.name).label('uid_name'),func.count(donvi_hoinhom.CTNV_ID).label('count_ctnv'))
-                .join(ctnv, ctnv.id == donvi_hoinhom.CTNV_ID)
-                .join(uid, donvi_hoinhom.uid==uid.uid)
-                .group_by(donvi_hoinhom.CTNV_ID, ctnv.name)
-                .filter(uid.Vaiao ==False)
-                .all())
+        result = (
+            db.query(
+                donvi_hoinhom.CTNV_ID,
+                ctnv.name.label("name"),
+                func.array_agg(uid.name).label("uid_name"),
+                func.count(donvi_hoinhom.CTNV_ID).label("count_ctnv"),
+            )
+            .join(ctnv, ctnv.id == donvi_hoinhom.CTNV_ID)
+            .join(uid, donvi_hoinhom.uid == uid.uid)
+            .group_by(donvi_hoinhom.CTNV_ID, ctnv.name)
+            .filter(uid.Vaiao == False)
+            .all()
+        )
         formatted_results = [
             {
                 "ctnv_id": row.CTNV_ID,
@@ -212,13 +223,20 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
         ]
 
         return JSONResponse(content=formatted_results)
-    
+
     def thongkedoituongctnv(self, db: Session):
-        result = (db.query(Doituong_Donvi.CTNV_ID, ctnv.name.label('name') ,func.array_agg(Doituong.client_name).label('doituong_name'),func.count(Doituong_Donvi.CTNV_ID).label('count_ctnv'))
-                .join(ctnv, ctnv.id == Doituong_Donvi.CTNV_ID)
-                .join(Doituong, Doituong.id==Doituong_Donvi.doituong_id)
-                .group_by(Doituong_Donvi.CTNV_ID, ctnv.name)
-                .all())
+        result = (
+            db.query(
+                Doituong_Donvi.CTNV_ID,
+                ctnv.name.label("name"),
+                func.array_agg(Doituong.client_name).label("doituong_name"),
+                func.count(Doituong_Donvi.CTNV_ID).label("count_ctnv"),
+            )
+            .join(ctnv, ctnv.id == Doituong_Donvi.CTNV_ID)
+            .join(Doituong, Doituong.id == Doituong_Donvi.doituong_id)
+            .group_by(Doituong_Donvi.CTNV_ID, ctnv.name)
+            .all()
+        )
         formatted_results = [
             {
                 "ctnv_id": row.CTNV_ID,
@@ -231,8 +249,8 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
 
         return JSONResponse(content=formatted_results)
 
+        #  liệt kê uid thuộc đơn vị
 
-            #  liệt kê uid thuộc đơn vị
     def details_uid(self, donvi_id: UUID4, db: Session):
         subquery = (
             db.query(uid.uid, func.max(uid.updated_at).label("max_updated_at"))
@@ -300,5 +318,86 @@ class CRUDThongKe(CRUDBase[tinhchat, tinhchatcreate, tinhchatupdate]):
         )
         return result
 
+    def dashboard_doituong(self, db: Session):
+        # count number of KOL
+        KOL_count = db.query(Doituong).filter(Doituong.KOL == True).count()
+        # count number of doituong
+        doituong_count = db.query(Doituong).filter(Doituong.KOL == False).count()
+        # count CTNV of Doituong
+        result_ctnv = (
+            db.query(
+                Doituong_Donvi.CTNV_ID,
+                ctnv.name.label("name"),
+                func.count(Doituong_Donvi.CTNV_ID).label("count_ctnv"),
+            )
+            .join(ctnv, ctnv.id == Doituong_Donvi.CTNV_ID)
+            .join(Doituong, Doituong.id == Doituong_Donvi.doituong_id)
+            .group_by(Doituong_Donvi.CTNV_ID, ctnv.name)
+            .all()
+        )
+        formatted_results = [
+            {
+                "ctnv_id": row.CTNV_ID,
+                "ctnv_name": row.name,
+                "count": row.count_ctnv,
+            }
+            for row in result_ctnv
+        ]
+        results = {
+            "KOL": KOL_count,
+            "doituong": doituong_count,
+            "ctnv_doituong": formatted_results,
+        }
+        return JSONResponse(content=results)
+
+    def dashboard_uid(self, db: Session):
+        # count vaiao
+        vaiao_count = db.query(uid).filter(uid.Vaiao == True).count()
+        uid_count = db.query(uid).filter(uid.Vaiao == False).count()
+        uid_type = (
+            db.query(uid.type_id,type.name.label('name') ,func.count(uid.type_id).label('count'))
+            .join(type, type.id == uid.type_id)
+            .filter(uid.Vaiao == False)
+            .group_by(uid.type_id, type.name)
+            .all()
+        )
+        result_ctnv = (
+            db.query(
+                donvi_hoinhom.CTNV_ID,
+                ctnv.name.label("name"),
+                func.count(donvi_hoinhom.CTNV_ID).label("count_ctnv"),
+            )
+            .join(ctnv, ctnv.id == donvi_hoinhom.CTNV_ID)
+            .join(uid, donvi_hoinhom.uid == uid.uid)
+            .group_by(donvi_hoinhom.CTNV_ID, ctnv.name)
+            .filter(uid.Vaiao == False)
+            .all()
+        )
+        ctnv_uid_results = [
+            {
+                "ctnv_id": row.CTNV_ID,
+                "ctnv_name": row.name,
+                "count": row.count_ctnv,
+            }
+            for row in result_ctnv
+        ]
+        uid_results = [
+            {
+                "type_id": row.type_id,
+                "type_name": row.name,
+                "count": row.count
+            }
+            for row in uid_type
+        ]
+        results = {
+            "vaiao": vaiao_count,
+            "uid_count": uid_count,
+            "uid_type": uid_results,
+            "ctnv_uid": ctnv_uid_results,
+        }
+        return JSONResponse(content=results)
+    def dashboard_trichtin(self, db: Session):
+        trichtin_result = db.query(trichtin).count()
+        return {"trichtin":trichtin_result}
 
 crud_thongke = CRUDThongKe(tinhchat)
