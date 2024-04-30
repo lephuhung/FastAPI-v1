@@ -37,6 +37,7 @@ class CRUD_DOITUONG(CRUDBase[Doituong, doituongcreate, doituongupdate]):
             .join(Doituong_Donvi, Doituong.id == Doituong_Donvi.doituong_id)
             .join (ctnv, ctnv.id== Doituong_Donvi.CTNV_ID)
             .join(Donvi, Donvi.id == Doituong_Donvi.donvi_id)
+            .order_by(Doituong_Donvi.updated_at.desc())
             .all()
         )
         formatted_result = [
