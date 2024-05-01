@@ -1,14 +1,15 @@
 # Use the official lightweight Node.js 14 image
-FROM node:14-alpine
+FROM node:21.7-alpine3.18
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the package.json and package-lock.json
 COPY package*.json ./
+# Add `/app/node_modules/.bin` to $PATH
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the local code to the container
 COPY . .
