@@ -80,7 +80,7 @@ class CRUDUid (CRUDBase[uid,uidCreate, uidUpdate]):
         .join(ctnv, donvi_hoinhom.CTNV_ID == ctnv.id)
         .join(Donvi, donvi_hoinhom.donvi_id == Donvi.id)
         .join(tinhchat_hoinhom,tinhchat_hoinhom.uid == uid.uid)
-        .filter(uid.type_id==4)
+        .filter(uid.type_id==2)
         .filter(uid.Vaiao ==Vaiao)
         .all())
         formatted_result = [

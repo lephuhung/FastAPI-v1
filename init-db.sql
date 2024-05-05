@@ -1,7 +1,7 @@
 -- use this line to using UUID generation--
 CREATE EXTENSION "uuid-ossp";
 
-CREATE TABLE "Doituong" (
+CREATE TABLE "doituong" (
   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   "client_name" varchar,
   "CMND" varchar,
@@ -34,7 +34,7 @@ CREATE TABLE "model_has_tags" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "UID" (
+CREATE TABLE "uid" (
   "id" SERIAL PRIMARY KEY,
   "uid" varchar,
   "name" varchar,
@@ -48,7 +48,7 @@ CREATE TABLE "UID" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "Doituong_UID" (
+CREATE TABLE "doituong_uid" (
   "id" SERIAL PRIMARY KEY,
   "doituong_id" uuid,
   "uid" varchar,
@@ -98,7 +98,7 @@ CREATE TABLE "trangthai_hoinhom" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "CTNV" (
+CREATE TABLE "ctnv" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,

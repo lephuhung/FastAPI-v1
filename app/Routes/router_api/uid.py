@@ -90,7 +90,7 @@ async def delete(id: str, db: Session = Depends(deps.get_db)):
 
 @router.get("/get-facebook")
 async def get_facebook(
-    type_id: int = 1,
+    type_id: int = 2,
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
@@ -100,7 +100,7 @@ async def get_facebook(
 
 @router.get("/get-groups")
 async def get_groups(
-    type_id: int = 0,
+    type_id: int = 1,
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
