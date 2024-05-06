@@ -15,7 +15,7 @@ services:
     ports:
       - '8200:8200'
     environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      ELASTIC_PASSWORD: 'changme'
     networks:
       - elk
     depends_on:

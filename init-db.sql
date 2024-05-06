@@ -141,7 +141,7 @@ CREATE TABLE "trichtin" (
   "nhanxet" varchar,
   "xuly" varchar,
   "uid_vaiao" varchar,
-  "user_id" uuid
+  "user_id" uuid,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -216,7 +216,7 @@ CREATE TABLE "role_has_permission" (
   "created_at" timestamp,
   "updated_at" timestamp
 );
-
+x
 CREATE TABLE "user" (
   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   "username" varchar,
