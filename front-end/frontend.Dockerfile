@@ -8,11 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 # Add `/app/node_modules/.bin` to $PATH
 
+# Copy the local code to the container
+COPY . .
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy the local code to the container
-COPY . .
+# # Copy the local code to the container
+# COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3011
