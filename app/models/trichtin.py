@@ -13,7 +13,7 @@ class trichtin(Base):
     """
     __tablename__='trichtin'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    uid = Column(String(20), ForeignKey('UID.uid'), nullable=False)
+    uid = Column(String(20), ForeignKey('uid.uid'), nullable=False)
     ghichu_noidung = Column(String(1000), nullable=False) 
     nhanxet = Column(String(255), nullable= True)
     xuly= Column(String(255))

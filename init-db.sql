@@ -141,7 +141,7 @@ CREATE TABLE "trichtin" (
   "nhanxet" varchar,
   "xuly" varchar,
   "uid_vaiao" varchar,
-  "user_id" uuid
+  "user_id" uuid,
   "created_at" timestamp,
   "updated_at" timestamp
 );

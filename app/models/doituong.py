@@ -11,7 +11,7 @@ class Doituong(Base):
     """
     Database model for an Doituong
     """
-    __tablename__='Doituong'
+    __tablename__='doituong'
     id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
     client_name = Column(String(255))
     CMND = Column(String(20), default=None)

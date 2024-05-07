@@ -35,8 +35,10 @@ services:
     volumes:
       - "./traefik.dev.toml:/etc/traefik/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  
   front-end:
-    build: .
+    build: 
+      context: front-end/
     ports:
       - "3011:3011"
     environment:
@@ -46,6 +48,6 @@ services:
     volumes:
       - ./front-end:/app
       - ./front-end/node_modules:/app/node_modules
-       
+    command: npm start
 volumes:
   postgres_data:

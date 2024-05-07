@@ -5,9 +5,9 @@ FROM node:21.7-alpine3.18
 WORKDIR /app
 
 # Copy the package.json and package-lock.json
-COPY package*.json ./
+COPY package*.json /app
 # Add `/app/node_modules/.bin` to $PATH
-
+ENV PATH /app/node_modules/.bin:$PATH
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3011
 
 # Command to run the application
-CMD ["npm", "start"]
+CMD ["top", "-b"]
