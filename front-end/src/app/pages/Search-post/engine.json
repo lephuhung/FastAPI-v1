@@ -1,0 +1,19 @@
+{
+  "engineName": "search-post",
+  "endpointBase": "http://localhost:3002",
+  "searchKey": "search-bmbnh2wrko1dccoivkpu5kz6",
+  "resultFields": [
+    "from_uid",
+    "message",
+    "reaction",
+    "shares",
+    "uid"
+  ],
+  "sortFields": [
+    "created_time"
+  ],
+  "facets": [
+    "created_time"
+  ],
+  "titleField": "message"
+}

@@ -1,0 +1,22 @@
+import React, { FC } from "react";
+import { useIntl } from 'react-intl'
+import { PageTitle } from '../../../_metronic/layout/core'
+import {Table} from './Table'
+const ClientWrap: FC = () => {
+    return (
+        <>
+            <Table className="mb-5 mb-xl-8"/>
+        </>
+    )
+}
+const Tags: FC = () => {
+    const intl = useIntl()
+    return (
+      <>
+        <PageTitle breadcrumbs={[]}>{intl.formatMessage({ id: 'MENU.CLIENT' })}</PageTitle>
+        <ClientWrap />
+      </>
+    )
+  }
+
+export { Tags }

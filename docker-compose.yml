@@ -148,6 +148,17 @@ services:
       - REDIS_HOST=rediss
     networks:
       - elk
+  front-end:
+    build: .
+    ports:
+      - "3011:3011"
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1 
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true 
+    volumes:
+      - ./front-end:/app
+      - ./front-end/node_modules:/app/node_modules
 networks:
   elk:
     driver: bridge

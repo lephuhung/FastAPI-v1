@@ -1,0 +1,24 @@
+{
+  "engineName": "search-datadoc",
+  "endpointBase": "http://localhost:3002",
+  "searchKey": "search-bmbnh2wrko1dccoivkpu5kz6",
+  "resultFields": [
+    "content",
+    "created_date",
+    "publish_date",
+    "sapo",
+    "topic"
+  ],
+  "sortFields": [
+    "publish_date"
+  ],
+  "facets": [
+    "newspaper",
+    "publish_date"
+  ],
+  "titleField": "topic",
+  "urlField": "href",
+  "thumbnailField": "feature_image"
+  
+  
+}
