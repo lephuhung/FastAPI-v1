@@ -81,7 +81,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: PostgresDockerfile
+      dockerfile: postgres.dockerfile
     container_name: db
     ports:
       - '5432:5432'

@@ -25,8 +25,8 @@ class crud_user_donvi(CRUDBase[user_donvi, UserDonviCreate, UserDonviUpdate]):
     # Get donvi of user ID
     def get_donvi_by_user_id(self, user_id: UUID4, db: Session):
         donvi_alias = aliased(Donvi)
-        user = db.query(donvi_alias.id.label('id'), donvi_alias.name.label('name')).join(user_donvi, user_donvi.donvi_id==donvi_alias.id).filter(user_donvi.user_id == user_id).first()
-        result_dict_list = [{'donvi_id': user.id, 'donvi_name': user.name}]
+        user_data = db.query(donvi_alias.id.label('id'), donvi_alias.name.label('name')).join(user_donvi, user_donvi.donvi_id==donvi_alias.id).filter(user_donvi.user_id == user_id).first()
+        result_dict_list = [{'donvi_id': user_data.id, 'donvi_name': user_data.name}]
         return result_dict_list
     # Count user on donvi ID
     def count_users_in_donvi(self, donvi_id: UUID4, db: Session):

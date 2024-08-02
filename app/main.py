@@ -27,7 +27,7 @@ app.include_router(api_router, prefix='/api')
 
 def init() -> None:
     db = SessionLocal()
-    init_db(db)
+    # init_db(db)
 
 @app.on_event("startup")
 async def startup_event():
