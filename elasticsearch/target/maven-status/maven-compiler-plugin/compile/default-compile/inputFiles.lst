@@ -1,0 +1,11 @@
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/elasticsearch/analysis/VietnameseConfig.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/apache/lucene/analysis/vi/VietnameseTokenizer.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/com/coccoc/Unsafe.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/apache/lucene/analysis/vi/VietnameseTokenizerImpl.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/elasticsearch/index/analysis/VietnameseStopTokenFilterFactory.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/elasticsearch/plugin/analysis/vi/AnalysisVietnamesePlugin.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/com/coccoc/Tokenizer.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/elasticsearch/index/analysis/VietnameseAnalyzerProvider.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/apache/lucene/analysis/vi/VietnameseAnalyzer.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/org/elasticsearch/index/analysis/VietnameseTokenizerFactory.java
+/home/lph77/Documents/GitHub/elasticsearch-analysis-vietnamese/src/main/java/com/coccoc/Token.java

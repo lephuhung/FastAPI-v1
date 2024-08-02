@@ -1,7 +1,7 @@
-FROM postgres:15.1-alpine
+FROM postgres:15
 
-LABEL author="Kevin Kouomeu"
-LABEL description="Postgres Image for demo"
-LABEL version="1.0"
+COPY ./pgsync/conf.sql /docker-entrypoint-initdb.d/
+COPY ./pgsync/populate.sql /docker-entrypoint-initdb.d/
 
-COPY init-db.sql /docker-entrypoint-initdb.d/
+RUN chmod a+r /docker-entrypoint-initdb.d/conf.sql
+RUN chmod a+r /docker-entrypoint-initdb.d/populate.sql
