@@ -149,7 +149,9 @@ services:
     networks:
       - elk
   front-end:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.front-end
     ports:
       - "3011:3011"
     environment:
