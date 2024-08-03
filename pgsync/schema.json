@@ -76,7 +76,7 @@
             "copy_to": "created_at"
           },
           "Thongtinbosung": {
-            "type": "keyword",
+            "type": "text",
             "copy_to": "Thongtinbosung"
           },
           "updated_at": {
