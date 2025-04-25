@@ -1,12 +1,32 @@
-from typing import Optional
-from pydantic import BaseModel
+from typing import Optional, List
+from pydantic import BaseModel, UUID4
+from datetime import datetime
 
 
-class Role(BaseModel):
-    name: Optional[str]
+class RoleBase(BaseModel):
+    name: str
 
-class RoleCreate(Role):
+
+class RoleCreate(RoleBase):
     pass
 
-class RoleUpdate(Role):
-    id: int
+
+class RoleUpdate(RoleBase):
+    pass
+
+
+class RoleInDBBase(RoleBase):
+    id: UUID4
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class Role(RoleInDBBase):
+    pass
+
+
+class RoleInDB(RoleInDBBase):
+    pass

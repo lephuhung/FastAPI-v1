@@ -1,17 +1,28 @@
-from app.crud.base import CRUDBase
-from pydantic import UUID4
+from typing import Any, Dict, Optional, Union, List
 from sqlalchemy.orm import Session
-from app.models.role_has_permission import Role_has_permission
-from app.schemas.role_has_permission import Role_has_PermissionUpdate, Role_has_PermissionCreate
+from app.crud.base import CRUDBase
+from app.models.role_permission import RolePermission
+from app.schemas.role_permission import RolePermissionCreate, RolePermissionUpdate
+from pydantic import UUID4
 
-class CURDRole_has_Permission(CRUDBase[Role_has_permission, Role_has_PermissionCreate, Role_has_PermissionUpdate]):
-    def get_all_permission_in_role(self, role_id: UUID4, *, db: Session):
-        role_permissions = (
-        db.query(Role_has_permission.permission_id)
-        .filter(Role_has_permission.role_id == role_id)
-        .all()
+
+class CRUDRolePermission(CRUDBase[RolePermission, RolePermissionCreate, RolePermissionUpdate]):
+    def get_by_role_id(self, db: Session, *, role_id: UUID4) -> List[RolePermission]:
+        return db.query(RolePermission).filter(RolePermission.role_id == role_id).all()
+
+    def get_by_permission_id(
+        self, db: Session, *, permission_id: int
+    ) -> List[RolePermission]:
+        return db.query(RolePermission).filter(RolePermission.permission_id == permission_id).all()
+
+    def get_by_role_and_permission(
+        self, db: Session, *, role_id: UUID4, permission_id: int
+    ) -> Optional[RolePermission]:
+        return (
+            db.query(RolePermission)
+            .filter(RolePermission.role_id == role_id, RolePermission.permission_id == permission_id)
+            .first()
         )
-        return [str(permission[0]) for permission in role_permissions]
 
 
-CrudRole_has_Permission = CURDRole_has_Permission(Role_has_permission)
+role_permission = CRUDRolePermission(RolePermission)

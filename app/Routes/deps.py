@@ -2,26 +2,18 @@ import logging
 from typing import Generator
 from pydantic import UUID4
 from app import crud, models, schemas
-from app.constants.role import Role
-from app.core import sercurity
+from app.core import security
 from app.core.config import settings
 from app.db.session import SessionLocal
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jose import jwt
-from app.models.role_has_permission import Role_has_permission
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from app.schemas.access_token import AccessTokenData
+
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/access-token",
-    # scopes={
-    #     Role.GUEST["name"]: Role.GUEST["description"],
-    #     Role.ACCOUNT_ADMIN["name"]: Role.ACCOUNT_ADMIN["description"],
-    #     Role.ACCOUNT_MANAGER["name"]: Role.ACCOUNT_MANAGER["description"],
-    #     Role.ADMIN["name"]: Role.ADMIN["description"],
-    #     Role.SUPER_ADMIN["name"]: Role.SUPER_ADMIN["description"],
-    # },
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -40,7 +32,7 @@ def get_current_user(
     security_scopes: SecurityScopes,
     db: Session = Depends(get_db),
     token: str = Depends(reusable_oauth2),
-) -> models.user:
+) -> models.user.User:
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
@@ -58,12 +50,11 @@ def get_current_user(
             raise credentials_exception
         token_data = AccessTokenData(**payload)
     except (jwt.JWTError, ValidationError):
-        # logger.error("Error Decoding Token", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = crud.crud_user.get(db, token_data.id)
+    user = crud.user.get(db, token_data.id)
     if not user:
         raise credentials_exception
     if security_scopes.scopes and not token_data.role:
@@ -78,21 +69,71 @@ def get_current_user(
     if security_scopes.scopes == []:
         return user
     raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissionse",
-                headers={"WWW-Authenticate": authenticate_value},
-            )
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not enough permissions",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
 
 
 def get_current_active_user(
-    current_user: schemas.user.UserCreate = Security(get_current_user, scopes=[],),
-) -> models.user:
-    if not crud.crud_user.is_active(current_user):
+    current_user: models.user.User = Security(get_current_user, scopes=[]),
+) -> models.user.User:
+    if not crud.user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
+
 def check_permission_in_role(permission_id: str, role_id: UUID4, db: Session):
-    data =db.query(Role_has_permission).filter(Role_has_permission.role_id==role_id, Role_has_permission.permission_id==permission_id).first()
-    if data is None:
+    role_permission = crud.role_permission.get_by_role_and_permission(
+        db=db, role_id=role_id, permission_id=permission_id
+    )
+    return role_permission is not None
+
+
+def check_access_permission(user_id: UUID4, unit_id: UUID4, db: Session):
+    # Lấy vai trò của người dùng
+    user_roles = crud.user_role.get_by_user_id(db=db, user_id=user_id)
+    if not user_roles:
         return False
+        
+    # Nếu là superadmin thì có quyền truy cập tất cả
+    for user_role in user_roles:
+        role = crud.role.get(db=db, id=user_role.role_id)
+        if role and role.name == "superadmin":
+            return True
+        
+    # Nếu là admin thì chỉ có quyền truy cập đơn vị của mình
+    for user_role in user_roles:
+        role = crud.role.get(db=db, id=user_role.role_id)
+        if role and role.name == "admin":
+            user = crud.user.get(db=db, id=user_id)
+            if not user or not user.unit_id:
+                return False
+            return user.unit_id == unit_id
+        
+    return False
+
+
+def get_current_user_with_access(
+    current_user: models.user.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+) -> models.user.User:
+    if not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Not authenticated"
+        )
+    return current_user
+
+
+def check_unit_access(
+    unit_id: UUID4,
+    current_user: models.user.User = Depends(get_current_user_with_access),
+    db: Session = Depends(get_db)
+):
+    if not check_access_permission(current_user.id, unit_id, db):
+        raise HTTPException(
+            status_code=403,
+            detail="Not enough permissions"
+        )
     return True

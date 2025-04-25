@@ -1,29 +1,40 @@
+from typing import Optional, List
+from pydantic import BaseModel, UUID4
 from datetime import datetime
-from typing import Optional
-
-# from app.schemas.user_role import UserRole
-from pydantic import UUID4, BaseModel, EmailStr
 
 
-# Shared properties
 class UserBase(BaseModel):
-    username: Optional[str]
+    username: str
+    is_active: bool = True
 
 
-# Properties to receive via API on creation
 class UserCreate(UserBase):
-    salt: Optional[str]
-    active: Optional[bool] = True
     password: str
-    donvi_id: Optional[UUID4]
+    unit_id: Optional[UUID4] = None
 
 
-
-# Properties to receive via API on update
 class UserUpdate(UserBase):
-    donvi_id: Optional[UUID4]
-    password: Optional[str]
+    password: Optional[str] = None
+    unit_id: Optional[UUID4] = None
+
+
+class UserInDBBase(UserBase):
+    id: UUID4
+    unit_id: Optional[UUID4] = None
+    created_at: datetime
     updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class User(UserInDBBase):
+    pass
+
+
+class UserInDB(UserInDBBase):
+    hashed_password: str
+    salt: str
 
 
 class UserOutDB(UserBase):
@@ -31,12 +42,6 @@ class UserOutDB(UserBase):
     username: Optional[str]
     active: Optional[bool]
 
-
-
-
-# Additional properties stored in DB
-class UserInDB(UserBase):
-    password: str
 
 class AcessToken(BaseModel):
     access_token: str

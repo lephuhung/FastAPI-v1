@@ -12,3 +12,4 @@ pydantic-settings==2.1.0
 inflect ==7.0.0
 sqlalchemy_utils ==0.41.1
 selenium==4.23.1
+elasticsearch==8.11.1

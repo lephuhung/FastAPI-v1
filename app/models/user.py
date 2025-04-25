@@ -1,27 +1,27 @@
-import datetime
-from uuid import uuid4
-
-from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
+from app.db.base_class import Base
+import uuid
 
+def generate_uuid():
+    return str(uuid.uuid4())
 
 class User(Base):
     """
-    Database model for an uid
+    Database model for user
     """
-    __tablename__ = 'user'
-    id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
-    username = Column(String(255),nullable=False)
-    password = Column(String(255),nullable=False) 
-    salt = Column(String(20), nullable=False)
-    active = Column(Boolean, default=True)
-    donvi_id = Column(UUID(as_uuid=True), ForeignKey("donvi.id"), default=None )
-    created_at = Column(DateTime, default=datetime.datetime.now())
-    updated_at = Column(
-        DateTime,
-        default=datetime.datetime.now(),
-        onupdate=datetime.datetime.now(),
-    )
-    # user_donvi = relationship("user_donvi", back_populates="user")
+    __tablename__ = "users"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=generate_uuid)
+    username = Column(String(100), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    salt = Column(String(255), nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    roles = relationship("UserRole", back_populates="user")
+    permissions = relationship("UserPermission", back_populates="user")
+    units = relationship("UserUnit", back_populates="user")

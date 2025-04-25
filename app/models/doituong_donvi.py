@@ -1,4 +1,3 @@
-import datetime
 from uuid import uuid4
 
 from app.db.base_class import Base
@@ -16,9 +15,9 @@ class Doituong_Donvi(Base):
     doituong_id = Column(UUID(as_uuid=True),ForeignKey("doituong.id"),primary_key=True,nullable=False)
     donvi_id = Column(UUID(as_uuid=True),ForeignKey("donvi.id"),primary_key=True,nullable=False)
     CTNV_ID = Column(Integer, ForeignKey("ctnv.id"), primary_key=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow,
+        default=func.now(),
+        onupdate=func.now(),
     )

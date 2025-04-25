@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app import crud, schemas, models
 from datetime import datetime
-from app.core.sercurity import get_salt, get_password_hash
+from app.core.security import get_salt, get_password_hash
 from fastapi.security import (
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,

@@ -1,18 +1,24 @@
-FROM python:3.7-slim
+FROM python:3.9-slim
 
-WORKDIR /usr/src/app
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    jq \
+    wait-for-it \
+    moreutils \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY ./pgsync ./
+RUN pip install pgsync
 
-RUN chmod +x ./entrypoint.sh
+WORKDIR /app
 
-RUN pip install pgsync==2.5.0
+COPY pgsync/entrypoint.sh /app/
+COPY pgsync/schema.json /app/
+COPY pgsync/conf.sql /app/
+COPY pgsync/populate.sql /app/
 
-RUN apt update \
-    && apt install -y moreutils \
-    && apt install -y jq \
-    && apt install -y wait-for-it
+RUN sed -i 's/\r$//' /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["bash", "./entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
 
 

@@ -1,4 +1,3 @@
-import datetime
 from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
@@ -18,11 +17,11 @@ class uid(Base):
     type_id = Column(Integer, ForeignKey('type.id'))
     ghichu = Column(String(5000), nullable=True)
     Vaiao= Column(Boolean(), default=False)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
     # models = relationship("", back_populates="account")

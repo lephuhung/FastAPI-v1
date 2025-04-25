@@ -1,7 +1,7 @@
 [
   {
     "database": "fastapi_treafik",
-    "index": "doituong_index",
+    "index": "individuals_index",
     "setting": {
       "analysis": {
         "analyzer": {
@@ -21,27 +21,27 @@
               "punctuation",
               "symbol"
             ],
-            "min_gram": "9",
+            "min_gram": "2",
             "type": "ngram",
-            "max_gram": "10"
+            "max_gram": "3"
           }
         }
       }
     },
     "nodes": {
-      "table": "doituong",
+      "table": "individuals",
       "columns": [
         "id",
-        "client_name",
-        "CMND",
-        "CCCD",
-        "Image",
-        "Ngaysinh",
-        "Gioitinh",
-        "Quequan",
-        "Thongtinbosung",
-        "SDT",
-        "KOL",
+        "full_name",
+        "national_id",
+        "citizen_id",
+        "image_url",
+        "date_of_birth",
+        "is_male",
+        "hometown",
+        "additional_info",
+        "phone_number",
+        "is_kol",
         "created_at",
         "updated_at"
       ],
@@ -51,9 +51,9 @@
             "type": "text",
             "copy_to": "id"
           },
-          "client_name": {
+          "full_name": {
             "type": "text",
-            "copy_to": "client_name",
+            "copy_to": "full_name",
             "fields": {
               "ngram": {
                 "type": "text",
@@ -63,75 +63,29 @@
               }
             }
           },
-          "CMND": {
+          "national_id": {
             "type": "text",
-            "copy_to": "CMND"
+            "copy_to": "national_id"
           },
-          "CCCD": {
+          "citizen_id": {
             "type": "text",
-            "copy_to": "CCCD"
+            "copy_to": "citizen_id"
           },
-          "created_at": {
+          "image_url": {
+            "type": "text",
+            "copy_to": "image_url"
+          },
+          "date_of_birth": {
             "type": "date",
-            "copy_to": "created_at"
+            "copy_to": "date_of_birth"
           },
-          "Thongtinbosung": {
-            "type": "text",
-            "copy_to": "Thongtinbosung"
-          },
-          "updated_at": {
-            "type": "date",
-            "copy_to": "updated_at"
-          },
-          "Quequan": {
-            "type": "text",
-            "copy_to": "Quequan"
-          },
-          "SDT": {
-            "type": "text",
-            "copy_to": "SDT"
-          },
-          "Image": {
-            "type": "text",
-            "copy_to": "content",
-            "fields": {
-              "ngram": {
-                "type": "text",
-                "analyzer": "vi_analyzer",
-                "search_analyzer": "vi_analyzer",
-                "fielddata": true
-              }
-            }
-          },
-          "Gioitinh": {
+          "is_male": {
             "type": "boolean",
-            "copy_to": "Gioitinh"
-          }
-        }
-      }
-    }
-  },
-  {
-    "database": "fastapi_treafik",
-    "index": "trichtin_index",
-    "nodes": {
-      "table": "trichtin",
-      "columns": [
-        "id",
-        "uid",
-        "ghichu_noidung",
-        "nhanxet",
-        "xuly",
-        "uid_vaiao",
-        "user_id",
-        "created_at",
-        "updated_at"
-      ],
-      "transform": {
-        "mapping": {
-          "uid": {
+            "copy_to": "is_male"
+          },
+          "hometown": {
             "type": "text",
-            "copy_to": "uid",
+            "copy_to": "hometown",
             "fields": {
               "ngram": {
                 "type": "text",
@@ -141,9 +95,9 @@
               }
             }
           },
-          "ghichu_noidung": {
+          "additional_info": {
             "type": "text",
-            "copy_to": "ghichu_noidung",
+            "copy_to": "additional_info",
             "fields": {
               "ngram": {
                 "type": "text",
@@ -153,21 +107,13 @@
               }
             }
           },
-          "nhanxet": {
+          "phone_number": {
             "type": "text",
-            "copy_to": "nhanxet"
+            "copy_to": "phone_number"
           },
-          "xuly": {
-            "type": "text",
-            "copy_to": "xuly"
-          },
-          "uid_vaiao": {
-            "type": "text",
-            "copy_to": "uid_vaiao"
-          },
-          "user_id": {
-            "type": "text",
-            "copy_to": "user_id"
+          "is_kol": {
+            "type": "boolean",
+            "copy_to": "is_kol"
           },
           "created_at": {
             "type": "date",
@@ -185,17 +131,17 @@
     "database": "fastapi_treafik",
     "index": "uid_index",
     "nodes": {
-      "table": "uid",
+      "table": "social_accounts",
       "columns": [
         "id",
         "uid",
         "name",
-        "reaction",
-        "SDT",
-        "trangthai_id",
+        "reaction_count",
+        "phone_number",
+        "status_id",
         "type_id",
-        "ghichu",
-        "Vaiao",
+        "note",
+        "is_active",
         "created_at",
         "updated_at"
       ],
@@ -205,9 +151,9 @@
             "type": "text",
             "copy_to": "uid"
           },
-          "ghichu": {
+          "name": {
             "type": "text",
-            "copy_to": "ghichu",
+            "copy_to": "name",
             "fields": {
               "ngram": {
                 "type": "text",
@@ -217,25 +163,115 @@
               }
             }
           },
-          "name": {
-            "type": "text",
-            "copy_to": "name"
+          "reaction_count": {
+            "type": "integer",
+            "copy_to": "reaction_count"
           },
-          "SDT": {
+          "phone_number": {
             "type": "text",
-            "copy_to": "SDT"
+            "copy_to": "phone_number"
+          },
+          "status_id": {
+            "type": "integer",
+            "copy_to": "status_id"
           },
           "type_id": {
-            "type": "text",
+            "type": "integer",
             "copy_to": "type_id"
           },
-          "Vaiao": {
-            "type": "boolean",
-            "copy_to": "Vaiao"
+          "note": {
+            "type": "text",
+            "copy_to": "note",
+            "fields": {
+              "ngram": {
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
+              }
+            }
           },
-          "trangthai_id": {
-            "type": "integer",
-            "copy_to": "trangthai_id"
+          "is_active": {
+            "type": "boolean",
+            "copy_to": "is_active"
+          },
+          "created_at": {
+            "type": "date",
+            "copy_to": "created_at"
+          },
+          "updated_at": {
+            "type": "date",
+            "copy_to": "updated_at"
+          }
+        }
+      }
+    }
+  },
+  {
+    "database": "fastapi_treafik",
+    "index": "trichtin_index",
+    "nodes": {
+      "table": "reports",
+      "columns": [
+        "id",
+        "social_account_uid",
+        "content_note",
+        "comment",
+        "action",
+        "related_social_account_uid",
+        "user_id",
+        "created_at",
+        "updated_at"
+      ],
+      "transform": {
+        "mapping": {
+          "social_account_uid": {
+            "type": "text",
+            "copy_to": "social_account_uid"
+          },
+          "content_note": {
+            "type": "text",
+            "copy_to": "content_note",
+            "fields": {
+              "ngram": {
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
+              }
+            }
+          },
+          "comment": {
+            "type": "text",
+            "copy_to": "comment",
+            "fields": {
+              "ngram": {
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
+              }
+            }
+          },
+          "action": {
+            "type": "text",
+            "copy_to": "action",
+            "fields": {
+              "ngram": {
+                "type": "text",
+                "analyzer": "vi_analyzer",
+                "search_analyzer": "vi_analyzer",
+                "fielddata": true
+              }
+            }
+          },
+          "related_social_account_uid": {
+            "type": "text",
+            "copy_to": "related_social_account_uid"
+          },
+          "user_id": {
+            "type": "text",
+            "copy_to": "user_id"
           },
           "created_at": {
             "type": "date",

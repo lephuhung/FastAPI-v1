@@ -1,4 +1,3 @@
-import datetime
 from uuid import uuid4
 
 from app.db.base_class import Base
@@ -24,10 +23,10 @@ class Doituong(Base):
     Thongtinbosung = Column(String(5000), default=None)
     SDT= Column(String(10), default=None)
     KOL= Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow,
+        default=func.now(),
+        onupdate=func.now(),
     )
     # color= relationship("color", back_populated="tags")

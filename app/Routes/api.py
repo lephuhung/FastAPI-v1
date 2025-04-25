@@ -1,37 +1,62 @@
 from fastapi import APIRouter
-from app.Routes.router_api import (uid, ctnv, moiquanhe, vaiao, user_has_role, trangthai_hoinhom,type,
-user, auth, user_donvi, donvi_hoinhom ,trichtin,role_has_permission,role, quantrivien, permission,
-user_has_permission, doituong,tags, model_has_tags, doituong_donvi,
-tinhchat_hoinhom, doituong_uid, trangthai, tinhchat, color, donvi, thongke, dashboard, search)
+from app.Routes.router_api import (
+    administrator,
+    status,
+    tag,
+    task,
+    permission,
+    relationship,
+    role,
+    unit,
+    individual,
+    characteristic,
+    group_characteristic,
+    group_status,
+    individual_unit,
+    report,
+    unit_group,
+    social_account_link,
+    individual_social_account,
+    individual_tag,
+    social_account,
+    auth,
+    user,
+    uid,
+    search,
+    dashboard,
+    account_type,
+    user_role,
+    user_permission,
+    role_permission
+)
+
 api_router = APIRouter()
 
-api_router.include_router(uid.router)
-api_router.include_router(user.router)
-api_router.include_router(auth.router)
-api_router.include_router(user_donvi.router)
-api_router.include_router(role_has_permission.router)
-api_router.include_router(user_has_permission.router)
-api_router.include_router(doituong.router)
-api_router.include_router(tags.router)
-api_router.include_router(model_has_tags.router)
-api_router.include_router(doituong_donvi.router)
-api_router.include_router(donvi_hoinhom.router)
-api_router.include_router(trichtin.router)
-api_router.include_router(tinhchat_hoinhom.router)
-api_router.include_router(doituong_uid.router)
-api_router.include_router(trangthai.router) 
-api_router.include_router(tinhchat.router)
-api_router.include_router(moiquanhe.router)
-api_router.include_router(ctnv.router)
-api_router.include_router(vaiao.router)
-api_router.include_router(user_has_role.router)
-api_router.include_router(color.router)
-api_router.include_router(trangthai_hoinhom.router)
-api_router.include_router(type.router)
-api_router.include_router(donvi.router)
-api_router.include_router(role.router)
-api_router.include_router(quantrivien.router)
-api_router.include_router(permission.router)
-api_router.include_router(thongke.router)
-api_router.include_router(dashboard.router)
-api_router.include_router(search.router)
+api_router.include_router(administrator)
+api_router.include_router(status)
+api_router.include_router(tag)
+api_router.include_router(task)
+api_router.include_router(permission)
+api_router.include_router(relationship)
+api_router.include_router(role)
+api_router.include_router(unit)
+api_router.include_router(individual)
+api_router.include_router(characteristic)
+api_router.include_router(group_characteristic)
+api_router.include_router(group_status)
+api_router.include_router(individual_unit)
+api_router.include_router(report)
+api_router.include_router(unit_group)
+api_router.include_router(social_account_link)
+api_router.include_router(individual_social_account)
+api_router.include_router(individual_tag)
+api_router.include_router(social_account)
+api_router.include_router(auth)
+api_router.include_router(user)
+api_router.include_router(uid)
+api_router.include_router(search)
+api_router.include_router(dashboard)
+api_router.include_router(account_type)
+api_router.include_router(user_role)
+api_router.include_router(user_permission)
+api_router.include_router(role_permission)

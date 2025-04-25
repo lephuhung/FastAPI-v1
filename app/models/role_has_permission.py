@@ -1,4 +1,3 @@
-import datetime
 from uuid import uuid4
 
 from app.db.base_class import Base
@@ -15,10 +14,10 @@ class Role_has_permission(Base):
     id = Column(Integer, primary_key=True, index=True,nullable=False, autoincrement=True)
     role_id = Column(UUID(as_uuid=True),ForeignKey("role.id"),primary_key=True,nullable=False)
     permission_id = Column(Integer, ForeignKey('permission.id'), nullable=False) 
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow,
+        default=func.now(),
+        onupdate=func.now(),
     )
     # permission = relationship("role", back_populates="permission")
