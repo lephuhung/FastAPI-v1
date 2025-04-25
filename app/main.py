@@ -4,7 +4,7 @@ from app.Routes.api import api_router
 from app.db.init_db import init_db
 from sqlalchemy.orm import Session
 from app.Routes import deps
-from app.core import sercurity, config
+from app.core import security, config
 from typing import Annotated
 from app import models, schemas
 from datetime import timedelta
