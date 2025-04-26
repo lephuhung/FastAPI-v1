@@ -25,3 +25,4 @@ class User(Base):
     roles = relationship("UserRole", back_populates="user")
     permissions = relationship("UserPermission", back_populates="user")
     units = relationship("UserUnit", back_populates="user")
+    reports = relationship("Report", back_populates="user")

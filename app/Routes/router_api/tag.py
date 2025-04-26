@@ -8,24 +8,23 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/tags", tags=["Tags"])
 
 @router.get("/", response_model=List[Tag])
-async def get_tags(
+def get_tags(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve tags.
+    Get all tags.
     """
     tags = tag.get_multi(db, skip=skip, limit=limit)
     return tags
 
 @router.post("/", response_model=Tag)
-async def create_tag(
+def create_tag(
     *,
     db: Session = Depends(deps.get_db),
     tag_in: TagCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new tag.
@@ -34,15 +33,15 @@ async def create_tag(
     return tag_obj
 
 @router.put("/{id}", response_model=Tag)
-async def update_tag(
+def update_tag(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     tag_in: TagUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a tag.
+    Update tag.
     """
     tag_obj = tag.get(db=db, id=id)
     if not tag_obj:
@@ -51,11 +50,10 @@ async def update_tag(
     return tag_obj
 
 @router.get("/{id}", response_model=Tag)
-async def get_tag(
+def get_tag(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get tag by ID.
@@ -66,14 +64,14 @@ async def get_tag(
     return tag_obj
 
 @router.delete("/{id}", response_model=Tag)
-async def delete_tag(
+def delete_tag(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a tag.
+    Delete tag.
     """
     tag_obj = tag.get(db=db, id=id)
     if not tag_obj:

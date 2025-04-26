@@ -21,6 +21,6 @@ class Unit(Base):
     )
     
     # Relationships
-    users = relationship("User", back_populates="unit")
+    users = relationship("UserUnit", back_populates="unit")
     individuals = relationship("IndividualUnit", back_populates="unit")
     groups = relationship("UnitGroup", back_populates="unit") 

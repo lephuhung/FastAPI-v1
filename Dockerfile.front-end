@@ -5,10 +5,10 @@ WORKDIR /app
 
 # Copy the package.json and package-lock.json
 COPY package*.json ./
-# Add `/app/node_modules/.bin` to $PATH
 
-# Install dependencies out side the container to vscode connet node_modules
-# RUN npm install --legacy-peer-deps
+# Install dependencies
+RUN apk add --no-cache python3 make g++ && \
+    npm install --legacy-peer-deps
 
 # Copy the local code to the container
 COPY . .

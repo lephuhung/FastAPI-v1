@@ -12,7 +12,7 @@ async def get_user_permissions(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Retrieve user permissions.
@@ -25,7 +25,7 @@ async def create_user_permission(
     *,
     db: Session = Depends(deps.get_db),
     user_permission_in: UserPermissionCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new user permission.
@@ -39,7 +39,7 @@ async def update_user_permission(
     db: Session = Depends(deps.get_db),
     id: int,
     user_permission_in: UserPermissionUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Update a user permission.
@@ -55,7 +55,7 @@ async def get_user_permission(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Get user permission by ID.
@@ -70,7 +70,7 @@ async def delete_user_permission(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Delete a user permission.

@@ -1,5 +1,5 @@
 import logging
-from typing import Generator
+from typing import Generator, Optional
 from pydantic import UUID4
 from app import crud, models, schemas
 from app.core import security
@@ -7,7 +7,7 @@ from app.core.config import settings
 from app.db.session import SessionLocal
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
-from jose import jwt
+from jose import jwt, JWTError
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from app.schemas.access_token import AccessTokenData
@@ -137,3 +137,14 @@ def check_unit_access(
             detail="Not enough permissions"
         )
     return True
+
+
+def get_current_superadmin(
+    current_user: models.user.User = Depends(get_current_active_user),
+) -> models.user.User:
+    if not current_user.is_superadmin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user doesn't have enough privileges"
+        )
+    return current_user

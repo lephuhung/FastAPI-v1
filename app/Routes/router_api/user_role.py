@@ -12,7 +12,7 @@ async def get_user_roles(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Retrieve user roles.
@@ -25,7 +25,7 @@ async def create_user_role(
     *,
     db: Session = Depends(deps.get_db),
     user_role_in: UserRoleCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new user role.
@@ -39,7 +39,7 @@ async def update_user_role(
     db: Session = Depends(deps.get_db),
     id: int,
     user_role_in: UserRoleUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Update a user role.
@@ -55,7 +55,7 @@ async def get_user_role(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Get user role by ID.
@@ -70,7 +70,7 @@ async def delete_user_role(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user=Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Delete a user role.

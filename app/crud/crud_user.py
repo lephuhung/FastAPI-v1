@@ -34,11 +34,21 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             password=get_password_hash(obj_in.password),
             salt=obj_in.salt,
             is_active=obj_in.is_active,
-            unit_id=obj_in.unit_id,
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
+        
+        # Tạo liên kết với unit
+        if obj_in.unit_id:
+            from app.models.user_unit import UserUnit
+            user_unit = UserUnit(
+                user_id=db_obj.id,
+                unit_id=obj_in.unit_id
+            )
+            db.add(user_unit)
+            db.commit()
+        
         return db_obj
 
     def update(

@@ -15,4 +15,31 @@ __all__ = [
     'Column', 'Integer', 'String', 'Boolean', 'DateTime',
     'ForeignKey', 'Text', 'Date', 'UUID', 'Table',
     'relationship', 'func', 'Base', 'generate_uuid'
-] 
+]
+
+# Import all models here to ensure they are registered with SQLAlchemy
+from app.models.user import User
+from app.models.unit import Unit
+from app.models.user_unit import UserUnit
+from app.models.role import Role
+from app.models.permission import Permission
+from app.models.user_role import UserRole
+from app.models.role_permission import RolePermission
+from app.models.user_permission import UserPermission
+from app.models.individual import Individual
+from app.models.social_account import SocialAccount
+from app.models.individual_social_account import IndividualSocialAccount
+from app.models.individual_unit import IndividualUnit
+from app.models.unit_group import UnitGroup
+from app.models.task import Task
+from app.models.status import Status
+from app.models.characteristic import Characteristic
+from app.models.tag import Tag
+from app.models.individual_tag import IndividualTag
+from app.models.account_type import AccountType
+from app.models.relationship import Relationship
+from app.models.report import Report
+from app.models.administrator import Administrator
+from app.models.group_status import GroupStatus
+from app.models.group_characteristic import GroupCharacteristic
+from app.models.social_account_link import SocialAccountLink 

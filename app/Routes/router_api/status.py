@@ -4,79 +4,78 @@ from app.schemas.status import StatusCreate, StatusUpdate, Status
 from app.crud.crud_status import status
 from app.Routes import deps
 from sqlalchemy.orm import Session
+from app import crud, schemas
 
 router = APIRouter(prefix="/statuses", tags=["Statuses"])
 
 @router.get("/", response_model=List[Status])
-async def get_statuses(
+def get_statuses(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve statuses.
+    Get all statuses.
     """
-    statuses = status.get_multi(db, skip=skip, limit=limit)
+    statuses = crud.status.get_multi(db, skip=skip, limit=limit)
     return statuses
 
 @router.post("/", response_model=Status)
-async def create_status(
+def create_status(
     *,
     db: Session = Depends(deps.get_db),
     status_in: StatusCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new status.
     """
-    status_obj = status.create(db=db, obj_in=status_in)
-    return status_obj
+    status = crud.status.create(db, obj_in=status_in)
+    return status
 
 @router.put("/{id}", response_model=Status)
-async def update_status(
+def update_status(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     status_in: StatusUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a status.
+    Update status.
     """
-    status_obj = status.get(db=db, id=id)
-    if not status_obj:
+    status = crud.status.get(db, id=id)
+    if not status:
         raise HTTPException(status_code=404, detail="Status not found")
-    status_obj = status.update(db=db, db_obj=status_obj, obj_in=status_in)
-    return status_obj
+    status = crud.status.update(db, db_obj=status, obj_in=status_in)
+    return status
 
 @router.get("/{id}", response_model=Status)
-async def get_status(
+def get_status(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get status by ID.
     """
-    status_obj = status.get(db=db, id=id)
-    if not status_obj:
+    status = crud.status.get(db, id=id)
+    if not status:
         raise HTTPException(status_code=404, detail="Status not found")
-    return status_obj
+    return status
 
 @router.delete("/{id}", response_model=Status)
-async def delete_status(
+def delete_status(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a status.
+    Delete status.
     """
-    status_obj = status.get(db=db, id=id)
-    if not status_obj:
+    status = crud.status.get(db, id=id)
+    if not status:
         raise HTTPException(status_code=404, detail="Status not found")
-    status_obj = status.remove(db=db, id=id)
-    return status_obj 
+    status = crud.status.remove(db, id=id)
+    return status 

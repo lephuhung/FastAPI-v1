@@ -18,6 +18,20 @@ services:
     depends_on:
       - elasticsearch
 
+  setup-kibana:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    volumes:
+      - ./setup-kibana.sh:/setup-kibana.sh
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    command: ["/bin/bash", "/setup-kibana.sh"]
+
   elasticsearch:
     build:
       context: elasticsearch/
@@ -40,6 +54,11 @@ services:
       discovery.type: single-node
     networks:
       - elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 120
 
   logstash:
     build:
@@ -72,11 +91,14 @@ services:
     ports:
       - "5601:5601"
     environment:
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
     networks:
       - elk
     depends_on:
-      - elasticsearch
+      setup-kibana:
+        condition: service_completed_successfully
 
   db:
     build:
@@ -157,17 +179,18 @@ services:
 
   front-end:
     build: 
-      context: .
-      dockerfile: Dockerfile.front-end
+      context: ./front-end
+      dockerfile: ../Dockerfile.front-end
     ports:
       - "3011:3011"
     environment:
       - WDS_SOCKET_HOST=127.0.0.1 
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true 
+      - NODE_ENV=development
     volumes:
       - ./front-end:/app
-      - ./front-end/node_modules:/app/node_modules
+      - /app/node_modules
     networks:
       - elk
 

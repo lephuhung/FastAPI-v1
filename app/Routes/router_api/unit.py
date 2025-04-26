@@ -8,24 +8,23 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/units", tags=["Units"])
 
 @router.get("/", response_model=List[Unit])
-async def get_units(
+def get_units(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve units.
+    Get all units.
     """
     units = unit.get_multi(db, skip=skip, limit=limit)
     return units
 
 @router.post("/", response_model=Unit)
-async def create_unit(
+def create_unit(
     *,
     db: Session = Depends(deps.get_db),
     unit_in: UnitCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new unit.
@@ -34,15 +33,15 @@ async def create_unit(
     return unit_obj
 
 @router.put("/{id}", response_model=Unit)
-async def update_unit(
+def update_unit(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     unit_in: UnitUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a unit.
+    Update unit.
     """
     unit_obj = unit.get(db=db, id=id)
     if not unit_obj:
@@ -51,11 +50,10 @@ async def update_unit(
     return unit_obj
 
 @router.get("/{id}", response_model=Unit)
-async def get_unit(
+def get_unit(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    id: str,
 ):
     """
     Get unit by ID.
@@ -66,14 +64,14 @@ async def get_unit(
     return unit_obj
 
 @router.delete("/{id}", response_model=Unit)
-async def delete_unit(
+def delete_unit(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    id: str,
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a unit.
+    Delete unit.
     """
     unit_obj = unit.get(db=db, id=id)
     if not unit_obj:

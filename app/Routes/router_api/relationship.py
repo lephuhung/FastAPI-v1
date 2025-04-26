@@ -8,24 +8,23 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/relationships", tags=["Relationships"])
 
 @router.get("/", response_model=List[Relationship])
-async def get_relationships(
+def get_relationships(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve relationships.
+    Get all relationships.
     """
     relationships = relationship.get_multi(db, skip=skip, limit=limit)
     return relationships
 
 @router.post("/", response_model=Relationship)
-async def create_relationship(
+def create_relationship(
     *,
     db: Session = Depends(deps.get_db),
     relationship_in: RelationshipCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new relationship.
@@ -34,15 +33,15 @@ async def create_relationship(
     return relationship_obj
 
 @router.put("/{id}", response_model=Relationship)
-async def update_relationship(
+def update_relationship(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     relationship_in: RelationshipUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a relationship.
+    Update relationship.
     """
     relationship_obj = relationship.get(db=db, id=id)
     if not relationship_obj:
@@ -51,11 +50,10 @@ async def update_relationship(
     return relationship_obj
 
 @router.get("/{id}", response_model=Relationship)
-async def get_relationship(
+def get_relationship(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get relationship by ID.
@@ -66,14 +64,14 @@ async def get_relationship(
     return relationship_obj
 
 @router.delete("/{id}", response_model=Relationship)
-async def delete_relationship(
+def delete_relationship(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a relationship.
+    Delete relationship.
     """
     relationship_obj = relationship.get(db=db, id=id)
     if not relationship_obj:

@@ -5,7 +5,7 @@ from app.crud.crud_individual_tag import individual_tag
 from app.Routes import deps
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/individual-tags", tags=["Individual Tags"])
+router = APIRouter(prefix="/individual-tags", tags=["Đối tượng Tags"])
 
 
 @router.get("/", response_model=List[IndividualTag])

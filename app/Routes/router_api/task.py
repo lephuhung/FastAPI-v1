@@ -8,24 +8,23 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.get("/", response_model=List[Task])
-async def get_tasks(
+def get_tasks(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve tasks.
+    Get all tasks.
     """
     tasks = task.get_multi(db, skip=skip, limit=limit)
     return tasks
 
 @router.post("/", response_model=Task)
-async def create_task(
+def create_task(
     *,
     db: Session = Depends(deps.get_db),
     task_in: TaskCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new task.
@@ -34,15 +33,15 @@ async def create_task(
     return task_obj
 
 @router.put("/{id}", response_model=Task)
-async def update_task(
+def update_task(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     task_in: TaskUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a task.
+    Update task.
     """
     task_obj = task.get(db=db, id=id)
     if not task_obj:
@@ -51,11 +50,10 @@ async def update_task(
     return task_obj
 
 @router.get("/{id}", response_model=Task)
-async def get_task(
+def get_task(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get task by ID.
@@ -66,14 +64,14 @@ async def get_task(
     return task_obj
 
 @router.delete("/{id}", response_model=Task)
-async def delete_task(
+def delete_task(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a task.
+    Delete task.
     """
     task_obj = task.get(db=db, id=id)
     if not task_obj:

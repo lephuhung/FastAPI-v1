@@ -8,24 +8,23 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/characteristics", tags=["Characteristics"])
 
 @router.get("/", response_model=List[Characteristic])
-async def get_characteristics(
+def get_characteristics(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Retrieve characteristics.
+    Get all characteristics.
     """
     characteristics = characteristic.get_multi(db, skip=skip, limit=limit)
     return characteristics
 
 @router.post("/", response_model=Characteristic)
-async def create_characteristic(
+def create_characteristic(
     *,
     db: Session = Depends(deps.get_db),
     characteristic_in: CharacteristicCreate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
     Create new characteristic.
@@ -34,15 +33,15 @@ async def create_characteristic(
     return characteristic_obj
 
 @router.put("/{id}", response_model=Characteristic)
-async def update_characteristic(
+def update_characteristic(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
     characteristic_in: CharacteristicUpdate,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Update a characteristic.
+    Update characteristic.
     """
     characteristic_obj = characteristic.get(db=db, id=id)
     if not characteristic_obj:
@@ -51,11 +50,10 @@ async def update_characteristic(
     return characteristic_obj
 
 @router.get("/{id}", response_model=Characteristic)
-async def get_characteristic(
+def get_characteristic(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get characteristic by ID.
@@ -66,14 +64,14 @@ async def get_characteristic(
     return characteristic_obj
 
 @router.delete("/{id}", response_model=Characteristic)
-async def delete_characteristic(
+def delete_characteristic(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    current_user = Security(deps.get_current_superadmin, scopes=[]),
 ):
     """
-    Delete a characteristic.
+    Delete characteristic.
     """
     characteristic_obj = characteristic.get(db=db, id=id)
     if not characteristic_obj:

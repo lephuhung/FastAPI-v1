@@ -1,26 +1,30 @@
 from typing import Optional, List
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, Field
 from datetime import datetime
+import uuid
 
 
 class UserBase(BaseModel):
     username: str
-    is_active: bool = True
 
 
 class UserCreate(UserBase):
     password: str
-    unit_id: Optional[UUID4] = None
+    unit_id: str
+    is_active: bool = False
+    salt: Optional[str] = None
 
 
-class UserUpdate(UserBase):
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
     password: Optional[str] = None
+    is_active: Optional[bool] = None
     unit_id: Optional[UUID4] = None
 
 
 class UserInDBBase(UserBase):
     id: UUID4
-    unit_id: Optional[UUID4] = None
+    is_active: bool
     created_at: datetime
     updated_at: datetime
 
@@ -33,23 +37,23 @@ class User(UserInDBBase):
 
 
 class UserInDB(UserInDBBase):
-    hashed_password: str
+    password: str
     salt: str
 
 
 class UserOutDB(UserBase):
     id: UUID4
     username: Optional[str]
-    active: Optional[bool]
+    is_active: Optional[bool]
 
 
-class AcessToken(BaseModel):
+class AccessToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class AcessTokenData(BaseModel):
-    id: int
+class AccessTokenData(BaseModel):
+    id: str
     username: str | None = None
     role: list[str] = []
     permission: list[str] = []
