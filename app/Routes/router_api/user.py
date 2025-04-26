@@ -11,7 +11,7 @@ from fastapi.security import (
     OAuth2PasswordRequestForm,
     SecurityScopes,
 )
-from app.schemas.user import UserCreate, UserUpdate, User
+from app.schemas.user import UserCreate, UserUpdate, User, UserMe
 from pydantic import BaseModel
 import uuid
 
@@ -183,6 +183,31 @@ async def post(
     # Lưu user vào database
     user = crud.user.create(db, obj_in=model_user)
     return user
+
+@router.get("/me", response_model=UserMe)
+def read_user_me(
+    current_user = Depends(deps.get_current_active_user),
+    db: Session = Depends(deps.get_db)
+):
+    """
+    Get current user information including units, roles and permissions
+    """
+    # Lấy thông tin units của user
+    units = crud.unit.get_by_user_id(user_id=current_user.id, db=db)
+    
+    # Lấy thông tin roles của user
+    roles = crud.user_role.get_by_user_id(user_id=current_user.id, db=db)
+    
+    # Lấy thông tin permissions của user
+    permissions = crud.user_permission.get_by_user_id(user_id=current_user.id, db=db)
+    
+    # Tạo response data
+    user_data = current_user.__dict__
+    user_data['units'] = [unit.__dict__ for unit in units] if units else []
+    user_data['roles'] = [role.__dict__ for role in roles] if roles else []
+    user_data['permissions'] = [permission.__dict__ for permission in permissions] if permissions else []
+    
+    return user_data
 
 # @router.get("/get_all")
 # async def get_all (

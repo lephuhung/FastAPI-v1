@@ -2,9 +2,6 @@ from datetime import datetime, timedelta
 from typing import Any, Union
 from app.core.config import settings
 from jose import jwt
-from app import schemas, models
-from sqlalchemy.orm import Session
-from app.core.password import get_password_hash, get_salt
 
 ALGORITHM = "HS256"
 
@@ -21,13 +18,4 @@ def create_access_token(
     encoded_jwt = jwt.encode(
         to_encode, settings.SECRET_KEY, algorithm=ALGORITHM
     )
-    return encoded_jwt
-
-def generate_random_string(length=8):
-    characters = string.ascii_letters + string.digits
-    random_string = ''.join(secrets.choice(characters) for i in range(length))
-    return random_string
-    
-def get_salt()->str:
-    salt= generate_random_string()
-    return salt
+    return encoded_jwt 

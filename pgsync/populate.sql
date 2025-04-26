@@ -693,12 +693,36 @@ FROM users u
 CROSS JOIN units un
 WHERE u.username = 'lephuhung77' AND un.name = 'PA05';
 
+INSERT INTO "user_units" ("user_id", "unit_id")
+SELECT u.id, un.id
+FROM users u
+CROSS JOIN units un
+WHERE u.username = 'Nguyendangphi' AND un.name = 'PA05';
+
+INSERT INTO "user_units" ("user_id", "unit_id")
+SELECT u.id, un.id
+FROM users u
+CROSS JOIN units un
+WHERE u.username = 'Luongvinhlong' AND un.name = 'PA05';
+
 -- Insert sample data for user_roles
 INSERT INTO "user_roles" ("user_id", "role_id")
 SELECT u.id, r.id
 FROM users u
 CROSS JOIN roles r
 WHERE u.username = 'lephuhung77' AND r.name = 'superadmin';
+
+INSERT INTO "user_roles" ("user_id", "role_id")
+SELECT u.id, r.id
+FROM users u
+CROSS JOIN roles r
+WHERE u.username = 'Luongvinhlong' AND r.name = 'superadmin';
+
+INSERT INTO "user_roles" ("user_id", "role_id")
+SELECT u.id, r.id
+FROM users u
+CROSS JOIN roles r
+WHERE u.username = 'Nguyendangphi' AND r.name = 'superadmin';
 
 -- Insert sample data for user_permissions
 INSERT INTO "user_permissions" ("user_id", "permission_id")

@@ -11,8 +11,11 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     unit_id: str
+
+
+class UserCreateInDB(UserCreate):
     is_active: bool = False
-    salt: Optional[str] = None
+    salt: str
 
 
 class UserUpdate(BaseModel):
@@ -57,3 +60,9 @@ class AccessTokenData(BaseModel):
     username: str | None = None
     role: list[str] = []
     permission: list[str] = []
+
+
+class UserMe(UserInDBBase):
+    units: List[dict] = []
+    roles: List[dict] = []
+    permissions: List[dict] = []
