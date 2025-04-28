@@ -129,12 +129,12 @@ const Table: React.FC<Props> = ({className}) => {
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       ></a> */}
                       <span className='badge badge-danger fs-7 fw-semibold fw-semibold text-center'>
-                        {el.donvi_name}
+                        {el.unit_name}
                       </span>
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-warning fs-7 fw-semibold fw-semibold text-center'>
-                        {el.ctnv_name.toUpperCase()}
+                        {el.task_name.toUpperCase()}
                       </span>
                     </td>
                     {/* <td>

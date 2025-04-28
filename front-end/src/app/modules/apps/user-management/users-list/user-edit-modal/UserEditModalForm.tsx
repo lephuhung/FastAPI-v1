@@ -89,7 +89,7 @@ const UserEditModalForm: FC<Props> = ({user, isUserLoading}) => {
             <label className='d-block fw-bold fs-6 mb-5'>Avatar</label>
             {/* end::Label */}
 
-            {/* begin::Image input */}
+            {/* begin::image_url input */}
             <div
               className='image-input image-input-outline'
               data-kt-image-input='true'
@@ -138,7 +138,7 @@ const UserEditModalForm: FC<Props> = ({user, isUserLoading}) => {
             </span> */}
               {/* end::Remove */}
             </div>
-            {/* end::Image input */}
+            {/* end::image_url input */}
 
             {/* begin::Hint */}
             {/* <div className='form-text'>Allowed file types: png, jpg, jpeg.</div> */}

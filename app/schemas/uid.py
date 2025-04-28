@@ -7,28 +7,28 @@ class uid(BaseModel):
     uid : Optional[str]
     name : Optional[str]
     reaction : Optional[int]
-    SDT: Optional[str]
-    trangthai_id : Optional[int]
-    type_id : Optional [int]
-    ghichu : Optional[str]
+    phone_number: Optional[str]
+    status : Optional[int]
+    account_type_id : Optional [int]
+    note : Optional[str]
     Vaiao: bool
 
 class uidCreate(uid):
-    ctnv_id: Optional[int]
-    donvi_id: Optional[UUID4]
-    tinhchat_id: Optional[int]
+    task_id: Optional[int]
+    unit_id: Optional[UUID4]
+    characteristic_id: Optional[int]
     def get_uid_instance(self) -> uid:
         return uid(
             uid=self.uid,
             name=self.name,
             reaction=self.reaction,
-            SDT=self.SDT,
-            trangthai_id=self.trangthai_id,
-            type_id=self.type_id,
-            ghichu=self.ghichu,
+            phone_number=self.phone_number,
+            status=self.status,
+            account_type_id=self.account_type_id,
+            note=self.note,
             Vaiao=self.Vaiao
         )
 
 class uidUpdate(uidCreate):
-    id_hoinhomdonvi: Optional[int]
+    id_hoinhomunit: Optional[int]
     pass

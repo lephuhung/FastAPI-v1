@@ -17,7 +17,7 @@ const URL = process.env.REACT_APP_API_URL
 
 const Trichtin: FC<Props> = ({id}) => {
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [showModalDoituong, setshowModalDoituong] = useState<boolean>(false)
+  const [showModalIndividual, setshowModalIndividual] = useState<boolean>(false)
   const [trichtin, settrichtin] = useState<trichtin>()
   const {isLoading, data, error} = useQuery({
     queryKey: ['trichtinAll'],
@@ -100,7 +100,7 @@ const Trichtin: FC<Props> = ({id}) => {
                     <td className='text-canter'>
                       <span className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4' onClick={() => {
                           settrichtin(el)
-                          setshowModalDoituong(true)
+                          setshowModalIndividual(true)
                       }}>
                         Hiện thị
                       </span>
@@ -111,8 +111,8 @@ const Trichtin: FC<Props> = ({id}) => {
             {/* end::Table body */}
           </table>
           <ModalViewItemTrichtin
-            show={showModalDoituong}
-            handleClose={() => setshowModalDoituong(false)}
+            show={showModalIndividual}
+            handleClose={() => setshowModalIndividual(false)}
             title='THÔNG TIN CHI TIẾT TRÍCH TIN'
             trichtin={trichtin}
           />

@@ -1,8 +1,8 @@
 
 
-def doituong_search(query: str = ''):
+def individual_search(query: str = ''):
     pass
-    # resp = client.search(index="doituong_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
+    # resp = client.search(index="individual_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
     # return resp["hits"]["hits"]
 
 def uid_search(query: str = ''):

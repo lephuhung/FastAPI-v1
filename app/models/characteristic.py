@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 class Characteristic(Base):
     """
-    Database model for characteristic
+    Database model for characteristic Tính chất
     """
     __tablename__ = "characteristics"
     id = Column(Integer, primary_key=True, index=True)

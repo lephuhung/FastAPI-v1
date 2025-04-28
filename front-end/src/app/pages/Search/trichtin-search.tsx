@@ -3,12 +3,12 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
-import {donvi, type, tinhchat, ctnv} from '../Facebook/IFacebook'
+import {unit, type, characteristic, task} from '../Facebook/IFacebook'
 import {trichtinsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import {trangthai} from '../Doituong/doituong'
+import {status} from '../Individual/individual'
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -61,13 +61,13 @@ const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalItemVaiao, setShowModalItemVaiao] = useState<boolean>(false)
   const [data, setData] = useState<trichtinsearch[]>([])
-  //   const [phanloai, setPhanloai] = useState<trangthai[]>([])
+  //   const [phanloai, setPhanloai] = useState<status[]>([])
   const [loading, setloading] = useState<boolean>(false)
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const phanloaiString = localStorage.getItem('phanloai')
-  const phanloai: trangthai[] = typeof phanloaiString === 'string' ? JSON.parse(phanloaiString) : []
+  const phanloai: status[] = typeof phanloaiString === 'string' ? JSON.parse(phanloaiString) : []
   console.log(phanloai)
   return (
     <div className={`card ${className}`}>
@@ -170,7 +170,7 @@ const Table: React.FC<Props> = ({className}) => {
                         className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4'
                         onClick={() => {
                           // settrichtin(el)
-                          // setshowModalDoituong(true)
+                          // setshowModalIndividual(true)
                         }}
                       >
                         Hiện thị

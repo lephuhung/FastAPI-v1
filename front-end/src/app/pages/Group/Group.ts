@@ -1,54 +1,54 @@
 export interface IGroup {
     uid: string,
     name: string,
-    SDT?: string,
-    trangthai_id: number,
-    type_id: number,
-    ghichu: string,
+    phone_number?: string,
+    status: number,
+    account_type_id: number,
+    note: string,
     reaction: number,
     Vaiao: Boolean,
 
 }
 export interface IGroupModal extends IGroup {
-    trangthai_name: string,
-    ctnv_id: number,
-    donvi_id: string,
+    status_name: string,
+    task_id: number,
+    unit_id: string,
 }
 export interface IResponseGroup {
     uid: string,
     name: string,
-    SDT?: string,
-    trangthai_id: number,
-    type_id: number,
-    ghichu: string,
+    phone_number?: string,
+    status: number,
+    account_type_id: number,
+    note: string,
     reaction: number,
     Vaiao: Boolean,
     created_at: string,
     updated_at: string,
-    trangthai_name: string,
-    trangthai_color: string,
-    ctnv_name: string,
-    donvi_name: string,
-    donvi_id?: string,
-    ctnv_id?: number,
-    id_hoinhomdonvi?: number,
+    status_name: string,
+    status_color: string,
+    task_name: string,
+    unit_name: string,
+    unit_id?: string,
+    task_id?: number,
+    id_hoinhomunit?: number,
 }
-export interface trangthai {
+export interface status {
     created_at: string,
     id: number,
     name: string,
     color: string,
     updated_at: string
 }
-export interface donvi {
+export interface unit {
     created_at: string,
     id: string,
     name: string,
     updated_at: string
 }
-export interface type extends donvi {
+export interface type extends unit {
 
 }
-export interface ctnv extends donvi {
+export interface task extends unit {
 
 }

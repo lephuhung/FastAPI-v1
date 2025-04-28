@@ -6,11 +6,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class moiquanhe(Base):
+class relationship(Base):
     """
     Database model for an uid
     """
-    __tablename__='moiquanhe'
+    __tablename__='relationship'
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(255))
     created_at = Column(DateTime, default=func.now())

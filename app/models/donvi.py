@@ -8,9 +8,9 @@ from sqlalchemy.orm import relationship
 
 class Donvi(Base):
     """
-    Database model for an donvi
+    Database model for an unit
     """
-    __tablename__ = 'donvi'
+    __tablename__ = 'unit'
     id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
     name = Column(String(255))
     created_at = Column(DateTime, default=func.now())

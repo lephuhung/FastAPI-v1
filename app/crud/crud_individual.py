@@ -14,7 +14,7 @@ class CRUDIndividual(CRUDBase[Individual, IndividualCreate, IndividualUpdate]):
         return db.query(Individual).filter(Individual.id_number == id_number).first()
 
     def get_by_name(self, db: Session, *, name: str) -> List[Individual]:
-        return db.query(Individual).filter(Individual.client_name.ilike(f"%{name}%")).all()
+        return db.query(Individual).filter(Individual.full_name.ilike(f"%{name}%")).all()
 
     def get_kols(self, db: Session) -> List[Individual]:
         return db.query(Individual).filter(Individual.is_kol == True).all()

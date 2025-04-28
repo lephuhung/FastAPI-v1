@@ -7,7 +7,7 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, IFacebookModal, IFacebook, trangthai, donvi, ctnv} from './IFacebook'
+import {type, IFacebookModal, IFacebook, status, unit, task} from './IFacebook'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
 import './style.css'
@@ -32,7 +32,7 @@ const ValidateUid = Yup.object().shape({
   reaction: Yup.string()
     .required('Số bạn bè cần nhập')
     .matches(/^\d+$/, 'Số lượng bạn bè chỉ nhận ký tự số'),
-  SDT: Yup.string()
+  phone_number: Yup.string()
     .min(0, 'Quá ngắn')
     .max(11, 'Quá dài')
     .matches(/^\d+$/, 'Số điện thoại là ký tự số, nếu không có điền 0'),
@@ -42,15 +42,15 @@ const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
 const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props) => {
-  const [data, setData] = useState<trangthai[]>([])
-  const donviString = localStorage.getItem('donvi')
-  const donviData: donvi[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
+  const [data, setData] = useState<status[]>([])
+  const unitString = localStorage.getItem('unit')
+  const unitData: unit[] = typeof unitString === 'string' ? JSON.parse(unitString) : []
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: ctnv[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
+  const taskString = localStorage.getItem('task')
+  const task: task[] = typeof taskString === 'string' ? JSON.parse(taskString) : []
   useEffect(() => {
-    axios.get(`${URL}/trangthai`).then((response) => {
+    axios.get(`${URL}/status`).then((response) => {
       setData(response.data)
     })
   }, [])
@@ -141,9 +141,9 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                 </div>
                 <div>
                   <label className='form-label'> PHÂN LOẠI HỘI NHÓM </label>
-                  <MySelect label='Job Type' name='trangthai_id'>
+                  <MySelect label='Job Type' name='status'>
                     <option value=''>Lựa chọn phân loại</option>
-                    {data.map((data: trangthai, index: number) => {
+                    {data.map((data: status, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}
@@ -177,7 +177,7 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                   <label className='form-label'>SỐ ĐIỆN THOẠI</label>
                   <Field
                     type='text'
-                    name='SDT'
+                    name='phone_number'
                     className='form-control form-control-white'
                     placeholder='0912345678'
                   />
@@ -190,7 +190,7 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                 <label className='form-label'>GHI CHÚ</label>
                 <MyTextArea
                   label='Ghi chú'
-                  name='ghichu'
+                  name='note'
                   rows='6'
                   placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                 />
@@ -198,10 +198,10 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect label='Job Type' name='donvi_id'>
+                  <MySelect label='Job Type' name='unit_id'>
                     <option value=''>Lựa chọn đơn vị</option>
-                    {donviData &&
-                      donviData?.map((data: donvi, index: number) => {
+                    {unitData &&
+                      unitData?.map((data: unit, index: number) => {
                         return (
                           <option value={data.id} key={index}>
                             {data.name}
@@ -212,9 +212,9 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                 </div>
                 <div>
                   <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect label='Job Type' name='ctnv_id'>
+                  <MySelect label='Job Type' name='task_id'>
                     <option value=''>Lựa chọn CTNV</option>
-                    {ctnv.map((data: ctnv, index: number) => {
+                    {task.map((data: task, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}

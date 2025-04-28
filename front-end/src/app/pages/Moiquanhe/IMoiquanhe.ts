@@ -1,7 +1,7 @@
-export interface Imoiquanhe{
+export interface Irelationship{
     name:string
 }
-export interface IResponsemoiquanhe extends Imoiquanhe{
+export interface IResponserelationship extends Irelationship{
     id: number
     created_at:string,
     updated_at:string

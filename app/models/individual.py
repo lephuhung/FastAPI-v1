@@ -12,14 +12,15 @@ class Individual(Base):
     """
     __tablename__ = "individuals"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    client_name = Column(String(255))
-    id_number = Column(String(20))  # CMND/CCCD
-    image = Column(String(255))
+    full_name = Column(String(255))
+    id_number = Column(String(20))  # national_id/citizen_id
+    image_url = Column(String(255))
     date_of_birth = Column(Date)
-    gender = Column(Boolean)
+    is_male = Column(Boolean)
     hometown = Column(String(255))
     additional_info = Column(String(1000))
-    phone_number = Column(String(20))
+    phone_number = Column(String(15))
+    kols_type = Column(String(255))  # type of kol (e.g. influencer, celebrity, etc.)
     is_kol = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(

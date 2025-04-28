@@ -33,9 +33,9 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/vaiao' title='Danh sách Vai Ảo' hasBullet={true} />
       </AsideMenuItemWithSub>
       <AsideMenuItem
-        to='/doituong'
+        to='/individual'
         icon='/media/icons/duotune/art/art002.svg'
-        title='ĐỐI TƯỢNG/KOL'
+        title='ĐỐI TƯỢNG/KOLs'
         fontIcon='bi-app-indicator'
       />
       <AsideMenuItemWithSub
@@ -44,10 +44,10 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen025.svg '
       >
-        <AsideMenuItem to='/thongke-donvi' title='Thống kê theo đơn vị' hasBullet={true} />
-        <AsideMenuItem to='/thongke-tinhchat' title='Thống kê theo tính chất' hasBullet={true} />
+        <AsideMenuItem to='/thongke-unit' title='Thống kê theo đơn vị' hasBullet={true} />
+        <AsideMenuItem to='/thongke-characteristic' title='Thống kê theo tính chất' hasBullet={true} />
         <AsideMenuItem to='/thongke-phanloai' title='Thống kê theo phân loại' hasBullet={true} />
-        <AsideMenuItem to='/thongke-ctnv' title='Thống kê theo công tác NV' hasBullet={true} />
+        <AsideMenuItem to='/thongke-task' title='Thống kê theo công tác NV' hasBullet={true} />
       </AsideMenuItemWithSub>
       <AsideMenuItemWithSub
         to='/post'
@@ -56,10 +56,10 @@ export function AsideMenuMain() {
         icon='/media/icons/duotune/general/gen022.svg'
       >
         <AsideMenuItem to='/tags' title='TAGS' hasBullet={true} />
-        <AsideMenuItem to='/tinhchat' title='TÍNH CHẤT' hasBullet={true} />
-        <AsideMenuItem to='/trangthai' title='PHÂN LOẠI' hasBullet={true} />
-        <AsideMenuItem to='/moiquanhe' title='MỐI QUAN HÊ' hasBullet={true} />
-        <AsideMenuItem to='/ctnv' title='CÔNG TÁC NGHIỆP VỤ' hasBullet={true} />
+        <AsideMenuItem to='/characteristic' title='TÍNH CHẤT' hasBullet={true} />
+        <AsideMenuItem to='/status' title='PHÂN LOẠI' hasBullet={true} />
+        <AsideMenuItem to='/relationships' title='MỐI QUAN HÊ' hasBullet={true} />
+        <AsideMenuItem to='/task' title='CÔNG TÁC NGHIỆP VỤ' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -70,7 +70,7 @@ export function AsideMenuMain() {
       >
         <AsideMenuItem to='/search-trichtin' title='Từ khóa trong trích tin' hasBullet={true} />
         <AsideMenuItem to='/search-uid' title='Từ khóa trong hội nhóm' hasBullet={true} />
-        <AsideMenuItem to='/search-doituong' title='Từ khóa trong đối tượng' hasBullet={true} />
+        <AsideMenuItem to='/search-individual' title='Từ khóa trong đối tượng' hasBullet={true} />
         <AsideMenuItem to='/search-tags' title='Theo Tags' hasBullet={true} />
       </AsideMenuItemWithSub>
       <div className='menu-item'>
@@ -88,7 +88,7 @@ export function AsideMenuMain() {
       >
         <AsideMenuItem to='/permission' title='Phân Quyền' hasBullet={true} />
         <AsideMenuItem to='/user' title='Tài khoản' hasBullet={true} />
-        <AsideMenuItem to='/donvi' title='Đơn vị' hasBullet={true} />
+        <AsideMenuItem to='/unit' title='Đơn vị' hasBullet={true} />
       </AsideMenuItemWithSub>
       <AsideMenuItem
         to='/tele'

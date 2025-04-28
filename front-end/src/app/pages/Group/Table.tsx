@@ -16,19 +16,19 @@ const exampleData = {
   id: 0,
   uid: '',
   name: '',
-  SDT: '',
-  trangthai_id: 0,
-  type_id: 0,
-  ghichu: '',
+  phone_number: '',
+  status: 0,
+  account_type_id: 0,
+  note: '',
   reaction: 0,
   Vaiao: false,
   created_at: '',
   updated_at: '',
-  trangthai_name: '',
-  trangthai_color: '',
-  ctnv_name: '',
-  donvi_name: '',
-  id_hoinhomdonvi: 0
+  status_name: '',
+  status_color: '',
+  task_name: '',
+  unit_name: '',
+  id_hoinhomunit: 0
 }
 const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
@@ -127,11 +127,11 @@ const Table: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {el.trangthai_name.toUpperCase()}
+                        {el.status_name.toUpperCase()}
                       </span>
                     </td>
                     <td>
-                      <span className='badge badge-light-primary fs-7 fw-semibold'>{el.SDT}</span>
+                      <span className='badge badge-light-primary fs-7 fw-semibold'>{el.phone_number}</span>
                     </td>
                     <td>
                       <span className='badge badge-light-success fs-7 fw-semibold'>
@@ -140,12 +140,12 @@ const Table: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <span className='badge badge-success fs-7 fw-semibold'>
-                        {el.donvi_name}
+                        {el.unit_name}
                       </span>
                     </td>
                     <td>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {el.ctnv_name.toUpperCase()}
+                        {el.task_name.toUpperCase()}
                       </span>
                     </td>
                     <td className='text-center'>

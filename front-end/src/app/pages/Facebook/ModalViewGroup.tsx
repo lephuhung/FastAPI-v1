@@ -99,7 +99,7 @@ const ModalViewGroup = ({ show, handleClose, title, ifacebook }: Props) => {
                         path='/media/icons/duotune/general/gen018.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {ifacebook?.trangthai_name}
+                      {ifacebook?.status_name}
                     </a>
                     <a
                       href='#'
@@ -109,7 +109,7 @@ const ModalViewGroup = ({ show, handleClose, title, ifacebook }: Props) => {
                         path='/media/icons/duotune/communication/com011.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {`SĐT: ${ifacebook?.SDT}`}
+                      {`SĐT: ${ifacebook?.phone_number}`}
                     </a>
                   </div>
                 </div>
@@ -152,11 +152,11 @@ const ModalViewGroup = ({ show, handleClose, title, ifacebook }: Props) => {
                           className='svg-icon-3 svg-icon-primary me-2'
                         />
                         <div className='fs-2 fw-bolder'>
-                          {ifacebook.ctnv_name}
+                          {ifacebook.task_name}
                         </div>
                       </div>
 
-                      <div className='fw-bold fs-6 text-gray-400'>{`Đơn vị: ${ifacebook.donvi_name}`}</div>
+                      <div className='fw-bold fs-6 text-gray-400'>{`Đơn vị: ${ifacebook.unit_name}`}</div>
                     </div>
                     <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                       <div className='d-flex align-items-center'>
@@ -191,7 +191,7 @@ const ModalViewGroup = ({ show, handleClose, title, ifacebook }: Props) => {
                       </button>
                     </div>
                   </div>
-                  <div className='card-body py-5 fs-4'>{ifacebook?.ghichu ===''? 'Không có dữ liệu': ifacebook?.ghichu}</div>
+                  <div className='card-body py-5 fs-4'>{ifacebook?.note ===''? 'Không có dữ liệu': ifacebook?.note}</div>
                 </div>
               </div>
             </div>
@@ -236,7 +236,7 @@ const ModalViewGroup = ({ show, handleClose, title, ifacebook }: Props) => {
                   <span className='badge badge-light-primary fs-7 fw-semibold'>{el.reaction}</span>
                 </td>
                 <td>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7' style={{whiteSpace:'pre-wrap'}}>{el.ghichu}</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7' style={{whiteSpace:'pre-wrap'}}>{el.note}</span>
                 </td>
               </tr>
             )}

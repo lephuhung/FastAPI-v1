@@ -1,232 +1,3 @@
---   -- use this line to using UUID generation--
--- CREATE EXTENSION "uuid-ossp";
-
--- CREATE TABLE "doituong" (
---   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
---   "client_name" varchar,
---   "CMND" varchar,
---   "CCCD" varchar,
---   "Image" varchar,
---   "Ngaysinh" date,
---   "Gioitinh" boolean,
---   "Quequan" varchar,
---   "Thongtinbosung" varchar,
---   "SDT" varchar,
---   "KOL" boolean,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
-
--- CREATE TABLE "tags" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "color" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "model_has_tags" (
---   "id" SERIAL PRIMARY KEY,
---   "model_id" varchar,
---   "tags_id" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "uid" (
---   "id" SERIAL PRIMARY KEY,
---   "uid" varchar,
---   "name" varchar,
---   "reaction" int,
---   "SDT" varchar,
---   "trangthai_id" int,
---   "type_id" int,
---   "ghichu" varchar,
---   "Vaiao" boolean,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "doituong_uid" (
---   "id" SERIAL PRIMARY KEY,
---   "doituong_id" uuid,
---   "uid" varchar,
---   "Moiquanhe_id" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "quantrivien" (
---   "id" SERIAL PRIMARY KEY,
---   "uid_facebook" varchar,
---   "uid" varchar,
---   "Moiquanhe_id" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "trangthai" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "color" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "tinhchat" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "color" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "color" (
---   "id" SERIAL PRIMARY KEY,
---   "name"varchar,
---   "color" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "trangthai_hoinhom" (
---   "id" SERIAL PRIMARY KEY,
---   "trangthai_id" int,
---   "uid" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "ctnv" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "tinhchat_hoinhom" (
---   "id" SERIAL PRIMARY KEY,
---   "tinhchat_id" int,
---   "uid" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "type" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "moiquanhe" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "donvi" (
---   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "trichtin" (
---   "id" SERIAL PRIMARY KEY,
---   "uid" varchar,
---   "ghichu_noidung" varchar,
---   "nhanxet" varchar,
---   "xuly" varchar,
---   "uid_vaiao" varchar,
---   "user_id" uuid,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
--- CREATE TABLE "doituong_donvi" (
---   "id" SERIAL PRIMARY KEY,
---   "donvi_id" uuid NOT NULL,
---   "doituong_id" uuid,
---   "CTNV_ID" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
--- CREATE TABLE "donvi_hoinhom" (
---   "id" SERIAL PRIMARY KEY,
---   "donvi_id" uuid NOT NULL,
---   "uid" varchar,
---   "CTNV_ID" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "user_donvi" (
---   "id" SERIAL PRIMARY KEY,
---   "user_id" uuid,
---   "donvi_id" uuid,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "vaiao" (
---   "id" SERIAL PRIMARY KEY,
---   "uid_hoinhom" varchar,
---   "uid_vaiao" varchar,
---   "active" boolean,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "role" (
---   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "permission" (
---   "id" SERIAL PRIMARY KEY,
---   "name" varchar,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "user_has_permissions" (
---   "id" SERIAL PRIMARY KEY,
---   "user_id" uuid,
---   "permission_id" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "user_has_role" (
---   "id" SERIAL PRIMARY KEY,
---   "user_id" uuid,
---   "role_id" uuid,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "role_has_permission" (
---   "id" SERIAL PRIMARY KEY,
---   "role_id" uuid,
---   "permission_id" int,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
-
--- CREATE TABLE "user" (
---   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
---   "username" varchar,
---   "password" varchar,
---   "salt" varchar,
---   "active" varchar,
---   "donvi_id" uuid NULL,
---   "created_at" timestamp,
---   "updated_at" timestamp
--- );
 -- Kích hoạt tiện ích UUID
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -344,14 +115,14 @@ CREATE TABLE "social_accounts" (
   "reaction_count" int DEFAULT 0,
   "phone_number" varchar(15) CHECK ("phone_number" ~ '^[0-9]{10,15}$'),
   "status_id" int,
-  "type_id" int,
+  "account_type_id" int,
   "note" text,
-  "is_active" boolean DEFAULT true,
+  "is_linked" boolean DEFAULT true,
   "created_at" timestamp DEFAULT NOW(),
   "updated_at" timestamp DEFAULT NOW(),
   CONSTRAINT unique_uid UNIQUE ("uid"),
   CONSTRAINT fk_social_accounts_status FOREIGN KEY ("status_id") REFERENCES "statuses" ("id") ON DELETE RESTRICT,
-  CONSTRAINT fk_social_accounts_type FOREIGN KEY ("type_id") REFERENCES "account_types" ("id") ON DELETE RESTRICT
+  CONSTRAINT fk_social_accounts_type FOREIGN KEY ("account_type_id") REFERENCES "account_types" ("id") ON DELETE RESTRICT
 );
 CREATE INDEX idx_social_accounts_uid ON "social_accounts" ("uid");
 
@@ -585,7 +356,7 @@ INSERT INTO "characteristics" ("name", "color") VALUES
 ('Công giáo', '#FF0000'),
 ('Tôn giáo khác', '#FFA500'),
 ('Khiếu kiện', '#00FF00'),
-('KOL', '#FFFF00'),
+('is_kol', '#FFFF00'),
 ('Xấu độc', '#00FFFF');
 
 -- Insert sample data for tasks
@@ -628,7 +399,7 @@ INSERT INTO "individuals" ("full_name", "national_id", "citizen_id", "date_of_bi
 ('Lê Văn C', '456789123', '456789123045', '1988-03-03', true, 'TP.HCM', '0456789123', true);
 
 -- Insert sample data for social_accounts
-INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_active") VALUES
+INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "account_type_id", "note", "is_active") VALUES
 ('100001', 'Nguyễn Văn A', 1000, '0123456789', 1, 1, 'Tài khoản chính', true),
 ('100002', 'Trần Thị B', 500, '0987654321', 1, 1, 'Tài khoản phụ', true),
 ('100003', 'Lê Văn C', 2000, '0456789123', 1, 1, 'Tài khoản quan trọng', true);
@@ -683,7 +454,7 @@ WHERE u.username = 'Luongvinhlong' AND un.name = 'PA05';
 INSERT INTO "users" ("username", "password", "salt", "is_active") VALUES
 ('Luongvinhlong', '$2b$12$DX9Vfw30CNbLmc/EbmO3f.DYUVvBOLPgGwFD1dOKtuA6tPgZrG0ca', 'tPOnMZQU', true),
 ('Nguyendangphi', '$2b$12$9XOKGE9Af7AEWwyn1910DOyTk6/DhkVG3MznKaR.cOanrvY3AQQTW', 'WmmGtMWb', true),
-('lephuhung77', '$2b$12$wPHK2GdgI2.coKTi2DEXXeLCpqrQwGbrglltMGvC4nitdlzFG0ta2', 'xOxionLL', true),
+('lephuhung77', '$2b$12$wPHK2GdgI2.coKTi2DEXXeLCpqrQwGbrglltMGvC4nitdlzFG0ta2', 'xOxionLL', true);
 
 
 -- Insert sample data for user_units

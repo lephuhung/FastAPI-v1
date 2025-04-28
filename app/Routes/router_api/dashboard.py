@@ -8,9 +8,9 @@ from pydantic import UUID4
 router = APIRouter(prefix="/dashboard", tags=["Màn hình chính"])
 
 
-@router.get("/doituong")
-def get_doituong_dashboard(db: Session = Depends(deps.get_db)):
-    return crud.crud_thongke.dashboard_doituong(db=db)
+@router.get("/individual")
+def get_individual_dashboard(db: Session = Depends(deps.get_db)):
+    return crud.crud_thongke.dashboard_individual(db=db)
 
 
 @router.get("/uid")

@@ -2,16 +2,16 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class tinhchat_hoinhom(BaseModel):
+class characteristic_hoinhom(BaseModel):
     
-    tinhchat_id: Optional[int]
+    characteristic_id: Optional[int]
     uid: Optional[str]
     class Config:
         from_attributes = True
         
-class tinhchat_hoinhomcreate(tinhchat_hoinhom):
+class characteristic_hoinhomcreate(characteristic_hoinhom):
     pass
 
-class tinhchat_hoinhomupdate(tinhchat_hoinhom):
+class characteristic_hoinhomupdate(characteristic_hoinhom):
     pass
     

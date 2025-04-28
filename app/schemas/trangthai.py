@@ -2,19 +2,19 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class trangthai(BaseModel):
+class status(BaseModel):
     
     name: Optional[str]
     color: Optional[str]
     class Config:
         from_attributes = True
         
-class trangthaicreate(trangthai):
+class trangthaicreate(status):
     pass
 
-class trangthaiupdate(trangthai):
+class trangthaiupdate(status):
     id: Optional[int]
     
-class trangthai_date(trangthai):
+class trangthai_date(status):
     created_at : datetime
     updated_at : datetime

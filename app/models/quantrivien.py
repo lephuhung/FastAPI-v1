@@ -14,7 +14,7 @@ class quantrivien(Base):
     id = Column(Integer, primary_key=True, index=True)
     uid = Column(String(20), nullable=False)
     uid_facebook = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
-    moiquanhe_id = Column(String(20), ForeignKey('moiquanhe.id'))
+    relationship_id = Column(String(20), ForeignKey('relationship.id'))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,

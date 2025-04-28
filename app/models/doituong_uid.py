@@ -6,15 +6,15 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class Doituong_UID(Base):
+class Individual_UID(Base):
     """
-    Database model for an Doituong UUID
+    Database model for an Individual UUID
     """
-    __tablename__="doituong_uid"
+    __tablename__="individual_uid"
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    doituong_id = Column(Integer, ForeignKey("doituong.id"))
+    individual_id = Column(Integer, ForeignKey("individual.id"))
     uid = Column(String(20), ForeignKey("uid.uid") )
-    moiquanhe_id= Column(Integer, ForeignKey("moiquanhe.id"))
+    relationship_id= Column(Integer, ForeignKey("relationship.id"))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,

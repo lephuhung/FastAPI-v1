@@ -33,11 +33,9 @@ async def login_for_access_token(
     auth: AuthModel,
     db: Annotated[Session, Depends(deps.get_db)]
 ):
-    print(f"[DEBUG] Attempting login for username: {auth.username}")
     
     user = crud_user.authenticate(db=db, username=auth.username, password=auth.password)
     if not user:
-        print(f"[DEBUG] Authentication failed for username: {auth.username}")
         raise HTTPException(
             status_code=400,
             detail="Incorrect username or password"
@@ -62,7 +60,6 @@ async def login_for_access_token(
             status_code=400,
             detail="User has no role assigned"
         )
-    print(f"[DEBUG] User {user.username} has role: {role_user_id}")
     
     # Get role names
     role_names = []
@@ -70,7 +67,6 @@ async def login_for_access_token(
         role_obj = crud_role.get(db=db, id=role.role_id)
         if role_obj:
             role_names.append(role_obj.name)
-    print(f"[DEBUG] User {user.username} has roles: {role_names}")
     
     # Get Unit id of User
     unit = crud_unit.get_by_user_id(user_id=user.id, db=db)
@@ -80,11 +76,15 @@ async def login_for_access_token(
             status_code=400,
             detail="User has no unit assigned"
         )
-    print(f"[DEBUG] User {user.username} belongs to unit: {unit.id}")
-    
+
+    permission_objects = crud_user_permission.get_by_user_id(user_id=user.id, db=db)
+
     # Get Permission id by user id
-    permission = crud_user_permission.get_by_user_id(user_id=user.id, db=db)
-    print(f"[DEBUG] User {user.username} has permissions: {permission}")
+    permission_ids = []
+    if permission_objects:
+        for perm_obj in permission_objects:
+            permission_ids.append(str(perm_obj.permission_id))
+
     
     # Create access token
     access_token = create_access_token(
@@ -93,7 +93,7 @@ async def login_for_access_token(
             "username": user.username,
             "unit_id": str(unit.id),
             "role": role_names,
-            "permission": permission
+            "permissions": permission_ids 
         },
         expires_delta=access_token_expires,
     )
@@ -104,6 +104,7 @@ async def login_for_access_token(
 # verify token to check valid user
 @router.post("/verify_token", response_model=UserOutDB)
 async def verify_token(current_user=Security(deps.get_current_active_user, scopes=[])):
+    print(f"[DEBUG] Verifying token for user: {current_user.username}")
     return current_user
 
 @router.post("/register", response_model=schemas.user.User)

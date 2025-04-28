@@ -6,11 +6,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class ctnv(Base):
+class task(Base):
     """
-    Database model for an ctnv
+    Database model for an task
     """
-    __tablename__ = 'ctnv'
+    __tablename__ = 'task'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     name = Column(String(255))
     created_at = Column(DateTime, default=func.now())

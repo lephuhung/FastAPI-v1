@@ -7,14 +7,14 @@ from sqlalchemy.orm import relationship
 
 
 
-class user_donvi(Base):
+class user_unit(Base):
     """
-    Database model for an user_donvi table
+    Database model for an user_unit table
     """
-    __tablename__ = 'user_donvi'
+    __tablename__ = 'user_unit'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     user_id = Column(UUID(as_uuid=True),ForeignKey("user.id"),primary_key=True,nullable=False)
-    donvi_id = Column(UUID(as_uuid=True),ForeignKey("donvi.id"),primary_key=True,nullable=False)
+    unit_id = Column(UUID(as_uuid=True),ForeignKey("unit.id"),primary_key=True,nullable=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,

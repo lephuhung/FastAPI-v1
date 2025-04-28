@@ -16,9 +16,9 @@ const URL = process.env.REACT_APP_API_URL
 const DashboardPage: FC = () => {
   const result = useQueries([
     {
-      queryKey: ['dashboard_doituong'],
+      queryKey: ['dashboard_individual'],
       queryFn: () =>
-        axios.get(`${URL}/dashboard/doituong`).then((res) => {
+        axios.get(`${URL}/dashboard/individual`).then((res) => {
           return res.data
         }),
     },
@@ -48,7 +48,7 @@ const DashboardPage: FC = () => {
           <span className='accordion-icon'>
             <KTSVG className='svg-icon svg-icon-4' path='media/icons/duotune/arrows/arr064.svg' />
           </span>
-          <h3 className='fs-4 text-gray-800 fw-bold mb-0 ms-4'>TỔNG QUAN THÔNG TIN HỘI NHÓM, VAI ẢO, ĐỐI TƯỢNG, KOL</h3>
+          <h3 className='fs-4 text-gray-800 fw-bold mb-0 ms-4'>TỔNG QUAN THÔNG TIN HỘI NHÓM, VAI ẢO, ĐỐI TƯỢNG, is_kol</h3>
         </div>
         <div
           id='kt_accordion_2_item_1'
@@ -62,9 +62,9 @@ const DashboardPage: FC = () => {
                   <StatisticsWidget6
                     className='card-xl-stretch mb-xl-8'
                     color='success'
-                    title='KOL'
-                    description='SỐ LƯỢNG KOL'
-                    progress={result[0].data?.KOL}
+                    title='is_kol'
+                    description='SỐ LƯỢNG is_kol'
+                    progress={result[0].data?.is_kol}
                   />
                 )}
               </div>
@@ -76,7 +76,7 @@ const DashboardPage: FC = () => {
                     color='success'
                     title=' ĐỐI TƯỢNG'
                     description='SỐ LƯỢNG ĐỐI TƯỢNG'
-                    progress={result[0].data?.doituong}
+                    progress={result[0].data?.individual}
                   />
                 )}
               </div>
@@ -128,14 +128,14 @@ const DashboardPage: FC = () => {
             >
               <div className='row g-5'>
                 {result[0].data &&
-                  result[0].data.ctnv_doituong.map((el: any, index: number) => {
+                  result[0].data.task_individual.map((el: any, index: number) => {
                     return (
                       <div className='col-xl-3' key={index}>
                         {
                           <StatisticsWidget6
                             className='card-xl-stretch mb-xl-8'
                             color='primary'
-                            title={`DIỆN ${el.ctnv_name.toUpperCase()}`}
+                            title={`DIỆN ${el.task_name.toUpperCase()}`}
                             description='SỐ LƯỢNG ĐỐI TƯỢNG '
                             progress={el.count}
                           />
@@ -169,14 +169,14 @@ const DashboardPage: FC = () => {
             >
               <div className='row g-5'>
                 {result[1].data &&
-                  result[1].data.ctnv_uid.map((el: any, index: number) => {
+                  result[1].data.task_uid.map((el: any, index: number) => {
                     return (
                       <div className='col-xl-3' key={index}>
                         {
                           <StatisticsWidget6
                             className='card-xl-stretch mb-xl-8'
                             color='info'
-                            title={`DIỆN ${el.ctnv_name.toUpperCase()}`}
+                            title={`DIỆN ${el.task_name.toUpperCase()}`}
                             description='SỐ LƯỢNG HỘI NHÓM'
                             progress={el.count}
                           />
@@ -230,20 +230,20 @@ const DashboardPage: FC = () => {
 const DashboardWrapper: FC = () => {
   const intl = useIntl()
   useEffect(() => {
-    axios.get(`${URL}/donvi/getAll`).then((res) => {
-      localStorage.setItem('donvi', JSON.stringify(res.data))
+    axios.get(`${URL}/units`).then((res) => {
+      localStorage.setItem('unit', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/type/get-all`).then((res) => {
-      localStorage.setItem('type', JSON.stringify(res.data))
+    axios.get(`${URL}/account-types`).then((res) => {
+      localStorage.setItem('account_type', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/ctnv/getAll`).then((res) => {
-      localStorage.setItem('ctnv', JSON.stringify(res.data))
+    axios.get(`${URL}/tasks`).then((res) => {
+      localStorage.setItem('tasks', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/tinhchat/getAll`).then((res) => {
-      localStorage.setItem('tinhchat', JSON.stringify(res.data))
+    axios.get(`${URL}/characteristics`).then((res) => {
+      localStorage.setItem('characteristic', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/trangthai`).then((response) => {
-      localStorage.setItem('phanloai', JSON.stringify(response.data))
+    axios.get(`${URL}/statuses`).then((response) => {
+      localStorage.setItem('statuses', JSON.stringify(response.data))
     })
   }, [])
   return (

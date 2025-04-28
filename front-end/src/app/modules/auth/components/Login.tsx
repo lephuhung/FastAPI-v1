@@ -20,8 +20,8 @@ const loginSchema = Yup.object().shape({
 })
 
 const initialValues = {
-  email: 'superduperaccount',
-  password: 'lph77',
+  email: 'lephuhung77',
+  password: '123456',
 }
 
 /*
@@ -63,7 +63,7 @@ export function Login() {
     >
       {/* begin::Heading */}
       <div className='text-center mb-10'>
-        <h1 className='text-dark mb-3'>PHẦN MỀM QUẢN LÝ HỘI NHÓM, KOL, VAI ẢO, THÔNG TIN XẤU ĐỘC CÔNG AN TỈNH HÀ TĨNH</h1>
+        <h1 className='text-dark mb-3'>PHẦN MỀM QUẢN LÝ HỘI NHÓM, is_kol, VAI ẢO, THÔNG TIN XẤU ĐỘC CÔNG AN TỈNH HÀ TĨNH</h1>
         {/* <div className='text-gray-400 fw-bold fs-4'>
           New Here?{' '}
           <Link to='/auth/registration' className='link-primary fw-bolder'>

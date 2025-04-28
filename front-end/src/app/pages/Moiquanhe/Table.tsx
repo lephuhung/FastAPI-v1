@@ -4,7 +4,7 @@ import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {CreateAppModal} from './CreateAppModal'
 import {useQuery} from 'react-query'
 import axios from 'axios'
-import {IResponsemoiquanhe} from './IMoiquanhe'
+import {IResponserelationship} from './IMoiquanhe'
 import {useCopyToClipboard} from './useCopyToClipboard'
 import { ToastContainer } from 'react-toastify'
 const URL = `${process.env.REACT_APP_API_URL}`
@@ -14,7 +14,7 @@ type Props = {
 const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalViewItem, setShowModalViewItem] = useState<boolean>(false)
-  const [IResponsehost, setIResponseHost] = useState<IResponsemoiquanhe>({
+  const [IResponsehost, setIResponseHost] = useState<IResponserelationship>({
     id:0,
     name:'',
     created_at: '',
@@ -25,7 +25,7 @@ const Table: React.FC<Props> = ({className}) => {
   const {isLoading, data, error} = useQuery({
     queryKey: ['host', refresh],
     queryFn: async () => {
-      const respone = await axios.get(`${URL}/moiquanhe`)
+      const respone = await axios.get(`${URL}/relationships`)
       const {data} = respone
       return data
     },
@@ -77,7 +77,7 @@ const Table: React.FC<Props> = ({className}) => {
             {/* begin::Table body */}
             <tbody>
               {data &&
-                data.map((el: IResponsemoiquanhe, index: number) => (
+                data.map((el: IResponserelationship, index: number) => (
                   <tr key={index}>
                     <td>
                       <div className='d-flex align-items-center'>

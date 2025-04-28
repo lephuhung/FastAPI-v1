@@ -7,7 +7,7 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, trangthai, donvi, ctnv} from '../Facebook/IFacebook'
+import {type, status, unit, task} from '../Facebook/IFacebook'
 import {IGroupModal, IResponseGroup} from '../Group/Group'
 import {IResponseFacebook} from '../Facebook/IFacebook'
 import {toast} from 'react-toastify'
@@ -95,12 +95,12 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
 const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
   const [datagroup, setDataGroup] = useState<IResponseGroup[]>([])
   const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
-  const donviString = localStorage.getItem('donvi')
-  const donvi: donvi[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
+  const unitString = localStorage.getItem('unit')
+  const unit: unit[] = typeof unitString === 'string' ? JSON.parse(unitString) : []
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: ctnv[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
+  const taskString = localStorage.getItem('task')
+  const task: task[] = typeof taskString === 'string' ? JSON.parse(taskString) : []
   useEffect(() => {
     axios.get(`${URL}/uid/get-groups`).then((response) => {
       setDataGroup(response.data)

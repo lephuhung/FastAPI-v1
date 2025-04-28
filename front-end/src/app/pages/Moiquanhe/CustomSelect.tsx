@@ -6,7 +6,7 @@ import { StateManagerProps } from "react-select/dist/declarations/src/useStateMa
 export type MyOption = {
   label: string;
   value: any;
-  type_id?:number;
+  account_type_id?:number;
   name?:string;
 };
 //define the group option type

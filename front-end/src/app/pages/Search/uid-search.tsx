@@ -3,12 +3,12 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
-import { donvi, type, tinhchat, ctnv } from '../Facebook/IFacebook'
+import { unit, type, characteristic, task } from '../Facebook/IFacebook'
 import {uidsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import { toAbsoluteUrl } from '../../../_metronic/helpers'
-import { trangthai } from '../Doituong/doituong';
+import { status } from '../Individual/individual';
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -61,13 +61,13 @@ const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalItemVaiao, setShowModalItemVaiao] = useState<boolean>(false)
   const [data, setData] = useState<uidsearch[]>([])
-//   const [phanloai, setPhanloai] = useState<trangthai[]>([])
+//   const [phanloai, setPhanloai] = useState<status[]>([])
   const [loading, setloading] = useState<boolean>(false)
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const phanloaiString = localStorage.getItem('phanloai')
-  const phanloai: trangthai[] = typeof phanloaiString=== 'string' ? JSON.parse(phanloaiString) : []
+  const phanloai: status[] = typeof phanloaiString=== 'string' ? JSON.parse(phanloaiString) : []
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -155,11 +155,11 @@ const Table: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {phanloai[el._source.trangthai_id-1].name}
+                        {phanloai[el._source.status-1].name}
                       </span>
                     </td>
                     <td>
-                      <span className='badge badge-primary fs-7 fw-semibold'>{el._source.SDT}</span>
+                      <span className='badge badge-primary fs-7 fw-semibold'>{el._source.phone_number}</span>
                     </td>
                     <td>
                       {el._source.Vaiao ? (
@@ -173,7 +173,7 @@ const Table: React.FC<Props> = ({className}) => {
                       )}
                     </td>
                     <td>
-                      <span className='badge badge-danger fs-7 fw-semibold'>{type[el._source.type_id].name}</span>
+                      <span className='badge badge-danger fs-7 fw-semibold'>{type[el._source.account_type_id].name}</span>
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-success fs-7 fw-semibold'>

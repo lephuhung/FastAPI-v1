@@ -3,46 +3,46 @@ from typing import Optional
 from datetime import datetime, date
 
 
-class doituong(BaseModel):
+class individual(BaseModel):
 
-    client_name: Optional[str]
-    CMND: Optional[str]
-    CCCD: Optional[str]
-    Ngaysinh: Optional[date]
+    full_name: Optional[str]
+    national_id: Optional[str]
+    citizen_id: Optional[str]
+    date_of_birth: Optional[date]
     # True is Nam, False is Nu
-    Gioitinh: bool
-    Quequan: Optional[str]
-    Thongtinbosung: Optional[str]
-    SDT: Optional[str]
-    KOL: bool
-    Image: Optional[str]
+    is_male: bool
+    hometown: Optional[str]
+    additional_info: Optional[str]
+    phone_number: Optional[str]
+    is_kol: bool
+    image_url: Optional[str]
 
 
-class doituongcreate(doituong):
-    ctnv_id: Optional[int]
-    donvi_id: Optional[UUID4]
+class individualcreate(individual):
+    task_id: Optional[int]
+    unit_id: Optional[UUID4]
 
-    def get_doituong_instance(self) -> doituong:
-        return doituong(
-            client_name= self.client_name,
-            CMND = self.CMND,
-            CCCD = self.CCCD,
-            Ngaysinh= self.Ngaysinh,
+    def get_individual_instance(self) -> individual:
+        return individual(
+            full_name= self.full_name,
+            national_id = self.national_id,
+            citizen_id = self.citizen_id,
+            date_of_birth= self.date_of_birth,
             # True is Nam, False is Nu
-            Gioitinh=self.Gioitinh,
-            Quequan = self.Quequan,
-            Thongtinbosung= self.Thongtinbosung,
-            SDT= self.SDT,
-            KOL = self.KOL,
-            Image= self.Image
+            is_male=self.is_male,
+            hometown = self.hometown,
+            additional_info= self.additional_info,
+            phone_number= self.phone_number,
+            is_kol = self.is_kol,
+            image_url= self.image_url
         )
 
 
-class doituongupdate(doituongcreate):
+class individualupdate(individualcreate):
     id: UUID4
     pass
 
 
-class doituongoutDB(doituong):
+class individualoutDB(individual):
     created_at: datetime
     updated_at: datetime

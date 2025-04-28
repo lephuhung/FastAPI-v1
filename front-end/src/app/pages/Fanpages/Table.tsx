@@ -5,7 +5,7 @@ import {CreateAppModal} from './CreateAppModal'
 import {useQuery} from 'react-query'
 import axios from 'axios'
 import {ModalViewItem} from './ModalViewItem'
-import {IResponseFanpage, IFanpage, tinhchat} from './Fanpage'
+import {IResponseFanpage, IFanpage, characteristic} from './Fanpage'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {UpdateModal} from './UpdateAppModal'
@@ -18,20 +18,20 @@ const exampleData = {
   id: 0,
   uid: '',
   name: '',
-  SDT: '',
-  trangthai_id: 0,
-  type_id: 0,
-  ghichu: '',
+  phone_number: '',
+  status: 0,
+  account_type_id: 0,
+  note: '',
   reaction: 0,
   Vaiao: false,
   created_at: '',
   updated_at: '',
-  trangthai_name: '',
-  trangthai_color: '',
-  ctnv_name: '',
-  donvi_name: '',
-  tinhchat_id:0,
-  id_hoinhomdonvi: 0,
+  status_name: '',
+  status_color: '',
+  task_name: '',
+  unit_name: '',
+  characteristic_id:0,
+  id_hoinhomunit: 0,
 }
 const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
@@ -40,8 +40,8 @@ const Table: React.FC<Props> = ({className}) => {
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const [ifacebookupdate, setIfacebookupdate] = useState<IResponseFanpage>(exampleData)
   const [ifanpage, setIfanpage] = useState<IResponseFanpage>()
-  const tinhchatString = localStorage.getItem('tinhchat')
-  const tinhchat: tinhchat[] = typeof tinhchatString === 'string' ? JSON.parse(tinhchatString) : []
+  const characteristicString = localStorage.getItem('characteristic')
+  const characteristic: characteristic[] = typeof characteristicString === 'string' ? JSON.parse(characteristicString) : []
   const {isLoading, data, error} = useQuery({
     queryKey: ['fanpage', loading],
     queryFn: async () => {
@@ -126,26 +126,26 @@ const Table: React.FC<Props> = ({className}) => {
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       ></a> */}
                       <span className='badge badge-warning fs-7 fw-semibold'>
-                        {tinhchat[el.tinhchat_id-1].name.toUpperCase()}
+                        {characteristic[el.characteristic_id-1].name.toUpperCase()}
                       </span>
                     </td>
                     <td>
                       <span className='badge badge-light-primary fs-7 fw-semibold'>
-                        {el.trangthai_name.toUpperCase()}
+                        {el.status_name.toUpperCase()}
                       </span>
                     </td>
                     <td className='text-center'>
-                      <span className='badge badge-primary fs-7 fw-semibold'>{el.SDT==='0' ? 'Chưa có': el.SDT}</span>
+                      <span className='badge badge-primary fs-7 fw-semibold'>{el.phone_number==='0' ? 'Chưa có': el.phone_number}</span>
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-success fs-7 fw-semibold'>{el.reaction}</span>
                     </td>
                     <td>
-                      <span className='badge badge-success fs-7 fw-semibold'>{el.donvi_name}</span>
+                      <span className='badge badge-success fs-7 fw-semibold'>{el.unit_name}</span>
                     </td>
                     <td className='text-center'> 
                       <span className='badge badge-success fs-7 fw-semibold'>
-                        {el.ctnv_name.toUpperCase()}
+                        {el.task_name.toUpperCase()}
                       </span>
                     </td>
                     <td className='text-center'>

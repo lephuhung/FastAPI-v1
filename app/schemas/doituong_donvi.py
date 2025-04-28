@@ -2,16 +2,16 @@ from pydantic import BaseModel, UUID4
 from typing import Optional
 from datetime import datetime
 
-class doituong_donvi(BaseModel):
-    doituong_id: UUID4
-    donvi_id: UUID4
+class individual_unit(BaseModel):
+    individual_id: UUID4
+    unit_id: UUID4
     CTNV_ID: int
 
     class Config:
         from_attributes = True
-class doituong_donvicreate(doituong_donvi):
+class individual_unitcreate(individual_unit):
     pass
 
-class doituong_donviupdate(doituong_donvi):
+class individual_unitupdate(individual_unit):
     id: Optional[int]
 

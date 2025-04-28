@@ -2,19 +2,19 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class moiquanhe(BaseModel):
+class relationship(BaseModel):
     
     name: Optional[str]
 
     class Config:
         from_attributes = True
         
-class moiquanhecreate(moiquanhe):
+class relationshipcreate(relationship):
     pass
 
-class moiquanheupdate(moiquanhe):
+class relationshipupdate(relationship):
     id: Optional[int]
     
-class moiquanhe_date(moiquanhe):
+class relationship_date(relationship):
     created_at : datetime
     updated_at : datetime

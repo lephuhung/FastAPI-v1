@@ -12,7 +12,7 @@ class trangthai_hoinhom(Base):
     """
     __tablename__ = 'trangthai_hoinhom'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    trangthai_id = Column(Integer, ForeignKey('trangthai.id'), nullable=False)
+    status = Column(Integer, ForeignKey('status.id'), nullable=False)
     uid = Column(String(20), ForeignKey('uid.uid'), nullable=False) 
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(

@@ -50,7 +50,7 @@ CREATE TABLE "social_accounts" (
   "reaction_count" int DEFAULT 0,
   "phone_number" varchar(15) CHECK ("phone_number" ~ '^[0-9]{10,15}$'),
   "status_id" int,
-  "type_id" int,
+  "account_type_id" int,
   "note" text,
   "is_active" boolean DEFAULT true,
   "created_at" timestamp DEFAULT NOW(),

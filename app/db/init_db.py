@@ -62,14 +62,14 @@ def init_db(db: Session) -> None:
     permissions = [
         "user.all", "user.read", "user.update", "user.delete", "user.create",
         "role.all", "role.read", "role.update", "role.delete", "role.create",
-        "ctnv.all", "ctnv.read", "ctnv.update", "ctnv.delete", "ctnv.create",
-        "doituong.all", "doituong.create", "doituong.update", "doituong.delete", "doituong.read",
+        "task.all", "task.read", "task.update", "task.delete", "task.create",
+        "individual.all", "individual.create", "individual.update", "individual.delete", "individual.read",
         "tags.read", "tags.update", "tags.delete", "tags.create", "tags.all",
-        "tinhchat.all", "tinhchat.create", "tinhchat.update", "tinhchat.delete", "tinhchat.create",
-        "trangthai.all", "trangthai.read", "trangthai.update", "trangthai.delete", "trangthai.create",
+        "characteristic.all", "characteristic.create", "characteristic.update", "characteristic.delete", "characteristic.create",
+        "status.all", "status.read", "status.update", "status.delete", "status.create",
         "trichtin.all", "trichtin.create", "trichtin.update", "trichtin.delete", "trichtin.read",
         "uid.all", "uid.read", "uid.delete", "uid.create", "uid.update",
-        "donvi.all", "donvi.read", "donvi.create", "donvi.update", "donvi.delete"
+        "unit.all", "unit.read", "unit.create", "unit.update", "unit.delete"
     ]
     
     permission_user_all = crud.permission.get_by_name(db=db, name="user.all")

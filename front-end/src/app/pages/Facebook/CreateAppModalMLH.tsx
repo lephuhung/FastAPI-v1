@@ -7,7 +7,7 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, trangthai, donvi, ctnv, moiquanhe} from './IFacebook'
+import {type, status, unit, task, relationship} from './IFacebook'
 import { IGroupModal, IResponseGroup } from '../Group/Group'
 import {IResponseFacebook} from './IFacebook'
 import {toast} from 'react-toastify'
@@ -31,17 +31,17 @@ const modalsRoot = document.getElementById('root-modals') || document.body
 const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
   const [datagroup, setDataGroup] = useState<IResponseGroup[]>([])
   const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
-  const [datamoiquanhe, setDataMoiquanhe] = useState<moiquanhe[]>([])
+  const [datarelationship, setDataMoiquanhe] = useState<relationship[]>([])
 
 
   useEffect(() => {
-    axios.get(`${URL}/uid/get-page-group`).then((response) => {
+    axios.get(`${URL}/uid/get-groups`).then((response) => {
       setDataGroup(response.data)
     })
-    axios.get(`${URL}/uid/get-uid`).then((response) => {
+    axios.get(`${URL}/uid/get-facebook`).then((response) => {
       setDataFacebook(response.data)
     })
-    axios.get(`${URL}/moiquanhe`).then((response) => {
+    axios.get(`${URL}/relationships`).then((response) => {
       setDataMoiquanhe(response.data)
     })
   }, [])
@@ -65,7 +65,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
           initialValues={{
             uid: '',
             uid_facebook: '',
-            moiquanhe_id: 0
+            relationship_id: 0
           }}
           
           onSubmit={(values: any) => {
@@ -140,9 +140,9 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
               </div>
               <div style={{marginRight: '30px'}}>
                 <label className='form-label'>MỐI QUAN HỆ</label>
-                <MySelect label='Job Type' name='moiquanhe_id' width={150}>
+                <MySelect label='Job Type' name='relationship_id' width={150}>
                   <option value=''>Lựa chọn MQH</option>
-                  {datamoiquanhe.map((data: moiquanhe, index: number) => {
+                  {datarelationship.map((data: relationship, index: number) => {
                     return (
                       <option value={data.id} key={index}>
                        {data.name.toUpperCase()}

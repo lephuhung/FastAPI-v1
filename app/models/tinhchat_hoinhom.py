@@ -5,13 +5,13 @@ from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class tinhchat_hoinhom(Base):
+class characteristic_hoinhom(Base):
     """
-    Database model for an tinhchat hoinhom
+    Database model for an characteristic hoinhom
     """
-    __tablename__='tinhchat_hoinhom'
+    __tablename__='characteristic_hoinhom'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
-    tinhchat_id = Column(Integer, ForeignKey('tinhchat.id'), nullable=False)
+    characteristic_id = Column(Integer, ForeignKey('characteristic.id'), nullable=False)
     uid= Column(String(20), ForeignKey('uid.uid'), nullable=False) 
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(
@@ -19,4 +19,4 @@ class tinhchat_hoinhom(Base):
         default=func.now(),
         onupdate=func.now(),
     )
-    # tinchat = relationship('tinhchat')
+    # tinchat = relationship('characteristic')

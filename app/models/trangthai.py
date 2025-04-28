@@ -6,11 +6,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 
-class trangthai(Base):
+class status(Base):
     """
     Database model for an uid
     """ 
-    __tablename__='trangthai'
+    __tablename__='status'
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     name = Column(String(255))
     color = Column(String(255), nullable=False)
@@ -20,4 +20,4 @@ class trangthai(Base):
         default=func.now(),
         onupdate=func.now(),
     )
-    # color = relationship("trangthai", back_populates="color")
+    # color = relationship("status", back_populates="color")

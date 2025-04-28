@@ -4,7 +4,7 @@ from datetime import datetime
 
 class trangthai_hoinhom(BaseModel):
     
-    trangthai_id: Optional[int]
+    status: Optional[int]
     uid: Optional[str]
     
     class Config:

@@ -2,18 +2,18 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class ctnv(BaseModel):
+class task(BaseModel):
     
     name: Optional[str]
 
     class Config:
         from_attributes = True
-class ctnvcreate(ctnv):
+class taskcreate(task):
     pass
 
-class ctnvupdate(ctnv):
+class taskupdate(task):
     id: Optional[int]
     
-class ctnv_date(ctnv):
+class task_date(task):
     created_at : datetime
     updated_at : datetime

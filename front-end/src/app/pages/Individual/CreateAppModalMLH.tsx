@@ -1,0 +1,218 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import {createPortal} from 'react-dom'
+import {Modal} from 'react-bootstrap'
+// import {defaultCreateAppData, ICreateAppData} from './IAppModels'
+// import {StepperComponent} from '../../../assets/ts/components'
+import {KTSVG} from '../../../_metronic/helpers'
+import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
+import {toast} from 'react-toastify'
+import instance from '../../modules/axiosInstance'
+import {individualResponse} from './individual'
+import {IResponseFacebook, relationship} from '../Facebook/IFacebook'
+import '../Facebook/style.css'
+import {useEffect, useState} from 'react'
+import styled from '@emotion/styled'
+import axios from 'axios'
+// import styled from 'styled-components';
+type Props = {
+  show: boolean
+  handleClose: () => void
+  handleLoading: () => void
+  title: string
+}
+const URL = process.env.REACT_APP_API_URL
+const modalsRoot = document.getElementById('root-modals') || document.body
+
+const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
+  const [dataindividual, setDataIndividual] = useState<individualResponse[]>([])
+  const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
+  const [datarelationship, setDataMoiquanhe] = useState<relationship[]>([])
+
+  useEffect(() => {
+    axios.get(`${URL}/uid/get-uid`).then((response) => {
+      setDataFacebook(response.data)
+    })
+    axios.get(`${URL}/individuals`).then((response) => {
+      setDataIndividual(response.data)
+    })
+    axios.get(`${URL}/relationships`).then((response) => {
+      setDataMoiquanhe(response.data)
+    })
+  }, [])
+  return createPortal(
+    <Modal
+      id='kt_modal_create_app'
+      tabIndex={-1}
+      aria-hidden='true'
+      dialogClassName='modal-dialog modal-dialog-centered mw-900px'
+      show={show}
+      onHide={handleClose}
+    >
+      <div className='modal-header'>
+        <h2>{title}</h2>
+        <div className='btn btn-sm btn-icon btn-active-color-primary' onClick={handleClose}>
+          <KTSVG className='svg-icon-1' path='/media/icons/duotune/arrows/arr061.svg' />
+        </div>
+      </div>
+      <div className='modal-body py-lg-10 px-lg-10'>
+        <Formik
+          initialValues={{
+            individual_id: '',
+            uid: '',
+            relationship_id: 0,
+          }}
+          onSubmit={(values: any) => {
+            instance
+              .post(`${URL}/individual-uid/create`, values)
+              .then((res) => {
+                if (res.status === 200) {
+                  handleLoading()
+                  handleClose()
+                  toast.success('Thêm thành công', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                }
+                if (res.status === 400) {
+                  let data = res.data.DATA
+                  console.log(data.errors)
+                  toast.warning('Thêm không thành công', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                }
+              })
+              .catch((error) => {
+                if (error.response && error.response.status === 403) {
+                  toast.error('Thêm không thành công', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                } else {
+                  // Handle other errors
+                  console.log('An error occurred:', error.message)
+                }
+              })
+          }}
+        >
+          {({errors, touched}) => (
+            <Form>
+              <span>
+                Bảng dữ liệu này nhằm đưa ra mối liên hệ giữa Đối tượng cụ thể liên quan đến tài
+                khoản Facebook
+              </span>
+              <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{marginRight: '30px'}}>
+                  <label className='form-label'>ĐỐI TƯỢNG</label>
+                  <MySelect label='Job Type' name='individual_id' width={250}>
+                    <option value=''>Lựa chọn đối tượng</option>
+                    {dataindividual.map((data: individualResponse, index: number) => {
+                      return (
+                        <option value={data.id} key={index}>
+                          {`${data.full_name.toUpperCase()}: ${data.date_of_birth}`}
+                        </option>
+                      )
+                    })}
+                  </MySelect>
+                </div>
+                <div style={{marginRight: '30px'}}>
+                  <label className='form-label'>MỐI QUAN HỆ</label>
+                  <MySelect label='Job Type' name='relationship_id' width={150}>
+                    <option value=''>Lựa chọn MQH</option>
+                    {datarelationship.map((data: relationship, index: number) => {
+                      return (
+                        <option value={data.id} key={index}>
+                          {data.name.toUpperCase()}
+                        </option>
+                      )
+                    })}
+                  </MySelect>
+                </div>
+                <div>
+                  <label className='form-label'> TÀI KHOẢN FACEBOOK </label>
+                  <MySelect label='Job Type' name='uid' width={300}>
+                    <option value=''>Lựa chọn hội nhóm</option>
+                    {datafacebook.map((data: IResponseFacebook, index: number) => {
+                      return (
+                        <option value={data.uid} key={index}>
+                          {`${data.uid}: ${data.name.toUpperCase()}`}
+                        </option>
+                      )
+                    })}
+                  </MySelect>
+                </div>
+              </div>
+              <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
+                <button className='btn btn-info' style={{marginLeft: '5px'}}>
+                  Xóa dữ liệu
+                </button>
+                <button className='btn btn-primary' type='submit'>
+                  Lưu
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </Modal>,
+    modalsRoot
+  )
+}
+interface MySelectProps extends FieldAttributes<any> {
+  label: string
+}
+
+// Define styled components if not imported
+const StyledSelect = styled.select`
+  color: var(--blue-700);
+`
+
+const StyledErrorMessage = styled.div`
+  font-size: 12px;
+  color: var(--red-600);
+  width: 200px;
+  margin-top: 0.25rem;
+  &:before {
+    content: '❌ ';
+    font-size: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: var(--red-300);
+  }
+`
+
+const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
+  const [field, meta] = useField(props as any)
+
+  return (
+    <>
+      <StyledSelect {...field} {...props} style={{width: width}} />
+      {meta.touched && meta.error ? (
+        <StyledErrorMessage>{meta.error}</StyledErrorMessage>
+      ) : field.value === undefined || field.value === '' || field.value === 0 ? (
+        <StyledErrorMessage>Vui lòng lựa chọn</StyledErrorMessage>
+      ) : null}
+    </>
+  )
+}
+export {CreateModelMLH}

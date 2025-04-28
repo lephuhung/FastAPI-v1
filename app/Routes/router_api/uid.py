@@ -91,31 +91,31 @@ async def delete(id: str, db: Session = Depends(deps.get_db)):
 
 @router.get("/get-facebook")
 async def get_facebook(
-    type_id: int = 2,
+    account_type_id: int = 2,
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
-    facebook_data = social_account.get_all_by_type_id(type_id=type_id, db=db)
+    facebook_data = social_account.get_all_by_type_id(account_type_id=account_type_id, db=db)
     return facebook_data
 
 
 @router.get("/get-groups")
 async def get_groups(
-    type_id: int = 1,
+    account_type_id: int = 1,
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
-    facebook_data = social_account.get_all_by_type_id(type_id=type_id, db=db)
+    facebook_data = social_account.get_all_by_type_id(account_type_id=account_type_id, db=db)
     return facebook_data
 
 
 @router.get("/get-pages")
 async def get_pages(
-    type_id: int = 3,
+    account_type_id: int = 3,
     db: Session = Depends(deps.get_db),
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
-    facebook_data = social_account.get_all_by_type_id(type_id=type_id, db=db)
+    facebook_data = social_account.get_all_by_type_id(account_type_id=account_type_id, db=db)
     return facebook_data
 
 
@@ -134,7 +134,7 @@ async def get_uid(
     vaiao: bool = False,
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
-    vaiao_data = social_account.get_by_is_active(is_active=vaiao, db=db)
+    vaiao_data = social_account.get_all_by_uid(db=db)
     return vaiao_data
 
 

@@ -33,13 +33,14 @@ def get_current_user(
     db: Session = Depends(get_db),
     token: str = Depends(reusable_oauth2),
 ) -> models.user.User:
+
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
         authenticate_value = "Bearer"
     credentials_exception = HTTPException(
         status_code=401,
-        detail="Could not validate credentials",
+        detail="Could not validate credentials test1",
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
@@ -49,12 +50,18 @@ def get_current_user(
         if payload.get("username") is None:
             raise credentials_exception
         token_data = AccessTokenData(**payload)
-    except (jwt.JWTError, ValidationError):
+    except (jwt.JWTError, ValidationError) as e:
+        logger.error(f"Token validation failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            detail="Could not validate credentials test 403",
         )
-    user = crud.user.get(db, token_data.id)
+    user = crud.crud_user.get(db, token_data.id)
+
+    print(f"[DEBUG] User ID: {token_data.id}")
+    print(f"[DEBUG] User Role: {token_data.role}")
+    print(f"[DEBUG] User Permissions: {token_data.permissions}")
+    print(f"[DEBUG] User: {user}")
     if not user:
         raise credentials_exception
     if security_scopes.scopes and not token_data.role:
@@ -78,7 +85,8 @@ def get_current_user(
 def get_current_active_user(
     current_user: models.user.User = Security(get_current_user, scopes=[]),
 ) -> models.user.User:
-    if not crud.user.is_active(current_user):
+    print(f"[DEBUG] Current user: {current_user.username}")
+    if not crud.crud_user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 

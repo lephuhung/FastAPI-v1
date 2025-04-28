@@ -5,8 +5,8 @@ export interface IVaiaoResponse{
     hoinhom_name: string,
     active: boolean,
     updated_at: string
-    donvi_name: string,
-    ctnv_name: string
+    unit_name: string,
+    task_name: string
 }
 export interface IVaiao{
     uid_hoinhom:string

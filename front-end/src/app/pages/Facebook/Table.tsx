@@ -18,19 +18,20 @@ const exampleData = {
   id: 0,
   uid: '',
   name: '',
-  SDT: '',
-  trangthai_id: 0,
-  type_id: 0,
-  ghichu: '',
+  phone_number: '',
+  status: 1,
+  status_id: 0,
+  account_type_id: 0,
+  note: '',
   reaction: 0,
   Vaiao: false,
   created_at: '',
   updated_at: '',
-  trangthai_name: '',
-  trangthai_color: '',
-  ctnv_name: '',
-  donvi_name: '',
-  id_hoinhomdonvi: 0,
+  status_name: '',
+  status_color: '',
+  task_name: '',
+  unit_name: '',
+  id_hoinhomunit: 0,
 }
 const Table: React.FC<Props> = ({className}) => {
   const PUBLIC_URL = process.env.PUBLIC_URL
@@ -47,9 +48,10 @@ const Table: React.FC<Props> = ({className}) => {
     queryKey: ['facebook', loading],
     queryFn: async () => {
       setloading(false)
-      const respone = await axios.get(`${URL}/uid/get-facebook`)
+      const respone = await axios.get(`${URL}/social-accounts`)
       if(respone.status===200){
         const {data} = respone
+        console.log(data)
         return data
       }else if(respone.status===403){
         
@@ -149,11 +151,12 @@ const Table: React.FC<Props> = ({className}) => {
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {el.trangthai_name.toUpperCase()}
+                        {/* {el?.status_name.toUpperCase()} */}
+                        {el?.status_id}
                       </span>
                     </td>
                     <td className='text-center'> 
-                      <span className='badge badge-primary fs-7 fw-semibold'>{el.SDT==='0' ? 'Chưa có': el.SDT}</span>
+                      <span className='badge badge-primary fs-7 fw-semibold'>{el?.phone_number==='0' ? 'Chưa có': el.phone_number}</span>
                     </td>
                     <td>
                       {el.Vaiao ? (
@@ -167,11 +170,12 @@ const Table: React.FC<Props> = ({className}) => {
                       )}
                     </td>
                     <td>
-                      <span className='badge badge-danger fs-7 fw-semibold'>{el.donvi_name}</span>
+                      <span className='badge badge-danger fs-7 fw-semibold'>{el.unit_name}</span>
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-success fs-7 fw-semibold'>
-                        {el.ctnv_name.toUpperCase()}
+                        {/* {el.task_name.toUpperCase()} */}
+                        {el.name.toUpperCase()}
                       </span>
                     </td>
                     <td className='text-center'>

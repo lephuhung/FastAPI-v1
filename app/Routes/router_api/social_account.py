@@ -87,17 +87,17 @@ async def delete_social_account(
     return social_account_obj
 
 
-@router.get("/type/{type_id}", response_model=List[SocialAccount])
+@router.get("/type/{account_type_id}", response_model=List[SocialAccount])
 async def get_social_accounts_by_type(
     *,
     db: Session = Depends(deps.get_db),
-    type_id: int,
+    account_type_id: int,
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
     Get social accounts by type ID.
     """
-    social_accounts = social_account.get_all_by_type_id(db=db, type_id=type_id)
+    social_accounts = social_account.get_all_by_type_id(db=db, account_type_id=account_type_id)
     return social_accounts
 
 

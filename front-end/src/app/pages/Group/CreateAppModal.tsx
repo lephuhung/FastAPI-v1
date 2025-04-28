@@ -6,7 +6,7 @@ import {Modal} from 'react-bootstrap'
 import * as Yup from 'yup'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, trangthai, donvi, ctnv, tinhchat} from '../Facebook/IFacebook'
+import {type, status, unit, task, characteristic} from '../Facebook/IFacebook'
 import {IGroupModal} from './Group'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
@@ -33,24 +33,24 @@ const ValidateUid = Yup.object().shape({
   reaction: Yup.string()
     .required('Số bạn bè cần nhập')
     .matches(/^\d+$/, 'Số lượng bạn bè chỉ nhận ký tự số'),
-  SDT: Yup.string()
+  phone_number: Yup.string()
     .min(0, 'Quá ngắn')
     .max(11, 'Quá dài')
     .matches(/^\d+$/, 'Số điện thoại là ký tự số, nếu không có điền 0'),
   name: Yup.string().required(),
 })
 const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
-  const [data, setData] = useState<trangthai[]>([])
-  const tinhchatString = localStorage.getItem('tinhchat')
-  const tinhchat: tinhchat[] = typeof tinhchatString === 'string' ? JSON.parse(tinhchatString) : []
-  const donviString = localStorage.getItem('donvi')
-  const donvi: donvi[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
+  const [data, setData] = useState<status[]>([])
+  const characteristicString = localStorage.getItem('characteristic')
+  const characteristic: characteristic[] = typeof characteristicString === 'string' ? JSON.parse(characteristicString) : []
+  const unitString = localStorage.getItem('unit')
+  const unit: unit[] = typeof unitString === 'string' ? JSON.parse(unitString) : []
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: ctnv[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
+  const taskString = localStorage.getItem('task')
+  const task: task[] = typeof taskString === 'string' ? JSON.parse(taskString) : []
   useEffect(() => {
-    axios.get(`${URL}/trangthai`).then((response) => {
+    axios.get(`${URL}/status`).then((response) => {
       setData(response.data)
     })
   }, [])
@@ -78,15 +78,15 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
           initialValues={{
             uid: '',
             name: '',
-            SDT: '0',
+            phone_number: '0',
             reaction: 0,
-            trangthai_id: 0,
+            status: 0,
             Vaiao: false,
-            ghichu: '',
-            type_id: 1,
-            ctnv_id: 0,
-            donvi_id: '',
-            trangthai_name: '',
+            note: '',
+            account_type_id: 1,
+            task_id: 0,
+            unit_id: '',
+            status_name: '',
           }}
           validationSchema={ValidateUid}
           onSubmit={(values: IGroupModal) => {
@@ -160,9 +160,9 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div>
                   <label className='form-label'> PHÂN LOẠI HỘI NHÓM </label>
-                  <MySelect width='200px' label='Job Type' name='trangthai_id'>
+                  <MySelect width='200px' label='Job Type' name='status'>
                     <option value=''>Lựa chọn phân loại</option>
-                    {data.map((data: trangthai, index: number) => {
+                    {data.map((data: status, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}
@@ -173,9 +173,9 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div style={{marginLeft: '30px'}}>
                   <label className='form-label'> TÍNH CHẤT HỘI NHÓM </label>
-                  <MySelect width='200px' label='Job Type' name='tinhchat_id'>
+                  <MySelect width='200px' label='Job Type' name='characteristic_id'>
                     <option value=''>Lựa chọn tính chất</option>
-                    {tinhchat.map((data: tinhchat, index: number) => {
+                    {characteristic.map((data: characteristic, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name.toUpperCase()}
@@ -209,12 +209,12 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                   <label className='form-label'>SỐ ĐIỆN THOẠI</label>
                   <Field
                     type='text'
-                    name='SDT'
+                    name='phone_number'
                     className='form-control form-control-white'
                     placeholder='0912345678'
                   />
-                  {errors.SDT && touched.SDT ? (
-                    <StyledErrorMessage>{errors.SDT}</StyledErrorMessage>
+                  {errors.phone_number && touched.phone_number ? (
+                    <StyledErrorMessage>{errors.phone_number}</StyledErrorMessage>
                   ) : null}
                 </div>
               </div>
@@ -222,7 +222,7 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 <label className='form-label'>GHI CHÚ</label>
                 <MyTextArea
                   label='Ghi chú'
-                  name='ghichu'
+                  name='note'
                   rows='6'
                   placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                 />
@@ -230,10 +230,10 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect label='Job Type' name='donvi_id'>
+                  <MySelect label='Job Type' name='unit_id'>
                     <option value=''>Lựa chọn đơn vị</option>
-                    {donvi &&
-                      donvi?.map((data: donvi, index: number) => {
+                    {unit &&
+                      unit?.map((data: unit, index: number) => {
                         return (
                           <option value={data.id} key={index}>
                             {data.name}
@@ -244,9 +244,9 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div>
                   <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect width='200px' label='Job Type' name='ctnv_id'>
+                  <MySelect width='200px' label='Job Type' name='task_id'>
                     <option value=''>Lựa chọn CTNV</option>
-                    {ctnv.map((data: ctnv, index: number) => {
+                    {task.map((data: task, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}

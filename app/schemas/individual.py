@@ -4,12 +4,13 @@ from datetime import datetime, date
 
 
 class IndividualBase(BaseModel):
-    client_name: str
+    full_name: str
     id_number: Optional[str] = None
-    image: Optional[str] = None
+    image_url: Optional[str] = None
     date_of_birth: Optional[date] = None
-    gender: Optional[bool] = None
+    is_male: Optional[bool] = None
     hometown: Optional[str] = None
+    kols_type: Optional[str] = None
     additional_info: Optional[str] = None
     phone_number: Optional[str] = None
     is_kol: bool = False
