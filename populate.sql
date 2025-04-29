@@ -198,7 +198,7 @@ CREATE TABLE "reports" (
   "created_at" timestamp DEFAULT NOW(),
   "updated_at" timestamp DEFAULT NOW(),
   CONSTRAINT fk_reports_social_account FOREIGN KEY ("social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE CASCADE,
-  CONSTRAINT fk_reports_related_social_account FOREIGN KEY ("related_social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE SET NULL,
+  CONSTRAINT fk_reports_related_social_account FOREIGN KEY ("linked_social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE SET NULL,
   CONSTRAINT fk_reports_user FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE SET NULL
 );
 CREATE INDEX idx_reports_social_account_uid ON "reports" ("social_account_uid");
@@ -393,10 +393,10 @@ INSERT INTO "tags" ("name", "color") VALUES
 ('Theo dõi', '#00FFFF');
 
 -- Insert sample data for individuals
-INSERT INTO "individuals" ("full_name", "national_id", "citizen_id", "date_of_birth", "is_male", "hometown", "phone_number", "is_kol") VALUES
-('Nguyễn Văn A', '123456789', '123456789012', '1990-01-01', true, 'Hà Tĩnh', '0123456789', true),
-('Trần Thị B', '987654321', '987654321098', '1992-02-02', false, 'Hà Nội', '0987654321', false),
-('Lê Văn C', '456789123', '456789123045', '1988-03-03', true, 'TP.HCM', '0456789123', true);
+INSERT INTO "individuals" ("full_name", "id_card", "kols_type", "date_of_birth", "is_male", "hometown", "phone_number", "is_kol") VALUES
+('Nguyễn Văn A', '123456789012', 'KOLS UY TÍN', '1990-01-01', true, 'Hà Tĩnh', '0123456789', true),
+('Trần Thị B', '987654321098', 'KOLS UY TÍN', '1992-02-02', false, 'Hà Nội', '0987654321', false),
+('Lê Văn C', '456789123045', 'KOLS UY TÍN', '1988-03-03', true, 'TP.HCM', '0456789123', true);
 
 -- Insert sample data for social_accounts
 INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "account_type_id", "note", "is_active") VALUES

@@ -48,7 +48,7 @@ const DashboardPage: FC = () => {
           <span className='accordion-icon'>
             <KTSVG className='svg-icon svg-icon-4' path='media/icons/duotune/arrows/arr064.svg' />
           </span>
-          <h3 className='fs-4 text-gray-800 fw-bold mb-0 ms-4'>TỔNG QUAN THÔNG TIN HỘI NHÓM, VAI ẢO, ĐỐI TƯỢNG, is_kol</h3>
+          <h3 className='fs-4 text-gray-800 fw-bold mb-0 ms-4'>TỔNG QUAN THÔNG TIN HỘI NHÓM, VAI ẢO, ĐỐI TƯỢNG, KOLS</h3>
         </div>
         <div
           id='kt_accordion_2_item_1'
@@ -62,8 +62,8 @@ const DashboardPage: FC = () => {
                   <StatisticsWidget6
                     className='card-xl-stretch mb-xl-8'
                     color='success'
-                    title='is_kol'
-                    description='SỐ LƯỢNG is_kol'
+                    title='KOLs'
+                    description='SỐ LƯỢNG KOLS'
                     progress={result[0].data?.is_kol}
                   />
                 )}
@@ -74,7 +74,7 @@ const DashboardPage: FC = () => {
                   <StatisticsWidget6
                     className='card-xl-stretch mb-xl-8'
                     color='success'
-                    title=' ĐỐI TƯỢNG'
+                    title='ĐỐI TƯỢNG'
                     description='SỐ LƯỢNG ĐỐI TƯỢNG'
                     progress={result[0].data?.individual}
                   />

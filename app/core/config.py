@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: Optional[str] 
     POSTGRES_DB: Optional[str] 
 
+    MEILI_HOST: str = "http://meilisearch:7700" 
+    MEILI_MASTER_KEY: str  
+
+    CELERY_BROKER_URL: str = "redis://redis:6379/0" 
+    CELERY_RESULT_BACKEND: str = "redis://redis:6379/1" 
+
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
     @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
     @classmethod

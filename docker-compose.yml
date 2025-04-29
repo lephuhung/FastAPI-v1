@@ -18,18 +18,41 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # Lệnh kiểm tra: dùng pg_isready với user và db đã khai báo
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fastapi_traefik} -d ${POSTGRES_DB:-fastapi_traefik}"]
+      interval: 5s    # Kiểm tra mỗi 5 giây
+      timeout: 5s     # Chờ tối đa 5 giây cho lệnh kiểm tra
+      retries: 5      # Thử lại tối đa 5 lần nếu thất bại
+      start_period: 10s # Chờ 10s sau khi container start mới bắt đầu kiểm tra health
+    # --------------------
 
   web:
     build: .
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --reload';  
+    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --reload'; 
+    command: >
+      bash -c "
+        echo 'Waiting for DB...' && while ! nc -z db 5432; do sleep 1; done; echo 'DB Ready.';
+        echo 'Waiting for Meilisearch...' && while ! nc -z meilisearch 7700; do sleep 1; done; echo 'Meilisearch Ready.';
+        uvicorn app.main:app --host 0.0.0.0 --reload #--port 8000 Đổi port nội bộ thành 8000
+      " 
     volumes:
       - .:/app
     ports:
       - 80:8000
     environment:
       - DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_MASTER_KEY=TODO_SECURE_MASTER_KEY
+      - CELERY_BROKER_URL=redis://redis:6379/0 # Trỏ đến service redis, db 0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1 # Backend để lưu kết quả (tùy chọn), db 1
     depends_on:
-      - db
+      db:
+        condition: service_healthy # Chờ db healthy
+      meilisearch: 
+        condition: service_started
+      redis: 
+        condition: service_healthy # Chờ redis sẵn sàng
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fastapi.rule=Host(`fastapi.localhost`)"
@@ -46,6 +69,85 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - elk
+
+  redis: 
+    image: redis:7-alpine
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379" # Chỉ expose nếu cần debug từ bên ngoài container
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+  
+  meilisearch:
+    image: getmeili/meilisearch:latest 
+    container_name: meilisearch
+    environment:
+      - MEILI_MASTER_KEY=TODO_SECURE_MASTER_KEY 
+      # - MEILI_ENV=development # Bỏ comment dòng này nếu muốn chạy không cần Master Key (chỉ cho dev)
+    ports:
+      - "7700:7700" 
+    volumes:
+      - meili_data:/meili_data 
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 1s
+      retries: 10
+      start_period: 5s # Chờ 5s trước khi bắt đầu healthcheck
+
+  celery_worker: # Thêm service worker
+    build: . 
+    container_name: celery_worker
+    hostname: celery_worker
+    # -A: application instance
+    # -Q: (Tùy chọn) Chỉ định worker này lắng nghe queue nào (ví dụ: -Q meilisearch_sync,default)
+    command: celery -A app.celery_app.celery worker --loglevel=INFO
+    volumes:
+      - .:/app
+    environment:
+      # Worker cần các biến môi trường giống web để kết nối DB, Meili, Redis
+      - DATABASE_URL=${DATABASE_URL:-postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik}
+      - MEILI_HOST=${MEILI_HOST:-http://meilisearch:7700}
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-TODO_SECURE_MASTER_KEY}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://redis:6379/1}
+    networks:
+      - elk 
+    depends_on:
+      - web 
+      - db
+      - redis
+      - meilisearch
+
+  flower: 
+    build: . 
+    container_name: flower
+    hostname: flower
+  
+    command: >
+      celery -A app.celery_app.celery flower
+             --broker=${CELERY_BROKER_URL}
+             --port=5555
+             --basic_auth=${FLOWER_USER:-admin}:${FLOWER_PASSWORD:-123456} # 
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+      - FLOWER_USER=admin
+      - FLOWER_PASSWORD=123456
+    networks:
+      - elk 
+    depends_on:
+      - redis 
+
       
   # front-end:
   #   build: 
@@ -64,6 +166,7 @@ services:
   #   networks:
   #     - elk
 
+
 networks:
   elk:
     name: fastapi_network
@@ -71,3 +174,4 @@ networks:
 
 volumes:
   postgres_data:
+  meili_data:
