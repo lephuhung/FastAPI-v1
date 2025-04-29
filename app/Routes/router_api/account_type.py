@@ -7,6 +7,18 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/account-types", tags=["Account Types"])
 
+@router.get("/public", response_model=List[AccountType])
+async def get_public_account_types(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+):
+    """
+    Retrieve public account types without authentication.
+    """
+    account_types = account_type.get_multi(db, skip=skip, limit=limit)
+    return account_types
+
 @router.get("/", response_model=List[AccountType])
 async def get_account_types(
     db: Session = Depends(deps.get_db),

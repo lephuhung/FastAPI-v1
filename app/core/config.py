@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "FastAPI Role Based Access Control Auth Service"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     USERS_OPEN_REGISTRATION: str
     ENVIRONMENT: Optional[str]
     PORT: Optional[int]

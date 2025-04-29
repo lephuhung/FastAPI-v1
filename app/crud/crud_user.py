@@ -6,7 +6,6 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
 from pydantic.types import UUID4
 from sqlalchemy.orm import Session
-from app.Routes import deps
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     # Get User by Name
@@ -14,7 +13,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return db.query(User).filter(User.username==username).first()
     #get user active
     def is_active(self, user: User) -> bool:
-        return user.active
+        return user.is_active
     # get user by id
     def get_by_id(self, db: Session, *, id: int):
         return db.query(User).filter(User.id==id).first()

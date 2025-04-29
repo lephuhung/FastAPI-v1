@@ -104,6 +104,9 @@ async def login_for_access_token(
 # verify token to check valid user
 @router.post("/verify_token", response_model=UserOutDB)
 async def verify_token(current_user=Security(deps.get_current_active_user, scopes=[])):
+    print(f"[DEBUG] Verifying token for user: {current_user.username}")
+    print(f"[DEBUG] User ID: {current_user.id}")
+    print(f"[DEBUG] User is active: {current_user.is_active}")
     return current_user
 
 @router.post("/register", response_model=schemas.user.User)

@@ -37,15 +37,16 @@ export function requestPassword(email: string) {
 }
 
 export function getUserByToken(token: string) {
-  return axios.post<UserModel>(GET_USER_BY_ACCESSTOKEN_URL, {
-    access_token: token,
-  }, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers":
-        "Access-Control-Allow-Headers, Content-Type, Authorization",
-      "Access-Control-Allow-Methods": "*",
-      "Content-Type": "application/json",
-    },
-  })
+  return axios.post<UserModel>(
+    GET_USER_BY_ACCESSTOKEN_URL,
+    {}, // body rỗng
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
+
+console.log('Token:', localStorage.getItem('kt-auth-react-v'))

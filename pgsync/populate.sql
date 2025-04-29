@@ -598,10 +598,10 @@ INSERT INTO "tasks" ("name", "description") VALUES
 
 -- Insert sample data for account_types
 INSERT INTO "account_types" ("name") VALUES
-('Cá nhân'),
+('Fcebook cá nhân'),
 ('Nhóm Facebook'),
 ('Trang Facebook '),
-('Fanpage Facebook'),
+('Vai ảo'),
 ('Telegram'),
 ('Zalo');
 

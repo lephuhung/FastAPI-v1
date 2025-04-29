@@ -14,7 +14,7 @@ class SocialAccount(Base):
     reaction_count = Column(Integer, default=0)
     phone_number = Column(String(20))
     status_id = Column(Integer, ForeignKey("statuses.id"))
-    account_type_id = Column(Integer, ForeignKey("account_types.id"))
+    type_id = Column(Integer, ForeignKey("account_types.id"))
     note = Column(String(1000))
     is_linked = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())

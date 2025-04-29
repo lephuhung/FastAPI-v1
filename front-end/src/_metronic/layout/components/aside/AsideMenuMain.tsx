@@ -1,12 +1,25 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {useIntl} from 'react-intl'
 // import { KTSVG } from '../../../helpers'
 import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
 import {AsideMenuItem} from './AsideMenuItem'
+import {getAccountTypes} from '../../../../app/modules/account-type/core/_requests'
+import {AccountTypeModel} from '../../../../app/modules/account-type/core/_models'
 
 export function AsideMenuMain() {
   const intl = useIntl()
+  const [accountTypes, setAccountTypes] = useState<AccountTypeModel[]>([])
+
+  useEffect(() => {
+    getAccountTypes()
+      .then((response) => {
+        setAccountTypes(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching account types:', error)
+      })
+  }, [])
 
   return (
     <>
@@ -27,10 +40,14 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen022.svg'
       >
-        <AsideMenuItem to='/facebook' title='Danh sách Facebook' hasBullet={true} />
-        <AsideMenuItem to='/group' title='Danh sách Group' hasBullet={true} />
-        <AsideMenuItem to='/fanpage' title='Danh sách Fanpage' hasBullet={true} />
-        <AsideMenuItem to='/vaiao' title='Danh sách Vai Ảo' hasBullet={true} />
+        {accountTypes.map((type) => (
+          <AsideMenuItem
+            key={type.id}
+            to={`/${type.name.toLowerCase()}`}
+            title={`${type.name}`}
+            hasBullet={true}
+          />
+        ))}
       </AsideMenuItemWithSub>
       <AsideMenuItem
         to='/doituong'
