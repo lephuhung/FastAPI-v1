@@ -683,50 +683,27 @@ WHERE u.username = 'Luongvinhlong' AND un.name = 'PA05';
 INSERT INTO "users" ("username", "password", "salt", "is_active") VALUES
 ('Luongvinhlong', '$2b$12$DX9Vfw30CNbLmc/EbmO3f.DYUVvBOLPgGwFD1dOKtuA6tPgZrG0ca', 'tPOnMZQU', true),
 ('Nguyendangphi', '$2b$12$9XOKGE9Af7AEWwyn1910DOyTk6/DhkVG3MznKaR.cOanrvY3AQQTW', 'WmmGtMWb', true),
-('lephuhung77', '$2b$12$wPHK2GdgI2.coKTi2DEXXeLCpqrQwGbrglltMGvC4nitdlzFG0ta2', 'xOxionLL', true),
+('lephuhung77', '$2b$12$wPHK2GdgI2.coKTi2DEXXeLCpqrQwGbrglltMGvC4nitdlzFG0ta2', 'xOxionLL', true);
 
-
--- Insert sample data for user_units
+-- Insert sample data for user_units (consolidated)
 INSERT INTO "user_units" ("user_id", "unit_id")
 SELECT u.id, un.id
 FROM users u
 CROSS JOIN units un
-WHERE u.username = 'lephuhung77' AND un.name = 'PA05';
+WHERE (u.username IN ('lephuhung77', 'Nguyendangphi', 'Luongvinhlong'))
+AND un.name = 'PA05';
 
-INSERT INTO "user_units" ("user_id", "unit_id")
-SELECT u.id, un.id
-FROM users u
-CROSS JOIN units un
-WHERE u.username = 'Nguyendangphi' AND un.name = 'PA05';
-
-INSERT INTO "user_units" ("user_id", "unit_id")
-SELECT u.id, un.id
-FROM users u
-CROSS JOIN units un
-WHERE u.username = 'Luongvinhlong' AND un.name = 'PA05';
-
--- Insert sample data for user_roles
+-- Insert sample data for user_roles (consolidated)
 INSERT INTO "user_roles" ("user_id", "role_id")
 SELECT u.id, r.id
 FROM users u
 CROSS JOIN roles r
-WHERE u.username = 'lephuhung77' AND r.name = 'superadmin';
+WHERE (u.username IN ('lephuhung77', 'Luongvinhlong', 'Nguyendangphi'))
+AND r.name = 'superadmin';
 
-INSERT INTO "user_roles" ("user_id", "role_id")
-SELECT u.id, r.id
-FROM users u
-CROSS JOIN roles r
-WHERE u.username = 'Luongvinhlong' AND r.name = 'superadmin';
-
-INSERT INTO "user_roles" ("user_id", "role_id")
-SELECT u.id, r.id
-FROM users u
-CROSS JOIN roles r
-WHERE u.username = 'Nguyendangphi' AND r.name = 'superadmin';
-
--- Insert sample data for user_permissions
+-- Insert sample data for user_permissions (consolidated)
 INSERT INTO "user_permissions" ("user_id", "permission_id")
 SELECT u.id, p.id
 FROM users u
 CROSS JOIN permissions p
-WHERE u.username = 'lephuhung77';
+WHERE u.username IN ('lephuhung77', 'Luongvinhlong', 'Nguyendangphi');

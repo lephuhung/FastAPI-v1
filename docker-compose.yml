@@ -18,19 +18,19 @@ services:
     depends_on:
       - elasticsearch
 
-  setup-kibana:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-    volumes:
-      - ./setup-kibana.sh:/setup-kibana.sh
-    environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-    networks:
-      - elk
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    command: ["/bin/bash", "/setup-kibana.sh"]
+  # setup-kibana:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+  #   volumes:
+  #     - ./setup-kibana.sh:/setup-kibana.sh
+  #   environment:
+  #     ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+  #     KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+  #   networks:
+  #     - elk
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   command: ["/bin/bash", "/setup-kibana.sh"]
 
   elasticsearch:
     build:
@@ -81,24 +81,24 @@ services:
     depends_on:
       - elasticsearch
 
-  kibana:
-    build:
-      context: kibana/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
-    volumes:
-      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
-    ports:
-      - "5601:5601"
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-      ELASTICSEARCH_USERNAME: kibana_system
-      ELASTICSEARCH_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-    networks:
-      - elk
-    depends_on:
-      setup-kibana:
-        condition: service_completed_successfully
+  # kibana:
+  #   build:
+  #     context: kibana/
+  #     args:
+  #       ELASTIC_VERSION: ${ELASTIC_VERSION}
+  #   volumes:
+  #     - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+  #   ports:
+  #     - "5601:5601"
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+  #     ELASTICSEARCH_USERNAME: kibana_system
+  #     ELASTICSEARCH_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+  #   networks:
+  #     - elk
+    # depends_on:
+    #   setup-kibana:
+    #     condition: service_completed_successfully
 
   db:
     build:
