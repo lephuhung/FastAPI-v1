@@ -46,7 +46,12 @@ export function getUserByToken(token: string) {
         "Content-Type": "application/json",
       },
     }
-  );
+  ).catch((error) => {
+    if (error.response && error.response.status === 400) {
+      window.location.reload();
+    }
+    throw error;
+  });
 }
 
 console.log('Token:', localStorage.getItem('kt-auth-react-v'))
