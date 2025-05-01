@@ -3,12 +3,11 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
-import { donvi, type, tinhchat, ctnv } from '../Facebook/IFacebook'
 import {uidsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import { toAbsoluteUrl } from '../../../_metronic/helpers'
-import { statuses } from '../Individual/individual';
+import { account_type, status } from '../SocialAccount/SocialAccount';
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -65,9 +64,9 @@ const Table: React.FC<Props> = ({className}) => {
   const [loading, setloading] = useState<boolean>(false)
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const statusesString = localStorage.getItem('statuses')
-  const statuses: statuses[] = typeof statusesString=== 'string' ? JSON.parse(statusesString) : []
+  const statuses: status[] = typeof statusesString=== 'string' ? JSON.parse(statusesString) : []
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}

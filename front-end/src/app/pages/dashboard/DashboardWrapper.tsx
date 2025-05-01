@@ -28,6 +28,7 @@ interface DashboardStats {
       social_account_count: number
     }>
   }
+  type_4_social_accounts: number
 }
 
 const DashboardPage: FC = () => {

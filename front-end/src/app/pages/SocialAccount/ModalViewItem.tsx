@@ -8,24 +8,24 @@ import axios from 'axios'
 import { useQuery } from 'react-query'
 import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
-import { IFanpage, IResponseFanpage } from './Fanpage';
+import { SocialAccountResponse } from './SocialAccount';
 type Props = {
   show: boolean
   handleClose: () => void
   title: string,
-  ifanpage?: IResponseFanpage
+  item?: SocialAccountResponse
 }
 
 const PUBLIC_URL = process.env.PUBLIC_URL
 const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
-const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
-  const [data, setData] = useState<any>();
+const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
   const navigate = useNavigate()
+  const [data, setData] = useState<any>();
   const [error, setError]=useState('');
   useEffect(() => {
-    axios.get(`${URL}/uid/get-history/${ifanpage?.uid}`, )
+    axios.get(`${URL}/uid/get-history/${item?.uid}`, )
       .then((res) => {
         if (res.data.STATUS === '200')
         console.log(res.data)
@@ -34,7 +34,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
           setError('TAI KHOAN DA BI KHOA');
       })
       .catch(() => { });
-  }, [ifanpage])
+  }, [item])
 
   return createPortal(
     <Modal
@@ -55,12 +55,12 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
         {/* end::Close */}
       </div>
       {/* Start profile */}
-      { ifanpage && <div className='card'>
+      { item && <div className='card'>
         <div className='card-body pt-9 pb-0'>
           <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
             <div className='me-7 mb-4'>
               <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative'>
-                  <Avatar name={ifanpage?.name} size='100' />
+                  <Avatar name={item?.name} size='100' />
                 <div className='position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px'></div>
               </div>
             </div>
@@ -70,7 +70,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                 <div className='d-flex flex-column'>
                   <div className='d-flex align-items-center mb-2'>
                     <a href='#' className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'>
-                      {ifanpage?.name}
+                      {item?.name}
                     </a>
                     <a href='#'>
                       <KTSVG
@@ -89,7 +89,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                         path='/media/icons/duotune/communication/com006.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {ifanpage?.Vaiao ? 'VAI AO' : 'KHÔNG VAI ẢO'}
+                      {item?.is_active ? 'KÍCH HOẠT' : 'KHÔNG KÍCH HOẠT'}
                     </a>
                     <a
                       href='#'
@@ -99,7 +99,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                         path='/media/icons/duotune/general/gen018.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {ifanpage?.trangthai_name}
+                      {item?.status_id}
                     </a>
                     <a
                       href='#'
@@ -109,7 +109,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                         path='/media/icons/duotune/communication/com011.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {`SĐT: ${ifanpage?.SDT}`}
+                      {`SĐT: ${item?.phone_number}`}
                     </a>
                   </div>
                 </div>
@@ -152,11 +152,11 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                           className='svg-icon-3 svg-icon-primary me-2'
                         />
                         <div className='fs-2 fw-bolder'>
-                          {ifanpage.ctnv_name}
+                          {item?.task?.name}
                         </div>
                       </div>
 
-                      <div className='fw-bold fs-6 text-gray-400'>{`Đơn vị: ${ifanpage.donvi_name}`}</div>
+                      <div className='fw-bold fs-6 text-gray-400'>{`Đơn vị: ${item?.unit?.name}`}</div>
                     </div>
                     <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                       <div className='d-flex align-items-center'>
@@ -164,7 +164,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                           path='/media/icons/duotune/arrows/arr066.svg'
                           className='svg-icon-3 svg-icon-success me-2'
                         />
-                        <div className='fs-4 fw-bolder'>{ifanpage? ifanpage?.updated_at.split(' ')[0]: 'Chưa rõ'}</div>
+                        <div className='fs-4 fw-bolder'>{item? item?.updated_at.split(' ')[0]: 'Chưa rõ'}</div>
                       </div>
 
                       <div className='fw-bold fs-6 text-gray-400'>Cập nhật cuối</div>
@@ -180,7 +180,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                         type='button'
                         className='btn btn-sm btn-light'
                         onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/trichtin/${ifanpage.uid}`)
+                          navigate(`${PUBLIC_URL}/trichtin/${item?.uid}`)
                         }}
                         style={{marginRight: '10px'}}
                       >
@@ -191,12 +191,11 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                       </button>
                     </div>
                   </div>
-                  <div className='card-body py-5 fs-4'>{ifanpage?.ghichu ===''? 'Không có dữ liệu': ifanpage?.ghichu}</div>
+                  <div className='card-body py-5 fs-4'>{item?.note ===''? 'Không có dữ liệu': item?.note}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="separator my-10"></div>
         <h3>LỊCH SỬ THAY ĐỔI</h3>
         </div>
         </div>
@@ -216,7 +215,7 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
           {/* end::Table head */}
           {/* begin::Table body */}
           <tbody>
-            {data && data.map((el: IResponseFanpage, index: number) =>
+            {data && data.map((el: SocialAccountResponse, index: number) =>
               <tr key={index}>
                 <td>
                   <span className='text-muted fw-semibold text-muted d-block fs-7 text-center'>{index+1}</span>
@@ -234,10 +233,10 @@ const ModalViewItem = ({ show, handleClose, title, ifanpage }: Props) => {
                   </div>
                 </td>
                 <td>
-                  <span className='badge badge-light-primary fs-7 fw-semibold'>{el.reaction}</span>
+                  <span className='badge badge-light-primary fs-7 fw-semibold'>{el.reaction_count}</span>
                 </td>
                 <td>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7' style={{whiteSpace:'pre-wrap'}}>{el.ghichu}</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7' style={{whiteSpace:'pre-wrap'}}>{el.note}</span>
                 </td>
               </tr>
             )}

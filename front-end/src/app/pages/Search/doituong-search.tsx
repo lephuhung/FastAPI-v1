@@ -3,7 +3,6 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
-import {donvi, type, tinhchat, ctnv} from '../Facebook/IFacebook'
 import {individualsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
@@ -11,6 +10,7 @@ import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import {statuses, individual} from '../Individual/individual'
 import {toast} from 'react-toastify'
 import Avatar from 'react-avatar';
+import {account_type} from '../SocialAccount/SocialAccount';
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -67,7 +67,7 @@ const Table: React.FC<Props> = ({className}) => {
   const [loading, setloading] = useState<boolean>(false)
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const statusesString = localStorage.getItem('statuses')
   const statuses: statuses[] = typeof statusesString === 'string' ? JSON.parse(statusesString) : []
   return (
@@ -216,7 +216,7 @@ const Table: React.FC<Props> = ({className}) => {
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         onClick={() => {
                           axios
-                            .delete(`${URL}/doituong/delete/${el._source.id}`)
+                            .delete(`${URL}/individuals/${el._source.id}`)
                             .then((res) => {
                               if (res.status === 200) {
                                 toast.success('Xóa thành công', {

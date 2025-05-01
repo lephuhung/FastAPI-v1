@@ -43,7 +43,7 @@ export function AsideMenuMain() {
         {accountTypes.map((type) => (
           <AsideMenuItem
             key={type.id}
-            to={`/${type.name.toLowerCase()}`}
+            to={`/social-account/${type.id}`}
             title={`${type.name}`}
             hasBullet={true}
           />

@@ -1,21 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import {createPortal} from 'react-dom'
 import {Modal} from 'react-bootstrap'
-// import {defaultCreateAppData, ICreateAppData} from './IAppModels'
-// import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
 import {toast} from 'react-toastify'
-import instance from '../../modules/axiosInstance'
-import {individualResponse} from './individual'
-import {IResponseFacebook, moiquanhe} from '../Facebook/IFacebook'
-import '../Facebook/style.css'
+import {individualResponse, relationship, ResponseSocialAccounts} from './individual'
+import '../SocialAccount/style.css'
 import {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 import axios from 'axios'
-// import styled from 'styled-components';
 type Props = {
   show: boolean
   handleClose: () => void
@@ -27,17 +19,22 @@ const modalsRoot = document.getElementById('root-modals') || document.body
 
 const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
   const [datadoituong, setDataDoituong] = useState<individualResponse[]>([])
-  const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
-  const [datamoiquanhe, setDataMoiquanhe] = useState<moiquanhe[]>([])
+  const [datafacebook, setDataFacebook] = useState<ResponseSocialAccounts[]>([])
+  const [datamoiquanhe, setDataMoiquanhe] = useState<relationship[]>([])
 
   useEffect(() => {
-    axios.get(`${URL}/social-accounts`).then((response) => {
+    const token = localStorage.getItem('token')
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+    
+    axios.get(`${URL}/social-accounts`, { headers }).then((response) => {
       setDataFacebook(response.data)
     })
-    axios.get(`${URL}/individuals`).then((response) => {
+    axios.get(`${URL}/individuals`, { headers }).then((response) => {
       setDataDoituong(response.data)
     })
-    axios.get(`${URL}/administrators`).then((response) => {
+    axios.get(`${URL}/relationships`, { headers }).then((response) => {
       setDataMoiquanhe(response.data)
     })
   }, [])
@@ -64,8 +61,13 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
             moiquanhe_id: 0,
           }}
           onSubmit={(values: any) => {
-            instance
-              .post(`${URL}/doituong-uid/create`, values)
+            const token = localStorage.getItem('token')
+            const headers = {
+              Authorization: `Bearer ${token}`
+            }
+            
+            axios
+              .post(`${URL}/individual-social-accounts`, values, { headers })
               .then((res) => {
                 if (res.status === 200) {
                   handleLoading()
@@ -124,12 +126,12 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'>ĐỐI TƯỢNG</label>
-                  <MySelect label='Job Type' name='doituong_id' width={250}>
+                  <MySelect label='Job Type' name='individual_id' width={250}>
                     <option value=''>Lựa chọn đối tượng</option>
                     {datadoituong.map((data: individualResponse, index: number) => {
                       return (
                         <option value={data.id} key={index}>
-                          {`${data.client_name.toUpperCase()}: ${data.Ngaysinh}`}
+                          {`${data.full_name.toUpperCase()}: ${data.date_of_birth}`}
                         </option>
                       )
                     })}
@@ -137,9 +139,9 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'>MỐI QUAN HỆ</label>
-                  <MySelect label='Job Type' name='moiquanhe_id' width={150}>
+                  <MySelect label='Job Type' name='relationship_id' width={150}>
                     <option value=''>Lựa chọn MQH</option>
-                    {datamoiquanhe.map((data: moiquanhe, index: number) => {
+                    {datamoiquanhe.map((data: relationship, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name.toUpperCase()}
@@ -150,9 +152,9 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div>
                   <label className='form-label'> TÀI KHOẢN FACEBOOK </label>
-                  <MySelect label='Job Type' name='uid' width={300}>
+                  <MySelect label='Job Type' name='social_account_uid' width={300}>
                     <option value=''>Lựa chọn hội nhóm</option>
-                    {datafacebook.map((data: IResponseFacebook, index: number) => {
+                    {datafacebook.map((data: ResponseSocialAccounts, index: number) => {
                       return (
                         <option value={data.uid} key={index}>
                           {`${data.uid}: ${data.name.toUpperCase()}`}

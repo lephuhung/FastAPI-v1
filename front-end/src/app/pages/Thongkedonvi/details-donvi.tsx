@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useQuery, useQueries} from 'react-query'
-import { IResponseGroup } from '../Group/Group'
+import { SocialAccountResponse } from '../SocialAccount/SocialAccount'
 import Avatar from 'react-avatar'
 import {useParams, useLocation} from 'react-router-dom'
 import axios from 'axios'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {individual, account_types,individualResponse} from '../Individual/individual'
 import {ModalViewDoituong} from '../Individual/ModalViewDoituong'
-import {ModalViewItem} from '../Group/ModalViewItem'
-import {IResponseFacebook} from '../Facebook/IFacebook'
+import {ModalViewItem} from '../SocialAccount/ModalViewItem'
 import {IndividualResponse} from '../Individual/Table'
 
 const URL = process.env.REACT_APP_API_URL
@@ -23,7 +22,7 @@ const Details: React.FC<Props> = ({id}) => {
   console.log(type)
   const [showModalDoituong, setshowModalDoituong] = useState<boolean>(false)
   const [doituongitem, setdoituongItem] = useState<IndividualResponse>()
-  const [dataItem, setDataItem] = useState<IResponseGroup>()
+  const [dataItem, setDataItem] = useState<SocialAccountResponse>()
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const result = useQueries([
     {
@@ -78,7 +77,7 @@ const Details: React.FC<Props> = ({id}) => {
                   </thead>
                   <tbody>
                     {result[0].data &&
-                      result[0].data.map((el: IResponseFacebook, index: number) => (
+                      result[0].data.map((el: SocialAccountResponse, index: number) => (
                         <tr key={index}>
                           <td className='text-center'>
                             <span className='text-muted fw-semibold text-muted d-block fs-7'>
@@ -110,17 +109,17 @@ const Details: React.FC<Props> = ({id}) => {
 
                           <td>
                             <span className='badge badge-primary fs-7 fw-semibold'>
-                              {el.trangthai_name.toUpperCase()}
+                              {el.status_id}
                             </span>
                           </td>
                           <td>
                             <span className='badge badge-warning fs-7 fw-semibold'>
-                              {el.Vaiao ? 'Vai ảo' : 'Không'}
+                              {el.is_active ? 'Vai ảo' : 'Không'}
                             </span>
                           </td>
                           <td>
                             <span className='badge badge-primary fs-7 fw-semibold'>
-                              {el.reaction}
+                              {el.reaction_count}
                             </span>
                           </td>
                           <td>
@@ -130,7 +129,7 @@ const Details: React.FC<Props> = ({id}) => {
                           </td>
                           <td className='text-center'>
                             <span className='badge badge-success fs-7 fw-semibold'>
-                              {el.ctnv_name.toUpperCase()}
+                              {el.task?.name || 'Chưa có'}
                             </span>
                           </td>
                           <td className='text-center'>
@@ -218,16 +217,16 @@ const Details: React.FC<Props> = ({id}) => {
                         result[1].data.map((el: individualResponse, index: number) => {
                           const individualData: IndividualResponse = {
                             id: el.id,
-                            full_name: el.client_name,
-                            national_id: el.CMND,
-                            citizen_id: el.CCCD,
-                            image_url: el.Image,
-                            date_of_birth: el.Ngaysinh,
-                            is_male: el.Gioitinh,
-                            hometown: el.Quequan,
-                            additional_info: el.Thongtinbosung,
-                            phone_number: el.SDT,
-                            is_kol: el.KOL,
+                            full_name: el.full_name,
+                            national_id: el.national_id,
+                            citizen_id: el.citizen_id,
+                            image_url: el.image_url,
+                            date_of_birth: el.date_of_birth,
+                            is_male: el.is_male,
+                            hometown: el.hometown,
+                            additional_info: el.additional_info,
+                            phone_number: el.phone_number,
+                            is_kol: el.is_kol,
                             created_at: el.created_at,
                             updated_at: el.updated_at
                           }
@@ -241,10 +240,10 @@ const Details: React.FC<Props> = ({id}) => {
                               <td>
                                 <div className='d-flex align-items-center'>
                                   <div className='symbol symbol-50px me-5'>
-                                    {el.Image ? (
-                                      <img src={el.Image} className='' alt='' />
+                                    {el.image_url ? (
+                                      <img src={el.image_url} className='' alt='' />
                                     ) : (
-                                      <Avatar name={el.client_name} round={true} size='50' />
+                                      <Avatar name={el.full_name} round={true} size='50' />
                                     )}
                                   </div>
                                   <div className='d-flex justify-content-start flex-column'>
@@ -252,31 +251,31 @@ const Details: React.FC<Props> = ({id}) => {
                                       href='#'
                                       className='text-dark fw-bold text-hover-primary mb-1 fs-6'
                                     >
-                                      {el.client_name.toUpperCase()}
+                                      {el.full_name.toUpperCase()}
                                     </a>
                                     <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                      {`CCCD/CMND: ${el.CCCD}/${el.CMND}`}
+                                      {`CCCD/CMND: ${el.citizen_id}/${el.national_id}`}
                                     </span>
                                   </div>
                                 </div>
                               </td>
                               <td>
                                 <span className='badge badge-light-primary fs-7 fw-semibold'>
-                                  {el.SDT}
+                                  {el.phone_number}
                                 </span>
                               </td>
                               <td>
                                 <span className='badge badge-light-success fs-7 fw-semibold'>
-                                  {el.Quequan}
+                                  {el.hometown}
                                 </span>
                               </td>
                               <td>
                                 <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                  {el.Ngaysinh.toString()}
+                                  {el.date_of_birth ? el.date_of_birth.toString() : ''}
                                 </span>
                               </td>
                               <td className='text-center'>
-                                {el.KOL === true ? (
+                                {el.is_kol === true ? (
                                   <span className='badge badge-primary fs-7 fw-semibold fw-semibold'>
                                     KOL
                                   </span>
@@ -353,7 +352,7 @@ const Details: React.FC<Props> = ({id}) => {
         show={showModelItem}
         handleClose={() => setModelItem(false)}
         // handleLoading={() => setloading(true)}
-        igroup={dataItem}
+        item={dataItem}
         title='THÔNG TIN CHI TIẾT GROUP'
       />
     </>

@@ -39,13 +39,16 @@ const ValidateDoituong = Yup.object().shape({
 const modalsRoot = document.getElementById('root-modals') || document.body
 const UpdateModal = ({show, handleClose, title, individual}: Props) => {
   const unitsString = localStorage.getItem('units')
-  const [KOL, setKOL]= useState<boolean>(true)
+  const [KOL, setKOL]= useState<boolean>(individual.is_kol)
   const units: units[] = typeof unitsString === 'string' ? JSON.parse(unitsString) : []
   const tasksString = localStorage.getItem('tasks')
   const tasks: tasks[] = typeof tasksString === 'string' ? JSON.parse(tasksString) : []
   const doituongclone = {
     ...individual,
     is_male: individual.is_male ? '1' : '2',
+    unit_id: individual.unit?.id || '',
+    task_id: individual.task?.id || '',
+    is_kol: individual.is_kol
   }
   return createPortal(
     <Modal
@@ -71,26 +74,28 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
           initialValues={doituongclone}
           validationSchema={ValidateDoituong}
           onSubmit={(data: any) => {
-            data.Ngaysinh = new Date(data.Ngaysinh).toISOString().split('T')[0]
-            data.is_male === '1' ? (data.is_male = true) : (data.is_male = false)
+            const formData = {
+              ...data,
+              date_of_birth: data.date_of_birth ? new Date(data.date_of_birth).toISOString().split('T')[0] : null,
+              is_male: data.is_male === '1',
+              is_kol: KOL,
+              unit_id: data.unit_id || null,
+              task_id: data.task_id || null
+            }
+            
+            // Remove undefined and null values
+            Object.keys(formData).forEach(key => {
+              if (formData[key] === undefined || formData[key] === null) {
+                delete formData[key]
+              }
+            })
+            
             axios
-              .post(`${URL}/individuals/update/${individual.id}`, data)
+              .put(`${URL}/individuals/${individual.id}`, formData)
               .then((res) => {
                 if (res.status === 200) {
                   handleClose()
-                  toast.success('Thêm thành công', {
-                    position: 'bottom-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
-                  })
-                } else {
-                  let data = res.data.message
-                  toast.warning(data, {
+                  toast.success('Cập nhật thành công', {
                     position: 'bottom-right',
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -103,8 +108,8 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                 }
               })
               .catch((error) => {
-                let data = error.response.data.message
-                toast.warning(data, {
+                const message = error.response?.data?.detail || 'Có lỗi xảy ra'
+                toast.error(message, {
                   position: 'bottom-right',
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -115,7 +120,6 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                   theme: 'light',
                 })
               })
-            console.log(data)
           }}
         >
           {({errors, touched}) => (
@@ -139,11 +143,17 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                         style={{width: '500px'}}
                       />
                       {errors.full_name && touched.full_name ? (
-                        <StyledErrorMessage>{errors.full_name}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.full_name)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{marginLeft: '30px', paddingTop: '40px'}}>
-                      <MyCheckbox name='KOL' setKOL={setKOL} KOL ={KOL}>KOL</MyCheckbox>
+                      <MyCheckbox 
+                        name='is_kol' 
+                        setKOL={setKOL} 
+                        KOL={KOL}
+                      >
+                        KOL
+                      </MyCheckbox>
                     </div>
                   </div>
                   <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -156,7 +166,7 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                         placeholder='042......'
                       />
                       {errors.citizen_id && touched.citizen_id ? (
-                        <StyledErrorMessage>{errors.citizen_id}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.citizen_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div className='mb-5' style={{marginLeft: '30px'}}>
@@ -168,7 +178,7 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                         placeholder='18......'
                       />
                       {errors.national_id && touched.national_id ? (
-                        <StyledErrorMessage>{errors.national_id}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.national_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{display: 'flex', flexDirection: 'row', marginLeft: '30px'}}>
@@ -205,7 +215,7 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                         <option value='KOL ẨN'>KOL ẨN</option>
                       </MySelect>
                       {errors.phone_number && touched.phone_number ? (
-                        <StyledErrorMessage>{errors.phone_number}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.phone_number)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div>
@@ -222,7 +232,7 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                       placeholder='Xã .....'
                     />
                     {errors.hometown && touched.hometown ? (
-                      <StyledErrorMessage>{errors.hometown}</StyledErrorMessage>
+                      <StyledErrorMessage>{String(errors.hometown)}</StyledErrorMessage>
                     ) : null}
                   </div>
                   <div className='mb-5'>
@@ -237,12 +247,12 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                   <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                     <div style={{marginRight: '30px'}}>
                       <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='donvi_id'>
+                      <MySelect label='Job Type' name='unit_id'>
                         <option value=''>Lựa chọn đơn vị</option>
                         {units &&
                           units?.map((data: units, index: number) => {
                             return (
-                              <option value={data.id} key={index}>
+                              <option value={data.id} key={index} selected={data.id === individual.unit?.id}>
                                 {data.name}
                               </option>
                             )
@@ -251,11 +261,11 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                     </div>
                     <div>
                       <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='ctnv_id'>
+                      <MySelect label='Job Type' name='task_id'>
                         <option value=''>Lựa chọn CTNV</option>
                         {tasks.map((data: tasks, index: number) => {
                           return (
-                            <option value={data.id} key={index}>
+                            <option value={data.id} key={index} selected={String(data.id) === String(individual.task?.id)}>
                               {data.name}
                             </option>
                           )
@@ -385,27 +395,29 @@ const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
     </>
   )
 }
-const MyCheckbox: React.FC<MyCheckboxProps> = ({children,setKOL, KOL ,...props}) => {
+const MyCheckbox: React.FC<MyCheckboxProps> = ({children, setKOL, KOL, ...props}) => {
   const [field, meta, helpers] = useField(props as any)
+  
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked; // Get the new value of the checkbox
-    helpers.setValue(newValue); // Update the formik field value
-    setKOL(newValue); // Update KOL state
-  };
+    const newValue = e.target.checked
+    helpers.setValue(newValue)
+    setKOL(newValue)
+  }
+
   return (
     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-      <div className='form-check form-check-custom form-check-solid'>
+      <div className='form-check form-check-custom form-check-solid' style={{display: 'flex', alignItems: 'center'}}>
         <input
           className='form-check-input'
           {...field}
           {...props}
           type='checkbox'
           id='flexCheckDefault'
-          style={{paddingRight: '10px'}}
+          style={{paddingRight: '10px', marginRight: '10px'}}
           checked={field.value}
           onChange={handleCheckboxChange}
         />
-        {children}
+        <label style={{marginLeft: '10px', marginBottom: 0}}>{children}</label>
       </div>
       {meta.touched && meta.error ? <div className='error'>{meta.error}</div> : null}
     </div>

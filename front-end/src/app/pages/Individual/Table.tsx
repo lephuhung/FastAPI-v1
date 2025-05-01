@@ -6,13 +6,11 @@ import axios from 'axios'
 import {individual  , individualResponse} from './individual'
 import Avatar from 'react-avatar'
 import {ModalViewDoituong} from './ModalViewDoituong'
-import {SearchModal} from './SearchModal'
 import clsx from 'clsx'
 import {CreateAppModal} from './CreateAppModal'
 import {UpdateModal} from './UpdateAppModal'
 import {ToastContainer, toast} from 'react-toastify'
 import {CreateModelMLH} from './CreateAppModalMLH'
-import {ModalCreateDoituong} from './ModalCreateDoituong'
 
 const URL = process.env.REACT_APP_API_URL
 
@@ -22,18 +20,21 @@ type Props = {
 
 const doituongexample = {
   id: '',
-  client_name: '',
-  CMND: '',
-  CCCD: '',
-  Image: '',
-  Ngaysinh: '',
-  Gioitinh: false,
-  Quequan: '',
-  Thongtinbosung: '',
-  SDT: '',
-  KOL: false,
+  full_name: '',
+  national_id: '',
+  citizen_id: '',
+  image_url: '',
+  date_of_birth: '',
+  is_male: false,
+  hometown: '',
+  additional_info: '',
+  phone_number: '',
+  is_kol: false,
   created_at: '',
   updated_at: '',
+  individual_units: [],
+  unit: {id: 0, name: ''},
+  task: {id: 0, name: ''},
 }
 
 const toolbarButtonMarginClass = 'ms-1 ms-lg-3'
@@ -52,6 +53,8 @@ interface IndividualResponse {
   is_kol: boolean
   created_at: string
   updated_at: string
+  unit?: {id: string, name: string}
+  task?: {id: number, name: string}
 }
 
 export type {IndividualResponse}
@@ -87,9 +90,9 @@ export const IndividualTable: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>
+          {/* <span className='card-label fw-bold fs-3 mb-1'>
             DANH SÁCH ĐỐI TƯỢNG/KOL TRÊN ĐỊA BÀN{' '}
-          </span>
+          </span> */}
           {/* <span className='text-muted mt-1 fw-semibold fs-7'>Over 500 new products</span> */}
         </h3>
         <div className={clsx('d-flex align-items-stretch', toolbarButtonMarginClass)}></div>
@@ -135,12 +138,22 @@ export const IndividualTable: React.FC<Props> = ({className}) => {
                 <th className='min-w-150px text-center'>HÀNH ĐỘNG</th>
               </tr>
             </thead>
-            <tbody>
-              {data &&
+            <tbody className='text-gray-600 fw-semibold'>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={7} className='text-center'>
+                    Đang tải...
+                  </td>
+                </tr>
+              ) : data && data.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className='text-center'>
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              ) : (
                 data.map((el: IndividualResponse, index: number) => (
-                  <tr
-                    key={index}
-                  >
+                  <tr key={el.id}>
                     <td>
                       <div className='d-flex align-items-center'>
                         <div className='symbol symbol-50px me-5'>
@@ -216,7 +229,7 @@ export const IndividualTable: React.FC<Props> = ({className}) => {
                         className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm'
                         onClick={() => {
                           axios
-                            .delete(`${URL}/doituong/delete/${el.id}`)
+                            .delete(`${URL}/individuals/${el.id}`)
                             .then((res) => {
                               if (res.status === 200) {
                                 toast.success('Xóa thành công', {
@@ -253,7 +266,8 @@ export const IndividualTable: React.FC<Props> = ({className}) => {
                       </a>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
             {/* end::Table body */}
           </table>

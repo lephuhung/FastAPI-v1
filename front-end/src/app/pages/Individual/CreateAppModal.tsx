@@ -80,7 +80,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
             is_male: '1',
             hometown: '',
             additional_info: 'Chưa có thông tin',
-            phone_number: '*',
+            phone_number: '0923123232',
             is_kol: false,
             task_id: 0,
             unit_id: '',
@@ -89,8 +89,19 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
           onSubmit={(data: any) => {
             data.date_of_birth = new Date(data.date_of_birth).toISOString().split('T')[0]
             data.is_male === '1' ? (data.is_male = true) : (data.is_male = false)
+            // Tách unit_id và task_id ra khỏi data
+            const { unit_id, task_id, ...individualData } = data
+            
+            // Tạo đối tượng gửi lên server
+            const requestData = {
+              ...individualData,
+              individual_units: unit_id && task_id ? [{
+                unit_id: unit_id,
+                task_id: task_id
+              }] : []
+            }
             axios
-              .post(`${URL}/individuals/create`, data)
+              .post(`${URL}/individuals`, requestData)
               .then((res) => {
                 if (res.status === 200) {
                   handleClose()
@@ -154,7 +165,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         style={{width: '500px'}}
                       />
                       {errors.full_name && touched.full_name ? (
-                        <StyledErrorMessage>{errors.full_name}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.full_name)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{marginLeft: '30px', paddingTop: '40px'}}>
@@ -171,7 +182,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         placeholder='042......'
                       />
                       {errors.citizen_id && touched.citizen_id ? (
-                        <StyledErrorMessage>{errors.citizen_id}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.citizen_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div className='mb-5' style={{marginLeft: '30px'}}>
@@ -183,7 +194,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         placeholder='18......'
                       />
                       {errors.national_id && touched.national_id ? (
-                        <StyledErrorMessage>{errors.national_id}</StyledErrorMessage>
+                        <StyledErrorMessage>{String(errors.national_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{display: 'flex', flexDirection: 'row', marginLeft: '30px'}}>
@@ -213,12 +224,12 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                   <div style={{display: 'flex', flexDirection: 'row'}}>
                     <div className='mb-5' style={{paddingRight: '30px'}}>
                     <label className='form-label'> LOẠI KOL </label>
-                      <MySelect label='Job Type' name='phone_number' disabled={!KOLL} width={200}>
+                      {/* <MySelect label='Job Type' name='phone_number' disabled={!KOLL} width={200}>
                         <option value=''>Lựa chọn loại KOL</option>
                         <option value='KOL MẠNG'>KOL MẠNG</option>
                         <option value='KOL UY TÍN'>KOL UY TÍN</option>
                         <option value='KOL ẨN'>KOL ẨN</option>
-                      </MySelect>
+                      </MySelect> */}
                     </div>
                     <div>
                       <label className='form-label'>Ngày/tháng/năm sinh</label>
@@ -235,7 +246,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                       placeholder='Xã .....'
                     />
                     {errors.hometown && touched.hometown ? (
-                      <StyledErrorMessage>{errors.hometown}</StyledErrorMessage>
+                      <StyledErrorMessage>{String(errors.hometown)}</StyledErrorMessage>
                     ) : null}
                   </div>
                   <div className='mb-5'>

@@ -43,10 +43,14 @@ def get_dashboard_stats(
     # Chuyển đổi map thành list
     combined_task_stats = list(task_map.values())
     
+    # Lấy số lượng social_account có type_id = 4
+    type_4_social_accounts = dashboard.get_social_accounts_by_type(db, type_id=4)
+    
     return {
         "account_type_stats": account_type_stats,
         "task_stats": {
             "combined_task_stats": combined_task_stats
-        }
+        },
+        "type_4_social_accounts": type_4_social_accounts
     }
 

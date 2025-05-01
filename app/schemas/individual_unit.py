@@ -5,12 +5,11 @@ from datetime import datetime
 
 class IndividualUnitBase(BaseModel):
     unit_id: UUID4
-    individual_id: UUID4
-    task_id: Optional[int] = None
+    task_id: int
 
 
 class IndividualUnitCreate(IndividualUnitBase):
-    pass
+    individual_id: Optional[UUID4] = None
 
 
 class IndividualUnitUpdate(IndividualUnitBase):
@@ -18,7 +17,8 @@ class IndividualUnitUpdate(IndividualUnitBase):
 
 
 class IndividualUnitInDBBase(IndividualUnitBase):
-    id: int
+    id: UUID4
+    individual_id: UUID4
     created_at: datetime
     updated_at: datetime
 

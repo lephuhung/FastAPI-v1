@@ -8,11 +8,7 @@ import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 // import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import { User } from '../pages/Users'
-import { Facebook } from '../pages/Facebook'
-import { Group } from '../pages/Group'
-import { Fanpage } from '../pages/Fanpages'
 import { Tinhchat } from '../pages/Tinhchat'
-import { Vaiao } from '../pages/Vaiao'
 import Search from '../pages/Search-datadoc'
 import SearchPost from '../pages/Search-post'
 import {CTNV} from '../pages/CTNV'
@@ -33,6 +29,7 @@ import { TrichtinVaiaoWrap } from '../pages/Trichtin/trichtinvaiao'
 import { UIDSearch } from '../pages/Search/uid-search'
 // import {individualsearch } from '../pages/Search/doituong-search'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
+import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -51,12 +48,9 @@ const PrivateRoutes = () => {
         <Route path='phanloai' element={<Phanloai/>}/>
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='users' element={<User/>} />
-        <Route path='facebook' element={<Facebook/>} />
-        <Route path='group' element={<Group/>} />
-        <Route path='Fanpage' element={<Fanpage/>} />
+        <Route path='social-account/:uid' element={<SocialAccount/>} />
         <Route path='moiquanhe' element={<Moiquanhe/>} />
         <Route path='tinhchat' element={<Tinhchat/>} />
-        <Route path='vaiao' element={<Vaiao/>}/>
         <Route path='search-datadoc' element={<Search/>} />
         <Route path='search-post' element={<SearchPost/>} />
         <Route path='ctnv' element={<CTNV/>} />

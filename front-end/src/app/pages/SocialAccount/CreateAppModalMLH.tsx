@@ -7,12 +7,10 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, trangthai, donvi, ctnv, moiquanhe} from './IFacebook'
-import { IGroupModal, IResponseGroup } from '../Group/Group'
-import {IResponseFacebook} from './IFacebook'
+import {account_type, status, unit, task, characteristics, SocialAccountResponse} from './SocialAccount'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
-import '../Facebook/style.css'
+import '../SocialAccount/style.css'
 import {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 import axios from 'axios'
@@ -29,9 +27,9 @@ const modalsRoot = document.getElementById('root-modals') || document.body
 
 
 const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
-  const [datagroup, setDataGroup] = useState<IResponseGroup[]>([])
-  const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
-  const [datamoiquanhe, setDataMoiquanhe] = useState<moiquanhe[]>([])
+  const [datagroup, setDataGroup] = useState<SocialAccountResponse[]>([])
+  const [datafacebook, setDataFacebook] = useState<SocialAccountResponse[]>([])
+  const [datamoiquanhe, setDataMoiquanhe] = useState<characteristics[]>([])
 
 
   useEffect(() => {
@@ -129,7 +127,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                 <label className='form-label'>UID FACEBOOK</label>
                 <MySelect label='Job Type' name='uid_facebook' width={250}>
                   <option value=''>Lựa chọn vai ảo</option>
-                  {datafacebook.map((data: IResponseFacebook, index: number) => {
+                  {datafacebook.map((data: SocialAccountResponse, index: number) => {
                     return (
                       <option value={data.uid} key={index}>
                         {`${data.uid}: ${data.name.toUpperCase()}`}
@@ -142,7 +140,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                 <label className='form-label'>MỐI QUAN HỆ</label>
                 <MySelect label='Job Type' name='moiquanhe_id' width={150}>
                   <option value=''>Lựa chọn MQH</option>
-                  {datamoiquanhe.map((data: moiquanhe, index: number) => {
+                  {datamoiquanhe.map((data: characteristics, index: number) => {
                     return (
                       <option value={data.id} key={index}>
                        {data.name.toUpperCase()}
@@ -155,7 +153,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                 <label className='form-label'> NẮM THÔNG TIN HỘI NHÓM </label>
                 <MySelect label='Job Type' name='uid' width={300}>
                   <option value=''>Lựa chọn hội nhóm</option>
-                  {datagroup.map((data: IResponseGroup, index: number) => {
+                  {datagroup.map((data: SocialAccountResponse, index: number) => {
                     return (
                       <option value={data.uid} key={index}>
                         {`${data.uid}: ${data.name.toUpperCase()}`}

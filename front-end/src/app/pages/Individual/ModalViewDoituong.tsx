@@ -7,7 +7,7 @@ import {KTSVG} from '../../../_metronic/helpers'
 import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
-import { type } from '../Facebook/IFacebook'
+import {account_type} from '../SocialAccount/SocialAccount'
 import {individualResponse} from './individual'
 import {IndividualResponse} from './Table'
 
@@ -27,10 +27,10 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   useEffect(() => {
     individual && axios
-      .get(`${URL}/doituong/details/${individual?.id}`)
+      .get(`${URL}/individuals/${individual?.id}`)
       .then((res) => {
         if (res.data.STATUS === '200') console.log('details' + res.data)
         setData(res.data)
@@ -39,7 +39,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
       .catch(() => {})
   }, [individual])
   function findItemById(id: string) {
-    return type.find((item:type) => item.id === id);
+    return type.find((item:account_type) => item.id === id);
   }
   return createPortal(
     <Modal

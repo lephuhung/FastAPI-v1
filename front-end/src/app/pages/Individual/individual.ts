@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { donvi } from '../Group/Group'
 
 const URL = process.env.REACT_APP_API_URL
 
@@ -28,27 +27,36 @@ export const deleteIndividual = async (id: number) => {
   return response.data
 }
 
-export interface individual{
-    client_name: string,
-    CMND: string,
-    CCCD: string,
-    Image:string,
-    Ngaysinh: string,
-    Gioitinh: boolean,
-    Quequan: string,
-    Thongtinbosung: string,
-    SDT: string,
-    KOL: boolean,
+export interface individual {
+  full_name: string
+  national_id: string | null
+  citizen_id: string | null
+  image_url: string | null
+  date_of_birth: string | null
+  is_male: boolean | null
+  hometown: string | null
+  additional_info: string | null
+  phone_number: string | null
+  is_kol: boolean
+  unit_id?: string
+  task_id?: number
 }
-export interface individualResponse extends individual{
-    id: string,
-    ctnv_id?: number,
-    donvi_id?: string,
-    donvi_name?: string,
-    ctnv_name?: string,
-    created_at: string,
-    updated_at: string,
+
+export interface individualResponse extends individual {
+  id: string
+  created_at: string
+  updated_at: string
+  individual_units: any[]
+  unit?: {
+    id: number
+    name: string
+  }
+  task?: {
+    id: number
+    name: string
+  }
 }
+
 export interface statuses {
     created_at: string,
     id: number,
@@ -56,15 +64,27 @@ export interface statuses {
     color: string,
     updated_at: string
 }
+
 export interface units {
-    created_at:string,
-    id: string,
-    name:string,
-    updated_at:string
+    id: string
+    name: string
 }
-export interface account_types extends donvi{
+
+export interface account_types extends units{
 
 }
-export interface tasks extends donvi{
 
+export interface tasks {
+  id: number
+  name: string
+}
+
+export interface relationship {
+  id: number
+  name: string
+}
+export interface ResponseSocialAccounts {
+  id: number
+  uid: string
+  name: string
 }

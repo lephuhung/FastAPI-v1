@@ -7,25 +7,22 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {type, trangthai, donvi, ctnv} from './Group'
+import {account_type, SocialAccountModal, status, unit, task, characteristics} from './SocialAccount'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
-import '../Facebook/style.css'
+import './style.css'
 import {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 import axios from 'axios'
-import {IResponseGroup} from './Group'
+import {SocialAccountResponse} from './SocialAccount'
 import * as Yup from 'yup'
-// import styled from 'styled-components';
 type Props = {
   show: boolean
   handleClose: () => void
   handleLoading: () => void
   title: string
-  dataModal: IResponseGroup
+  dataModal: SocialAccountResponse
 }
-const URL = process.env.REACT_APP_API_URL
-const modalsRoot = document.getElementById('root-modals') || document.body
 const ValidateUid = Yup.object().shape({
   uid: Yup.string()
     .min(12, 'Quá ngắn!')
@@ -39,17 +36,19 @@ const ValidateUid = Yup.object().shape({
     .min(0, 'Quá ngắn')
     .max(11, 'Quá dài')
     .matches(/^\d+$/, 'Số điện thoại là ký tự số, nếu không có điền 0'),
-  name:Yup.string().required()
+  name: Yup.string().required(),
 })
+const URL = process.env.REACT_APP_API_URL
+const modalsRoot = document.getElementById('root-modals') || document.body
 
 const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props) => {
-  const [data, setData] = useState<trangthai[]>([])
+  const [data, setData] = useState<status[]>([])
   const donviString = localStorage.getItem('donvi')
-  const donviData: donvi[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
+  const donviData: unit[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: ctnv[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
+  const ctnv: task[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
   useEffect(() => {
     axios.get(`${URL}/trangthai`).then((response) => {
       setData(response.data)
@@ -77,8 +76,7 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
       <div className='modal-body py-lg-10 px-lg-10'>
         <Formik
           initialValues={dataModal}
-          validationSchema={ValidateUid}
-          onSubmit={(values: IResponseGroup) => {
+          onSubmit={(values: SocialAccountResponse) => {
             console.log(values)
             instance
               .put(`${URL}/uid/update/${dataModal.uid}`, values)
@@ -137,15 +135,15 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'>UID FACEBOOK</label>
                   <Field type='text' name='uid' className='form-control' placeholder='' />
-                  {errors.uid && touched.uid ? (
-                    <StyledErrorMessage>{errors.uid}</StyledErrorMessage>
+                  {errors.name && touched.name ? (
+                    <StyledErrorMessage>{errors.name}</StyledErrorMessage>
                   ) : null}
                 </div>
                 <div>
                   <label className='form-label'> PHÂN LOẠI HỘI NHÓM </label>
                   <MySelect label='Job Type' name='trangthai_id'>
                     <option value=''>Lựa chọn phân loại</option>
-                    {data.map((data: trangthai, index: number) => {
+                    {data.map((data: status, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}
@@ -171,8 +169,8 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                     className='form-control form-control-white'
                     placeholder='123456'
                   />
-                  {errors.reaction && touched.reaction ? (
-                    <StyledErrorMessage>{errors.reaction}</StyledErrorMessage>
+                  {errors.reaction_count && touched.reaction_count ? (
+                    <StyledErrorMessage>{errors.reaction_count}</StyledErrorMessage>
                   ) : null}
                 </div>
                 <div>
@@ -183,9 +181,9 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                     className='form-control form-control-white'
                     placeholder='0912345678'
                   />
-                  {errors.SDT && touched.SDT ? (
-                    <StyledErrorMessage>{errors.SDT}</StyledErrorMessage>
-                  ) : null}
+                </div>
+                <div style={{marginLeft: '30px', paddingTop: '40px'}}>
+                  <MyCheckbox name='Vaiao'> VAI ẢO</MyCheckbox>
                 </div>
               </div>
               <div className='mb-5'>
@@ -203,7 +201,7 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                   <MySelect label='Job Type' name='donvi_id'>
                     <option value=''>Lựa chọn đơn vị</option>
                     {donviData &&
-                      donviData?.map((data: donvi, index: number) => {
+                      donviData?.map((data: unit, index: number) => {
                         return (
                           <option value={data.id} key={index}>
                             {data.name}
@@ -216,7 +214,7 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
                   <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
                   <MySelect label='Job Type' name='ctnv_id'>
                     <option value=''>Lựa chọn CTNV</option>
-                    {ctnv.map((data: ctnv, index: number) => {
+                    {ctnv.map((data: task, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}
@@ -285,6 +283,27 @@ const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
     </>
   )
 }
+
+const MyCheckbox: React.FC<MyCheckboxProps> = ({children, ...props}) => {
+  const [field, meta] = useField(props as any)
+
+  return (
+    <div>
+      <div className='form-check form-check-custom form-check-solid'>
+        <input
+          className='form-check-input'
+          {...field}
+          {...props}
+          type='checkbox'
+          id='flexCheckDefault'
+          checked={field.value}
+        />
+        {children}
+      </div>
+      {meta.touched && meta.error ? <div className='error'>{meta.error}</div> : null}
+    </div>
+  )
+}
 const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
   const [field, meta] = useField(props as any)
 
@@ -296,5 +315,4 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
     </>
   )
 }
-
 export {UpdateModal}

@@ -45,7 +45,7 @@ export const ModalCreateDoituong: React.FC<Props> = ({show, handleClose, title, 
 
   const handleSubmit = async (values: Partial<IndividualResponse>) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/individual`, values)
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/individuals`, values)
       if (response.data.STATUS === '200') {
         onSuccess()
         handleClose()
