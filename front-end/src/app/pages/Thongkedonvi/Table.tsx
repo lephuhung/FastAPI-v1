@@ -6,7 +6,7 @@ import instance from '../../modules/axiosInstance'
 
 import {CardItem} from './CardItem-donvi'
 import axios from 'axios'
-import {doituong} from '../Doituong/doituong'
+import {individual} from '../Individual/individual'
 const URL = process.env.REACT_APP_API_URL
 type Props = {
   className: string

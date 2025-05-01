@@ -6,7 +6,6 @@ import instance from '../../modules/axiosInstance'
 
 import {CardItemTinhchat} from './CardItem-tinhchat'
 import axios from 'axios'
-import {doituong} from '../Doituong/doituong'
 const URL = process.env.REACT_APP_API_URL
 
 

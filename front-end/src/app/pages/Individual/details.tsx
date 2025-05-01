@@ -1,12 +1,12 @@
 import React, {FC} from 'react'
 import Avatar from 'react-avatar'
 import {KTSVG} from '../../../_metronic/helpers'
-import {useIntl} from 'react-intl'
+
 import {useQueries} from 'react-query'
 import axios from 'axios'
 import {useParams} from 'react-router-dom'
 import {PageTitle} from '../../../_metronic/layout/core'
-import { type } from './doituong'
+import { account_types } from './individual'
 type Props = {
   id: any
 }
@@ -14,7 +14,7 @@ const URL = process.env.REACT_APP_API_URL
 
 const DeatailsDoituong: FC<Props> = ({id}) => {
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_types[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   const result = useQueries([
     {
       queryKey: ['posts'],
@@ -325,14 +325,8 @@ const DeatailsDoituong: FC<Props> = ({id}) => {
     </>
   )
 }
-const Details: FC = () => {
-  const intl = useIntl()
+const IndividualDetailsPage: FC = () => {
   const {id} = useParams()
-  return (
-    <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.TELE'})}</PageTitle>
-      <DeatailsDoituong id={id} />
-    </>
-  )
+  return <DeatailsDoituong id={id} />
 }
-export {Details}
+export {IndividualDetailsPage}

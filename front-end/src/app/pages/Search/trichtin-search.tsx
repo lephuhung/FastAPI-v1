@@ -8,7 +8,7 @@ import {trichtinsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import {trangthai} from '../Doituong/doituong'
+import {statuses} from '../Individual/individual'
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -66,9 +66,9 @@ const Table: React.FC<Props> = ({className}) => {
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const phanloaiString = localStorage.getItem('phanloai')
-  const phanloai: trangthai[] = typeof phanloaiString === 'string' ? JSON.parse(phanloaiString) : []
-  console.log(phanloai)
+  const statusesString = localStorage.getItem('statuses')
+  const statuses: statuses[] = typeof statusesString === 'string' ? JSON.parse(statusesString) : []
+  console.log(statuses)
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}

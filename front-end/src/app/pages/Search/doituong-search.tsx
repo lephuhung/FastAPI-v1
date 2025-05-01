@@ -4,11 +4,11 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
 import {donvi, type, tinhchat, ctnv} from '../Facebook/IFacebook'
-import {doituongsearch} from './search'
+import {individualsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import {trangthai, doituong} from '../Doituong/doituong'
+import {statuses, individual} from '../Individual/individual'
 import {toast} from 'react-toastify'
 import Avatar from 'react-avatar';
 const GroupWrap: FC = () => {
@@ -62,14 +62,14 @@ const buttonStyle = {
 const Table: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalItemVaiao, setShowModalItemVaiao] = useState<boolean>(false)
-  const [data, setData] = useState<doituongsearch[]>([])
+  const [data, setData] = useState<individualsearch[]>([])
   //   const [phanloai, setPhanloai] = useState<trangthai[]>([])
   const [loading, setloading] = useState<boolean>(false)
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const phanloaiString = localStorage.getItem('phanloai')
-  const phanloai: trangthai[] = typeof phanloaiString === 'string' ? JSON.parse(phanloaiString) : []
+  const statusesString = localStorage.getItem('statuses')
+  const statuses: statuses[] = typeof statusesString === 'string' ? JSON.parse(statusesString) : []
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -132,7 +132,7 @@ const Table: React.FC<Props> = ({className}) => {
             </thead>
             <tbody>
               {data &&
-                data.map((el: doituongsearch, index: number) => (
+                data.map((el: individualsearch, index: number) => (
                   <tr
                     key={index}
                     className='fw-bold fs-6 text-gray-800 border-bottom border-gray-200'

@@ -9,7 +9,7 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
-import {doituongResponse} from './doituong'
+import {individualResponse} from './individual'
 import {IResponseFacebook, moiquanhe} from '../Facebook/IFacebook'
 import '../Facebook/style.css'
 import {useEffect, useState} from 'react'
@@ -26,18 +26,18 @@ const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
 const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
-  const [datadoituong, setDataDoituong] = useState<doituongResponse[]>([])
+  const [datadoituong, setDataDoituong] = useState<individualResponse[]>([])
   const [datafacebook, setDataFacebook] = useState<IResponseFacebook[]>([])
   const [datamoiquanhe, setDataMoiquanhe] = useState<moiquanhe[]>([])
 
   useEffect(() => {
-    axios.get(`${URL}/uid/get-uid`).then((response) => {
+    axios.get(`${URL}/social-accounts`).then((response) => {
       setDataFacebook(response.data)
     })
-    axios.get(`${URL}/doituong`).then((response) => {
+    axios.get(`${URL}/individuals`).then((response) => {
       setDataDoituong(response.data)
     })
-    axios.get(`${URL}/moiquanhe`).then((response) => {
+    axios.get(`${URL}/administrators`).then((response) => {
       setDataMoiquanhe(response.data)
     })
   }, [])
@@ -126,7 +126,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                   <label className='form-label'>ĐỐI TƯỢNG</label>
                   <MySelect label='Job Type' name='doituong_id' width={250}>
                     <option value=''>Lựa chọn đối tượng</option>
-                    {datadoituong.map((data: doituongResponse, index: number) => {
+                    {datadoituong.map((data: individualResponse, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {`${data.client_name.toUpperCase()}: ${data.Ngaysinh}`}

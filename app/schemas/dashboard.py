@@ -10,13 +10,13 @@ class AccountTypeStats(BaseModel):
     total_social_accounts: int
     account_type_stats: List[AccountTypeStat]
 
-class TaskStat(BaseModel):
+class CombinedTaskStat(BaseModel):
     name: str
-    count: int
+    individual_count: int
+    social_account_count: int
 
 class TaskStats(BaseModel):
-    individual_task_stats: List[TaskStat]
-    social_account_task_stats: List[TaskStat]
+    combined_task_stats: List[CombinedTaskStat]
 
 class DashboardStats(BaseModel):
     account_type_stats: AccountTypeStats

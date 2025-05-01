@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 class AdministratorBase(BaseModel):
-    facebook_uid: str
-    uid: str
+    uid_administrator: str
+    social_account_uid: str
     relationship_id: int
 
 

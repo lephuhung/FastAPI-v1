@@ -21,13 +21,11 @@ interface DashboardStats {
     }>
   }
   task_stats: {
-    individual_task_stats: Array<{
+    combined_task_stats: Array<{
+      id: number
       name: string
-      count: number
-    }>
-    social_account_task_stats: Array<{
-      name: string
-      count: number
+      individual_count: number
+      social_account_count: number
     }>
   }
 }
@@ -35,7 +33,7 @@ interface DashboardStats {
 const DashboardPage: FC = () => {
   const {data: dashboardStats, isLoading} = useQuery<DashboardStats>(
     'dashboard_stats',
-    () => axios.get(`${URL}/dashboard/stats`).then((res) => res.data)
+    () => axios.get(`${URL}/dashboard/stats`).then((res:any) => res.data)
   )
 
   if (isLoading) {
@@ -103,7 +101,7 @@ const DashboardPage: FC = () => {
           data-bs-parent='#kt_accordion_2'
         >
           <div className='row g-5'>
-            {dashboardStats?.account_type_stats.account_type_stats.map((stat, index) => (
+            {dashboardStats?.account_type_stats.account_type_stats.map((stat:any, index:number) => (
               <div className='col-xl-3' key={index}>
                 <StatisticsWidget6
                   className='card-xl-stretch mb-xl-8'
@@ -135,26 +133,38 @@ const DashboardPage: FC = () => {
           data-bs-parent='#kt_accordion_2'
         >
           <div className='row g-5'>
-            {dashboardStats?.task_stats.individual_task_stats.map((stat, index) => (
-              <div className='col-xl-3' key={index}>
-                <StatisticsWidget6
-                  className='card-xl-stretch mb-xl-8'
-                  color='info'
-                  title={`${stat.name.toUpperCase()} - ĐỐI TƯỢNG`}
-                  description='SỐ LƯỢNG ĐỐI TƯỢNG'
-                  progress={String(stat.count)}
-                />
-              </div>
-            ))}
-            {dashboardStats?.task_stats.social_account_task_stats.map((stat, index) => (
-              <div className='col-xl-3' key={`sa-${index}`}>
-                <StatisticsWidget6
-                  className='card-xl-stretch mb-xl-8'
-                  color='danger'
-                  title={`${stat.name.toUpperCase()} - TÀI KHOẢN`}
-                  description='SỐ LƯỢNG TÀI KHOẢN'
-                  progress={String(stat.count)}
-                />
+            {dashboardStats?.task_stats.combined_task_stats.map((stat:any, index:number) => (
+              <div className='col-xl-4' key={index}>
+                <div className='card bg-light-info card-xl-stretch mb-xl-8'>
+                  <div className='card-header border-0'>
+                    <h3 className='card-title fw-bold text-info fs-5'>{stat.name.toUpperCase()}</h3>
+                  </div>
+                  <div className='card-body my-3'>
+                    <div className='d-flex flex-column'>
+                      <div className='d-flex align-items-center mb-3'>
+                        <div className='d-flex flex-column w-100'>
+                          <div className='d-flex justify-content-between align-items-center mb-5'>
+                            <div className='d-flex flex-column'>
+                              <span className='text-dark fs-1 fw-bold me-2'>{stat.individual_count}</span>
+                              <span className='fw-semibold text-muted fs-7'>ĐỐI TƯỢNG</span>
+                            </div>
+                            <div className='d-flex flex-column'>
+                              <span className='text-dark fs-1 fw-bold me-2'>{stat.social_account_count}</span>
+                              <span className='fw-semibold text-muted fs-7'>TÀI KHOẢN</span>
+                            </div>
+                          </div>
+                          <div className='progress h-7px bg-info bg-opacity-50'>
+                            <div
+                              className='progress-bar bg-info'
+                              role='progressbar'
+                              style={{width: `${(stat.individual_count / (stat.individual_count + stat.social_account_count)) * 100}%`}}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -167,20 +177,20 @@ const DashboardPage: FC = () => {
 const DashboardWrapper: FC = () => {
   const intl = useIntl()
   useEffect(() => {
-    axios.get(`${URL}/donvi/getAll`).then((res) => {
-      localStorage.setItem('donvi', JSON.stringify(res.data))
+    axios.get(`${URL}/units/`).then((res:any) => {
+      localStorage.setItem('units', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/type/get-all`).then((res) => {
-      localStorage.setItem('type', JSON.stringify(res.data))
+    axios.get(`${URL}/account-types`).then((res:any) => {
+      localStorage.setItem('account_types', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/ctnv/getAll`).then((res) => {
-      localStorage.setItem('ctnv', JSON.stringify(res.data))
+    axios.get(`${URL}/tasks`).then((res:any) => {
+      localStorage.setItem('tasks', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/tinhchat/getAll`).then((res) => {
-      localStorage.setItem('tinhchat', JSON.stringify(res.data))
+    axios.get(`${URL}/characteristics`).then((res:any) => {
+      localStorage.setItem('characteristics', JSON.stringify(res.data))
     })
-    axios.get(`${URL}/trangthai`).then((response) => {
-      localStorage.setItem('phanloai', JSON.stringify(response.data))
+    axios.get(`${URL}/statuses`).then((response:any) => {
+      localStorage.setItem('statuses', JSON.stringify(response.data))
     })
   }, [])
   return (

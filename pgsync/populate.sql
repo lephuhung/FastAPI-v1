@@ -383,16 +383,15 @@ CREATE INDEX idx_individual_social_accounts_social_account_uid ON "individual_so
 
 CREATE TABLE "administrators" (
   "id" SERIAL PRIMARY KEY,
-  "facebook_uid" varchar(100) NOT NULL,
+  "uid_administrator" varchar(100) NOT NULL,
   "social_account_uid" varchar(100) NOT NULL,
   "relationship_id" int NOT NULL,
   "created_at" timestamp DEFAULT NOW(),
   "updated_at" timestamp DEFAULT NOW(),
-  CONSTRAINT unique_facebook_uid UNIQUE ("facebook_uid"),
   CONSTRAINT fk_administrators_social_account FOREIGN KEY ("social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE CASCADE,
   CONSTRAINT fk_administrators_relationship FOREIGN KEY ("relationship_id") REFERENCES "relationships" ("id") ON DELETE RESTRICT
 );
-CREATE INDEX idx_administrators_facebook_uid ON "administrators" ("facebook_uid");
+CREATE INDEX idx_administrators_uid_administrator ON "administrators" ("uid_administrator");
 
 CREATE TABLE "group_statuses" (
   "id" SERIAL PRIMARY KEY,
@@ -672,36 +671,29 @@ FROM users u
 CROSS JOIN permissions p
 WHERE u.username = 'Luongvinhlong';
 
--- Insert sample data for user_units
+-- Insert sample data for user_units (single statement for all users)
 INSERT INTO "user_units" ("user_id", "unit_id")
 SELECT u.id, un.id
 FROM users u
 CROSS JOIN units un
-WHERE u.username = 'Luongvinhlong' AND un.name = 'PA05';
+WHERE u.username IN ('lephuhung77', 'Nguyendangphi', 'Luongvinhlong')
+AND un.name = 'PA05';
 
 -- Insert sample data for users
 INSERT INTO "users" ("username", "password", "salt", "is_active") VALUES
 ('Luongvinhlong', '$2b$12$DX9Vfw30CNbLmc/EbmO3f.DYUVvBOLPgGwFD1dOKtuA6tPgZrG0ca', 'tPOnMZQU', true),
 ('Nguyendangphi', '$2b$12$9XOKGE9Af7AEWwyn1910DOyTk6/DhkVG3MznKaR.cOanrvY3AQQTW', 'WmmGtMWb', true),
-('lephuhung77', '$2b$12$wPHK2GdgI2.coKTi2DEXXeLCpqrQwGbrglltMGvC4nitdlzFG0ta2', 'xOxionLL', true);
+('lephuhung77', '$2b$12$H4uylt0IhI5vGYx4nFt.4uTTTxcO1.QEDJOkN9pHW9qK6uFX2.53u', 'K4cfyXcw', true);
 
--- Insert sample data for user_units (consolidated)
-INSERT INTO "user_units" ("user_id", "unit_id")
-SELECT u.id, un.id
-FROM users u
-CROSS JOIN units un
-WHERE (u.username IN ('lephuhung77', 'Nguyendangphi', 'Luongvinhlong'))
-AND un.name = 'PA05';
-
--- Insert sample data for user_roles (consolidated)
+-- Insert sample data for user_roles
 INSERT INTO "user_roles" ("user_id", "role_id")
 SELECT u.id, r.id
 FROM users u
 CROSS JOIN roles r
-WHERE (u.username IN ('lephuhung77', 'Luongvinhlong', 'Nguyendangphi'))
+WHERE u.username IN ('lephuhung77', 'Luongvinhlong', 'Nguyendangphi')
 AND r.name = 'superadmin';
 
--- Insert sample data for user_permissions (consolidated)
+-- Insert sample data for user_permissions
 INSERT INTO "user_permissions" ("user_id", "permission_id")
 SELECT u.id, p.id
 FROM users u

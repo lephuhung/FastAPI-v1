@@ -1,17 +1,18 @@
 from typing import Optional, List
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, Field
 from datetime import datetime, date
 
 
 class IndividualBase(BaseModel):
-    client_name: str
-    id_number: Optional[str] = None
-    image: Optional[str] = None
+    full_name: str
+    national_id: Optional[str] = None
+    citizen_id: Optional[str] = None
+    image_url: Optional[str] = None
     date_of_birth: Optional[date] = None
-    gender: Optional[bool] = None
+    is_male: Optional[bool] = None
     hometown: Optional[str] = None
     additional_info: Optional[str] = None
-    phone_number: Optional[str] = None
+    phone_number: Optional[str] = Field(None, pattern=r'^[0-9]{10,15}$')
     is_kol: bool = False
 
 

@@ -9,9 +9,9 @@ class SocialAccountBase(BaseModel):
     reaction_count: int = 0
     phone_number: Optional[str] = None
     status_id: Optional[int] = None
-    account_type_id: Optional[int] = None
+    type_id: Optional[int] = None
     note: Optional[str] = None
-    is_linked: bool = False
+    is_active: bool = True
 
 
 class SocialAccountCreate(SocialAccountBase):

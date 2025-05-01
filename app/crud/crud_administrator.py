@@ -6,11 +6,11 @@ from app.schemas.administrator import AdministratorCreate, AdministratorUpdate
 
 
 class CRUDAdministrator(CRUDBase[Administrator, AdministratorCreate, AdministratorUpdate]):
-    def get_by_facebook_uid(self, db: Session, *, facebook_uid: str) -> Optional[Administrator]:
-        return db.query(Administrator).filter(Administrator.facebook_uid == facebook_uid).first()
+    def get_by_uid_administrator(self, db: Session, *, uid_administrator: str) -> Optional[Administrator]:
+        return db.query(Administrator).filter(Administrator.uid_administrator == uid_administrator).first()
 
-    def get_by_uid(self, db: Session, *, uid: str) -> List[Administrator]:
-        return db.query(Administrator).filter(Administrator.uid == uid).all()
+    def get_by_social_account_uid(self, db: Session, *, social_account_uid: str) -> List[Administrator]:
+        return db.query(Administrator).filter(Administrator.social_account_uid == social_account_uid).all()
 
     def get_by_relationship_id(
         self, db: Session, *, relationship_id: int

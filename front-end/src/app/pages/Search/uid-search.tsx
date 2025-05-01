@@ -8,7 +8,7 @@ import {uidsearch} from './search'
 import axios from 'axios'
 import instance from '../../modules/axiosInstance'
 import { toAbsoluteUrl } from '../../../_metronic/helpers'
-import { trangthai } from '../Doituong/doituong';
+import { statuses } from '../Individual/individual';
 const GroupWrap: FC = () => {
   return <Table className='mb-5 mb-xl-8' />
 }
@@ -66,8 +66,8 @@ const Table: React.FC<Props> = ({className}) => {
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const phanloaiString = localStorage.getItem('phanloai')
-  const phanloai: trangthai[] = typeof phanloaiString=== 'string' ? JSON.parse(phanloaiString) : []
+  const statusesString = localStorage.getItem('statuses')
+  const statuses: statuses[] = typeof statusesString=== 'string' ? JSON.parse(statusesString) : []
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -155,7 +155,7 @@ const Table: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {phanloai[el._source.trangthai_id-1].name}
+                        {statuses[el._source.trangthai_id-1].name}
                       </span>
                     </td>
                     <td>

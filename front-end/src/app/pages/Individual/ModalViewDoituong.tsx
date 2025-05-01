@@ -8,33 +8,36 @@ import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import { type } from '../Facebook/IFacebook'
-import {doituongResponse} from './doituong'
+import {individualResponse} from './individual'
+import {IndividualResponse} from './Table'
+
 type Props = {
   show: boolean
   handleClose: () => void
   title: string
-  doituong?: doituongResponse
+  individual: IndividualResponse | undefined
 }
+
 const PUBLIC_URL = process.env.PUBLIC_URL
 const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
-const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}) => {
+export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, individual}) => {
   const [data, setData] = useState<any>()
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const typeString = localStorage.getItem('type')
   const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   useEffect(() => {
-    doituong && axios
-      .get(`${URL}/doituong/details/${doituong?.id}`)
+    individual && axios
+      .get(`${URL}/doituong/details/${individual?.id}`)
       .then((res) => {
         if (res.data.STATUS === '200') console.log('details' + res.data)
         setData(res.data)
         if (res.data.STATUS === '400') setError('TAI KHOAN DA BI KHOA')
       })
       .catch(() => {})
-  }, [doituong])
+  }, [individual])
   function findItemById(id: string) {
     return type.find((item:type) => item.id === id);
   }
@@ -61,10 +64,10 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
           <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
             <div className='me-7 mb-4'>
               <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative'>
-                {doituong?.Image ? (
-                  <img src={doituong.Image} className='' alt='' />
+                {individual?.image_url ? (
+                  <img src={individual.image_url} className='' alt={individual.full_name} />
                 ) : (
-                  <Avatar name={doituong?.client_name} size='100' />
+                  <Avatar name={individual?.full_name} size='100' />
                 )}
 
                 <div className='position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px'></div>
@@ -76,7 +79,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                 <div className='d-flex flex-column'>
                   <div className='d-flex align-items-center mb-2'>
                     <a href='#' className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'>
-                      {doituong?.client_name.toUpperCase()}
+                      {individual?.full_name.toUpperCase()}
                     </a>
                     <a href='#'>
                       <KTSVG
@@ -95,7 +98,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                         path='/media/icons/duotune/communication/com006.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {doituong?.KOL ? 'KOL' : 'KHÔNG PHẢI KOL'}
+                      {individual?.is_kol ? 'KOL' : 'KHÔNG PHẢI KOL'}
                     </a>
                     <a
                       href='#'
@@ -105,7 +108,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                         path='/media/icons/duotune/general/gen018.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {doituong?.Quequan}
+                      {individual?.hometown || 'N/A'}
                     </a>
                     <a
                       href='#'
@@ -115,7 +118,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                         path='/media/icons/duotune/communication/com011.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {`LOẠI KOL: ${doituong?.SDT? doituong.SDT:'KHÔNG PHÂN LOẠI'}`}
+                      {`LOẠI KOL: ${individual?.phone_number ? individual.phone_number : 'KHÔNG PHÂN LOẠI'}`}
                     </a>
                   </div>
                 </div>
@@ -158,7 +161,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                           path='/media/icons/duotune/arrows/arr066.svg'
                           className='svg-icon-3 svg-icon-success me-2'
                         />
-                        <div className='fs-4 fw-bolder'>{doituong?.updated_at.split('.')[0]}</div>
+                        <div className='fs-4 fw-bolder'>{individual?.updated_at.split('.')[0]}</div>
                       </div>
 
                       <div className='fw-bold fs-6 text-gray-400'>Cập nhật cuối</div>
@@ -174,7 +177,7 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                         type='button'
                         className='btn btn-sm btn-light'
                         onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/trichtin/${doituong?.id}`)
+                          navigate(`${PUBLIC_URL}/trichtin/${individual?.id}`)
                         }}
                         style={{marginRight: '10px'}}
                       >
@@ -184,14 +187,14 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
                         type='button'
                         className='btn btn-sm btn-light'
                         onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/doituong/details/${doituong?.id}`)
+                          navigate(`${PUBLIC_URL}/doituong/details/${individual?.id}`)
                         }}
                       >
                         Mở hồ sơ chi tiết
                       </button>
                     </div>
                   </div>
-                  <div className='card-body py-1 fs-5'>{doituong?.Thongtinbosung}</div>
+                  <div className='card-body py-1 fs-5'>{individual?.additional_info}</div>
                 </div>
               </div>
             </div>
@@ -273,5 +276,3 @@ const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, doituong}
     modalsRoot
   )
 }
-
-export {ModalViewDoituong}

@@ -9,14 +9,14 @@ class SocialAccount(Base):
     """
     __tablename__ = "social_accounts"
     id = Column(Integer, primary_key=True, index=True)
-    uid = Column(String(255), unique=True, index=True)
+    uid = Column(String(100), unique=True, index=True)
     name = Column(String(255))
     reaction_count = Column(Integer, default=0)
-    phone_number = Column(String(20))
+    phone_number = Column(String(15))
     status_id = Column(Integer, ForeignKey("statuses.id"))
     type_id = Column(Integer, ForeignKey("account_types.id"))
-    note = Column(String(1000))
-    is_linked = Column(Boolean, default=False)
+    note = Column(String)
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(
         DateTime,
@@ -33,4 +33,5 @@ class SocialAccount(Base):
     unit_groups = relationship("UnitGroup", back_populates="social_account")
     reports = relationship("Report", back_populates="social_account")
     group_links = relationship("SocialAccountLink", foreign_keys="[SocialAccountLink.group_social_account_uid]", back_populates="group_social_account")
-    linked_links = relationship("SocialAccountLink", foreign_keys="[SocialAccountLink.linked_social_account_uid]", back_populates="linked_social_account") 
+    linked_links = relationship("SocialAccountLink", foreign_keys="[SocialAccountLink.linked_social_account_uid]", back_populates="linked_social_account")
+    administrators = relationship("Administrator", back_populates="social_account") 

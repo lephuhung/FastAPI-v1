@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import {useQuery} from 'react-query'
 import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
 import axios from 'axios'
-import {doituong, doituongResponse} from './doituong'
+import {individual  , individualResponse} from './individual'
 import Avatar from 'react-avatar'
 import {ModalViewDoituong} from './ModalViewDoituong'
 import {SearchModal} from './SearchModal'
@@ -12,10 +12,14 @@ import {CreateAppModal} from './CreateAppModal'
 import {UpdateModal} from './UpdateAppModal'
 import {ToastContainer, toast} from 'react-toastify'
 import {CreateModelMLH} from './CreateAppModalMLH'
+import {ModalCreateDoituong} from './ModalCreateDoituong'
+
 const URL = process.env.REACT_APP_API_URL
+
 type Props = {
   className: string
 }
+
 const doituongexample = {
   id: '',
   client_name: '',
@@ -31,19 +35,43 @@ const doituongexample = {
   created_at: '',
   updated_at: '',
 }
+
 const toolbarButtonMarginClass = 'ms-1 ms-lg-3'
-const Table: React.FC<Props> = ({className}) => {
+
+interface IndividualResponse {
+  id: string
+  full_name: string
+  national_id: string | null
+  citizen_id: string | null
+  image_url: string | null
+  date_of_birth: string | null
+  is_male: boolean | null
+  hometown: string | null
+  additional_info: string | null
+  phone_number: string | null
+  is_kol: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type {IndividualResponse}
+
+export const IndividualTable: React.FC<Props> = ({className}) => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [showModalDoituong, setshowModalDoituong] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [showModalMLH, setShowModalMLH] = useState<boolean>(false)
   const [showModalDoituongupdate, setshowModalDoituongupdate] = useState<boolean>(false)
-  const [doituongitem, setdoituongItem] = useState<doituongResponse>()
-  const [doituongitemupdate, setdoituongItemUpdate] = useState<doituongResponse>(doituongexample)
+  const [doituongitem, setdoituongItem] = useState<individualResponse>()
+  const [doituongitemupdate, setdoituongItemUpdate] = useState<individualResponse>(doituongexample)
+  const [showModalUpdate, setShowModalUpdate] = useState<boolean>(false)
+  const [showModalView, setShowModalView] = useState<boolean>(false)
+  const [selectedIndividual, setSelectedIndividual] = useState<IndividualResponse | undefined>(undefined)
+  const [selectedIndividualUpdate, setSelectedIndividualUpdate] = useState<IndividualResponse | undefined>(undefined)
   const {isLoading, data, error} = useQuery({
-    queryKey: 'doituong',
+    queryKey: 'individuals',
     queryFn: async () => {
-      const respone = await axios.get(`${URL}/doituong`)
+      const respone = await axios.get(`${URL}/individuals`)
       const {data} = respone
       return data
     },
@@ -99,81 +127,75 @@ const Table: React.FC<Props> = ({className}) => {
             {/* begin::Table head */}
             <thead>
               <tr className='fw-bold fs-6 text-gray-800 border-bottom border-gray-200'>
-                {/* <th className='ps-4 min-w-5px rounded-start text-center'>STT</th> */}
-                <th className='min-w-200px text-center'>THÔNG TIN </th>
-                <th className='min-w-100px text-center'>KOL LOẠI</th>
+                <th className='min-w-200px text-center'>THÔNG TIN</th>
+                <th className='min-w-100px text-center'>SỐ ĐIỆN THOẠI</th>
                 <th className='min-w-150px rounded-start text-center'>QUÊ QUÁN</th>
-                <th className='min-w-100px text-center'>ĐƠN VỊ</th>
-                <th className='min-w-50px text-center'>CTNV</th>
+                <th className='min-w-100px text-center'>GIỚI TÍNH</th>
                 <th className='min-w-50px text-center'>KOL</th>
                 <th className='min-w-150px text-center'>HÀNH ĐỘNG</th>
               </tr>
             </thead>
             <tbody>
               {data &&
-                data.map((el: doituongResponse, index: number) => (
+                data.map((el: IndividualResponse, index: number) => (
                   <tr
                     key={index}
-                    
                   >
                     <td>
                       <div className='d-flex align-items-center'>
                         <div className='symbol symbol-50px me-5'>
-                          {el.Image ? (
-                            <img src={el.Image} className='' alt='' />
+                          {el.image_url ? (
+                            <img src={el.image_url} className='' alt='' />
                           ) : (
-                            <Avatar name={el.client_name.slice(0,20)} round={true} size='50' />
+                            <Avatar name={el.full_name.slice(0,20)} round={true} size='50' />
                           )}
                         </div>
                         <div className='d-flex justify-content-start flex-column'>
                           <a href='#' className='text-dark fw-bold text-hover-primary mb-1 fs-6'>
-                            {el.client_name.toUpperCase()}
+                            {el.full_name.toUpperCase()}
                           </a>
                           <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                            { el.CCCD && el.CMND ?`CCCD/CMND: ${el.CCCD}/${el.CMND}`:'Không có thông tin CCCD/CMND'}
+                            {el.citizen_id && el.national_id 
+                              ? `CCCD/CMND: ${el.citizen_id}/${el.national_id}`
+                              : 'Không có thông tin CCCD/CMND'}
                           </span>
                         </div>
                       </div>
                     </td>
                     <td className='text-center'>
-                      {el.SDT|| el.SDT ==='*' ? (
-                        <span className='badge badge-primary fs-7 fw-semibold'>{el.SDT}</span>
+                      {el.phone_number ? (
+                        <span className='badge badge-primary fs-7 fw-semibold'>{el.phone_number}</span>
                       ) : (
                         <span className='badge badge-info fs-7 fw-semibold'>Chưa có</span>
                       )}
                     </td>
                     <td className='text-center'>
                       <span className='badge badge-light-success fs-7 fw-semibold'>
-                        {el.Quequan.slice(0, 30)}
+                        {el.hometown ? el.hometown.slice(0, 30) : 'Chưa có'}
                       </span>
                     </td>
                     <td className='text-center'>
-                      <span className='badge badge-primary fs-7 fw-semibold fw-semibold text-center'>
-                        {el.donvi_name}
+                      <span className='badge badge-primary fs-7 fw-semibold'>
+                        {el.is_male ? 'Nam' : 'Nữ'}
                       </span>
                     </td>
                     <td className='text-center'>
-                      <span className='badge badge-success fs-7 fw-semibold fw-semibold'>
-                        {el.ctnv_name}
-                      </span>
-                    </td>
-                    <td className='text-center'>
-                      {el.KOL === true ? (
-                        <span className='badge badge-primary fs-7 fw-semibold fw-semibold'>
+                      {el.is_kol ? (
+                        <span className='badge badge-primary fs-7 fw-semibold'>
                           KOL
                         </span>
                       ) : (
-                        <span className='badge badge-danger fs-7 fw-semibold fw-semibold'>
+                        <span className='badge badge-danger fs-7 fw-semibold'>
                           KHÔNG
                         </span>
                       )}
                     </td>
                     <td>
-                    <a
+                      <a
                         href='#'
                         className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'
                         onClick={() => {
-                          setdoituongItem(el)
+                          setSelectedIndividual(el)
                           setshowModalDoituong(true)
                         }}
                       >
@@ -183,7 +205,7 @@ const Table: React.FC<Props> = ({className}) => {
                         href='#'
                         className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'
                         onClick={() => {
-                          setdoituongItemUpdate(el)
+                          setSelectedIndividualUpdate(el)
                           setshowModalDoituongupdate(true)
                         }}
                       >
@@ -239,14 +261,16 @@ const Table: React.FC<Props> = ({className}) => {
             show={showModalDoituong}
             handleClose={() => setshowModalDoituong(false)}
             title='THÔNG TIN CHI TIẾT ĐỐI TƯỢNG'
-            doituong={doituongitem}
+            individual={selectedIndividual}
           />
-          <UpdateModal
-            show={showModalDoituongupdate}
-            handleClose={() => setshowModalDoituongupdate(false)}
-            title='THÔNG TIN CHI TIẾT ĐỐI TƯỢNG'
-            doituong={doituongitemupdate}
-          />
+          {selectedIndividualUpdate && (
+            <UpdateModal
+              show={showModalDoituongupdate}
+              handleClose={() => setshowModalDoituongupdate(false)}
+              title='THÔNG TIN CHI TIẾT ĐỐI TƯỢNG'
+              individual={selectedIndividualUpdate}
+            />
+          )}
           <CreateAppModal
             show={showModal}
             handleClose={() => setShowModal(false)}
@@ -285,4 +309,3 @@ export function cutString(string: string, maxLength: number): string {
   }
   return string
 }
-export {Table}

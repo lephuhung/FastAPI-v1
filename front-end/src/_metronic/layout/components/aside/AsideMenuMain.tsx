@@ -50,7 +50,7 @@ export function AsideMenuMain() {
         ))}
       </AsideMenuItemWithSub>
       <AsideMenuItem
-        to='/doituong'
+        to='/individual'
         icon='/media/icons/duotune/art/art002.svg'
         title='ĐỐI TƯỢNG/KOL'
         fontIcon='bi-app-indicator'

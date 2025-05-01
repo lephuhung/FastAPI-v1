@@ -19,8 +19,8 @@ import {CTNV} from '../pages/CTNV'
 import {Moiquanhe} from '../pages/Moiquanhe'
 import {Tags} from '../pages/Tags'
 import {Trangthai} from '../pages/Trangthai'
-import { Doituong } from '../pages/Doituong'
-import { Details } from '../pages/Doituong/details'
+import { IndividualPage } from '../pages/Individual'
+import { IndividualDetailsPage } from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
 import { Phanloai } from '../pages/Utils/Phanloai'
 import { Thongkedonvi } from '../pages/Thongkedonvi'
@@ -31,7 +31,7 @@ import { Details_donvi} from '../pages/Thongkedonvi/details-donvi'
 import { TrichtinWrap } from '../pages/Trichtin'
 import { TrichtinVaiaoWrap } from '../pages/Trichtin/trichtinvaiao'
 import { UIDSearch } from '../pages/Search/uid-search'
-import {DoituongSearch } from '../pages/Search/doituong-search'
+// import {individualsearch } from '../pages/Search/doituong-search'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -63,8 +63,8 @@ const PrivateRoutes = () => {
         <Route path='tags' element={<Tags/>} />
         <Route path='trangthai' element={<Trangthai/>} />
         <Route path='user' element={<User/>} />
-        <Route path='doituong/details/:id' element={<Details/>} />
-        <Route path='doituong' element={<Doituong/>} />
+        <Route path='individual/details/:id' element={<IndividualDetailsPage/>} />
+        <Route path='individual' element={<IndividualPage/>} />
         <Route path='thongke-donvi/details/:id' element={<Details_donvi/>} />
         <Route path='thongke-donvi' element={<Thongkedonvi/>} />
         <Route path='thongke-phanloai' element={<Thongkephanloai/>} />
@@ -73,7 +73,7 @@ const PrivateRoutes = () => {
         <Route path='trichtin/:id' element={<TrichtinWrap/>}/>
         <Route path='trichtinvaiao/:id' element={<TrichtinVaiaoWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
-        <Route path='search-doituong' element={<DoituongSearch/>} />
+        {/* <Route path='search-doituong' element={<individualsearch/>} /> */}
         <Route path='search-trichtin' element={<TrichinSearch/>} />
         <Route
           path='crafted/pages/profile/*'

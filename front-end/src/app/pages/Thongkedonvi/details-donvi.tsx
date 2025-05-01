@@ -6,10 +6,12 @@ import Avatar from 'react-avatar'
 import {useParams, useLocation} from 'react-router-dom'
 import axios from 'axios'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {doituong, type,doituongResponse} from '../Doituong/doituong'
-import {ModalViewDoituong} from '../Doituong/ModalViewDoituong'
+import {individual, account_types,individualResponse} from '../Individual/individual'
+import {ModalViewDoituong} from '../Individual/ModalViewDoituong'
 import {ModalViewItem} from '../Group/ModalViewItem'
 import {IResponseFacebook} from '../Facebook/IFacebook'
+import {IndividualResponse} from '../Individual/Table'
+
 const URL = process.env.REACT_APP_API_URL
 type Props = {
   id: any
@@ -17,10 +19,10 @@ type Props = {
 
 const Details: React.FC<Props> = ({id}) => {
   const typeString = localStorage.getItem('type')
-  const type: type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+  const type: account_types[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   console.log(type)
   const [showModalDoituong, setshowModalDoituong] = useState<boolean>(false)
-  const [doituongitem, setdoituongItem] = useState<doituongResponse>()
+  const [doituongitem, setdoituongItem] = useState<IndividualResponse>()
   const [dataItem, setDataItem] = useState<IResponseGroup>()
   const [showModelItem, setModelItem] = useState<boolean>(false)
   const result = useQueries([
@@ -213,105 +215,122 @@ const Details: React.FC<Props> = ({id}) => {
                     </thead>
                     <tbody>
                       {result[1].data &&
-                        result[1].data.map((el: doituongResponse, index: number) => (
-                          <tr key={index}>
-                            <td className='text-center'>
-                              <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                {index + 1}
-                              </span>
-                            </td>
-                            <td>
-                              <div className='d-flex align-items-center'>
-                                <div className='symbol symbol-50px me-5'>
-                                  {el.Image ? (
-                                    <img src={el.Image} className='' alt='' />
-                                  ) : (
-                                    <Avatar name={el.client_name} round={true} size='50' />
-                                  )}
+                        result[1].data.map((el: individualResponse, index: number) => {
+                          const individualData: IndividualResponse = {
+                            id: el.id,
+                            full_name: el.client_name,
+                            national_id: el.CMND,
+                            citizen_id: el.CCCD,
+                            image_url: el.Image,
+                            date_of_birth: el.Ngaysinh,
+                            is_male: el.Gioitinh,
+                            hometown: el.Quequan,
+                            additional_info: el.Thongtinbosung,
+                            phone_number: el.SDT,
+                            is_kol: el.KOL,
+                            created_at: el.created_at,
+                            updated_at: el.updated_at
+                          }
+                          return (
+                            <tr key={index}>
+                              <td className='text-center'>
+                                <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                                  {index + 1}
+                                </span>
+                              </td>
+                              <td>
+                                <div className='d-flex align-items-center'>
+                                  <div className='symbol symbol-50px me-5'>
+                                    {el.Image ? (
+                                      <img src={el.Image} className='' alt='' />
+                                    ) : (
+                                      <Avatar name={el.client_name} round={true} size='50' />
+                                    )}
+                                  </div>
+                                  <div className='d-flex justify-content-start flex-column'>
+                                    <a
+                                      href='#'
+                                      className='text-dark fw-bold text-hover-primary mb-1 fs-6'
+                                    >
+                                      {el.client_name.toUpperCase()}
+                                    </a>
+                                    <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                                      {`CCCD/CMND: ${el.CCCD}/${el.CMND}`}
+                                    </span>
+                                  </div>
                                 </div>
-                                <div className='d-flex justify-content-start flex-column'>
-                                  <a
-                                    href='#'
-                                    className='text-dark fw-bold text-hover-primary mb-1 fs-6'
-                                  >
-                                    {el.client_name.toUpperCase()}
-                                  </a>
-                                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                    {`CCCD/CMND: ${el.CCCD}/${el.CMND}`}
+                              </td>
+                              <td>
+                                <span className='badge badge-light-primary fs-7 fw-semibold'>
+                                  {el.SDT}
+                                </span>
+                              </td>
+                              <td>
+                                <span className='badge badge-light-success fs-7 fw-semibold'>
+                                  {el.Quequan}
+                                </span>
+                              </td>
+                              <td>
+                                <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                                  {el.Ngaysinh.toString()}
+                                </span>
+                              </td>
+                              <td className='text-center'>
+                                {el.KOL === true ? (
+                                  <span className='badge badge-primary fs-7 fw-semibold fw-semibold'>
+                                    KOL
                                   </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <span className='badge badge-light-primary fs-7 fw-semibold'>
-                                {el.SDT}
-                              </span>
-                            </td>
-                            <td>
-                              <span className='badge badge-light-success fs-7 fw-semibold'>
-                                {el.Quequan}
-                              </span>
-                            </td>
-                            <td>
-                              <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                {el.Ngaysinh.toString()}
-                              </span>
-                            </td>
-                            <td className='text-center'>
-                              {el.KOL === true ? (
-                                <span className='badge badge-primary fs-7 fw-semibold fw-semibold'>
-                                  KOL
+                                ) : (
+                                  <span className='badge badge-danger fs-7 fw-semibold fw-semibold'>
+                                    Không
+                                  </span>
+                                )}
+                              </td>
+                              <td>
+                                <span
+                                  className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-1'
+                                  onClick={() => {
+                                    setdoituongItem(individualData)
+                                    setshowModalDoituong(true)
+                                  }}
+                                >
+                                  Chi tiết
                                 </span>
-                              ) : (
-                                <span className='badge badge-danger fs-7 fw-semibold fw-semibold'>
-                                  Không
-                                </span>
-                              )}
-                            </td>
-                            <td>
-                              <span
-                                className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-1'
-                                onClick={() => {
-                                  setdoituongItem(el)
-                                  setshowModalDoituong(true)
-                                }}
-                              >
-                                Chi tiết
-                              </span>
 
-                              <a
-                                href='#'
-                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                onClick={() => {
-                                  // setShowModalViewItem(true)
-                                  // setIResponseHost(el)
-                                }}
-                              >
-                                <KTSVG
-                                  path='/media/icons/duotune/art/art005.svg'
-                                  className='svg-icon-3'
-                                />
-                              </a>
-                              <a
-                                href='#'
-                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                                onClick={() => {
-                                  axios
-                                    .delete(`${URL}/host/${el.id}`)
-                                    .then((res) => {
-                                      // if(res.data.STATUS==='200')setrefesh(true);
-                                    })
-                                    .catch((e) => {})
-                                }}
-                              >
-                                <KTSVG
-                                  path='/media/icons/duotune/general/gen027.svg'
-                                  className='svg-icon-3'
-                                />
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                                <a
+                                  href='#'
+                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                  onClick={() => {
+                                    // setShowModalViewItem(true)
+                                    // setIResponseHost(el)
+                                  }}
+                                >
+                                  <KTSVG
+                                    path='/media/icons/duotune/art/art005.svg'
+                                    className='svg-icon-3'
+                                  />
+                                </a>
+                                <a
+                                  href='#'
+                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                                  onClick={() => {
+                                    axios
+                                      .delete(`${URL}/host/${el.id}`)
+                                      .then((res) => {
+                                        // if(res.data.STATUS==='200')setrefesh(true);
+                                      })
+                                      .catch((e) => {})
+                                  }}
+                                >
+                                  <KTSVG
+                                    path='/media/icons/duotune/general/gen027.svg'
+                                    className='svg-icon-3'
+                                  />
+                                </a>
+                              </td>
+                            </tr>
+                          )
+                        })}
                     </tbody>
                     {/* end::Table body */}
                   </table>
@@ -328,7 +347,7 @@ const Details: React.FC<Props> = ({id}) => {
         show={showModalDoituong}
         handleClose={() => setshowModalDoituong(false)}
         title='THÔNG TIN CHI TIẾT ĐỐI TƯỢNG'
-        doituong={doituongitem}
+        individual={doituongitem}
       />
       <ModalViewItem
         show={showModelItem}
@@ -345,7 +364,7 @@ const Details_donvi: React.FC = () => {
   const {isLoading, data, error} = useQuery({
     queryKey: 'name',
     queryFn: () =>
-      axios.get(`${URL}/donvi/get/${id}`).then((res) => {
+      axios.get(`${URL}/units/${id}`).then((res) => {
         return res.data
       }),
   })

@@ -2,50 +2,55 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {createPortal} from 'react-dom'
 import {Modal} from 'react-bootstrap'
-import { useState } from 'react'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {doituong, doituongResponse, ctnv, donvi} from './doituong'
+import {individual, units, tasks} from './individual'
 import axios from 'axios'
 import styled from '@emotion/styled'
 // import ImageUploader, {FileObjectType as FileUploaderProps} from 'react-image-upload'
 import 'react-image-upload/dist/index.css'
 import ImageUploader from 'react-images-upload'
-import {toast} from 'react-toastify'
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import DatePicker from 'react-datepicker'
+import {toast} from 'react-toastify'
 import 'react-datepicker/dist/react-datepicker.css'
 import * as Yup from 'yup'
-import Avatar from 'react-avatar'
 type Props = {
   show: boolean
   handleClose: () => void
   title: string
-  doituong: doituongResponse
 }
 const URL = process.env.REACT_APP_API_URL
 const ValidateDoituong = Yup.object().shape({
-  Ngaysinh: Yup.date().required(),
-  CCCD: Yup.string()
+  date_of_birth: Yup.date().required(),
+  citizen_id: Yup.string()
     .length(12)
     .matches(/^\d+$/, 'Số CMND có độ dài 9 chữ số'),
-  CMND: Yup.string()
+  national_id: Yup.string()
     .length(9)
     .matches(/^\d+$/, 'Số CCCD có độ dài 12 chữ số'),
-  client_name: Yup.string().required(),
-  Quequan: Yup.string().required(),
+  full_name: Yup.string().required(),
+  hometown: Yup.string().required(),
+  additional_info: Yup.string().required(),
 })
-const modalsRoot = document.getElementById('root-modals') || document.body
-const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
-  const donviString = localStorage.getItem('donvi')
-  const [KOL, setKOL]= useState<boolean>(true)
-  const donvi: donvi[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
-  const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: ctnv[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
-  const doituongclone = {
-    ...doituong,
-    Gioitinh: doituong.Gioitinh ? '1' : '2',
-  }
+const labelStyle = {
+  display: 'inline-block',
+  marginRight: '20px', 
+  fontFamily: 'Arial, sans-serif', 
+  fontSize: '16px', 
+  color: '#333'
+};
+
+const radioStyle = {
+  marginRight: '5px',
+  verticalAlign: 'middle'
+};
+const CreateAppModal = ({show, handleClose, title}: Props) => {
+  const unitsString = localStorage.getItem('units')
+  const [KOLL, setKOLL]= useState<boolean>(false)
+  const units: units[] = typeof unitsString === 'string' ? JSON.parse(unitsString) : []
+  const tasksString = localStorage.getItem('tasks')
+  const tasks: tasks[] = typeof tasksString === 'string' ? JSON.parse(tasksString) : []
   return createPortal(
     <Modal
       id='kt_modal_create_app'
@@ -54,7 +59,6 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
       dialogClassName='modal-dialog modal-dialog-centered mw-900px'
       show={show}
       onHide={handleClose}
-      // onEntered={loadStepper}
     >
       <div className='modal-header'>
         <h2>{title}</h2>
@@ -67,13 +71,26 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
 
       <div className='modal-body py-lg-10 px-lg-10'>
         <Formik
-          initialValues={doituongclone}
+          initialValues={{
+            full_name: '',
+            national_id: '',
+            citizen_id: '',
+            image_url: '',
+            date_of_birth: '',
+            is_male: '1',
+            hometown: '',
+            additional_info: 'Chưa có thông tin',
+            phone_number: '*',
+            is_kol: false,
+            task_id: 0,
+            unit_id: '',
+          }}
           validationSchema={ValidateDoituong}
           onSubmit={(data: any) => {
-            data.Ngaysinh = new Date(data.Ngaysinh).toISOString().split('T')[0]
-            data.Gioitinh === '1' ? (data.Gioitinh = true) : (data.Gioitinh = false)
+            data.date_of_birth = new Date(data.date_of_birth).toISOString().split('T')[0]
+            data.is_male === '1' ? (data.is_male = true) : (data.is_male = false)
             axios
-              .post(`${URL}/doituong/update/${doituong.id}`, data)
+              .post(`${URL}/individuals/create`, data)
               .then((res) => {
                 if (res.status === 200) {
                   handleClose()
@@ -88,8 +105,9 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                     theme: 'light',
                   })
                 } else {
-                  let data = res.data.message
-                  toast.warning(data, {
+                  let data = res.data.DATA
+                  console.log(data.errors)
+                  toast.warning('Thêm không thành công', {
                     position: 'bottom-right',
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -102,47 +120,45 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                 }
               })
               .catch((error) => {
-                let data = error.response.data.message
-                toast.warning(data, {
-                  position: 'bottom-right',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: 'light',
-                })
+                if (error.response && error.response.status === 403) {
+                  toast.error('Thêm không thành công', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                } else {
+                  // Handle other errors
+                  console.log('An error occurred:', error.message)
+                }
               })
-            console.log(data)
           }}
         >
           {({errors, touched}) => (
             <Form>
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  {doituong.Image? 
-                  <img src={doituong.Image} width={250} height={250} alt='Ảnh đại diện' />:<Avatar name={doituong.client_name}  size='100' />
-}
-                  <ImagUploder name='Image' />
-                </div>
+                <ImagUploder name='image_url' />
                 <div style={{marginLeft: '30px'}}>
                   <div style={{display: 'flex', flexDirection: 'row'}}>
                     <div>
                       <label className='form-label'>TÊN ĐỐI TƯỢNG</label>
                       <Field
                         type='text'
-                        name='client_name'
+                        name='full_name'
                         className='form-control'
                         placeholder=''
                         style={{width: '500px'}}
                       />
-                      {errors.client_name && touched.client_name ? (
-                        <StyledErrorMessage>{errors.client_name}</StyledErrorMessage>
+                      {errors.full_name && touched.full_name ? (
+                        <StyledErrorMessage>{errors.full_name}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{marginLeft: '30px', paddingTop: '40px'}}>
-                      <MyCheckbox name='KOL' setKOL={setKOL} KOL ={KOL}>KOL</MyCheckbox>
+                      <MyCheckbox name='is_kol' setKOL ={setKOLL} KOL= {KOLL}>KOL</MyCheckbox>
                     </div>
                   </div>
                   <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -151,11 +167,11 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                       <Field
                         type='text'
                         className='form-control'
-                        name='CCCD'
+                        name='citizen_id'
                         placeholder='042......'
                       />
-                      {errors.CCCD && touched.CCCD ? (
-                        <StyledErrorMessage>{errors.CCCD}</StyledErrorMessage>
+                      {errors.citizen_id && touched.citizen_id ? (
+                        <StyledErrorMessage>{errors.citizen_id}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div className='mb-5' style={{marginLeft: '30px'}}>
@@ -163,31 +179,31 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                       <Field
                         type='text'
                         className='form-control'
-                        name='CMND'
+                        name='national_id'
                         placeholder='18......'
                       />
-                      {errors.CMND && touched.CMND ? (
-                        <StyledErrorMessage>{errors.CMND}</StyledErrorMessage>
+                      {errors.national_id && touched.national_id ? (
+                        <StyledErrorMessage>{errors.national_id}</StyledErrorMessage>
                       ) : null}
                     </div>
                     <div style={{display: 'flex', flexDirection: 'row', marginLeft: '30px'}}>
                       <div
                         role='group'
                         aria-labelledby='my-radio-group'
-                        style={{display: 'flex', flexDirection: 'row'}}
+                        style={{display: 'flex', flexDirection: 'row', alignItems:'center'}}
                       >
                         <div
                           className='form-check form-check-custom form-check-solid'
                           style={{marginRight: '30px'}}
                         >
-                          <label>
-                            <Field type='radio' name='Gioitinh' value='1' />
+                          <label style={labelStyle}>
+                            <Field type='radio' name='is_male' value='1' style={radioStyle}/>
                             Nam
                           </label>
                         </div>
                         <div className='form-check form-check-custom form-check-solid'>
-                          <label>
-                            <Field type='radio' name='Gioitinh' value='2' />
+                          <label style={labelStyle}>
+                            <Field type='radio' name='is_male' value='2' style={radioStyle}/>
                             Nữ
                           </label>
                         </div>
@@ -196,50 +212,48 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                   </div>
                   <div style={{display: 'flex', flexDirection: 'row'}}>
                     <div className='mb-5' style={{paddingRight: '30px'}}>
-                      <label className='form-label'> LOẠI KOL </label>
-                      <MySelect label='Job Type' name='SDT' disabled={!KOL} width={200}>
+                    <label className='form-label'> LOẠI KOL </label>
+                      <MySelect label='Job Type' name='phone_number' disabled={!KOLL} width={200}>
                         <option value=''>Lựa chọn loại KOL</option>
                         <option value='KOL MẠNG'>KOL MẠNG</option>
                         <option value='KOL UY TÍN'>KOL UY TÍN</option>
                         <option value='KOL ẨN'>KOL ẨN</option>
                       </MySelect>
-                      {errors.SDT && touched.SDT ? (
-                        <StyledErrorMessage>{errors.SDT}</StyledErrorMessage>
-                      ) : null}
                     </div>
                     <div>
                       <label className='form-label'>Ngày/tháng/năm sinh</label>
-                      <MyDatePicker name='Ngaysinh' />
+                      <MyDatePicker name='date_of_birth' />
                     </div>
+                    
                   </div>
                   <div className='mb-5'>
                     <label className='form-label'>Quê quán</label>
                     <Field
                       type='text'
                       className='form-control'
-                      name='Quequan'
+                      name='hometown'
                       placeholder='Xã .....'
                     />
-                    {errors.Quequan && touched.Quequan ? (
-                      <StyledErrorMessage>{errors.Quequan}</StyledErrorMessage>
+                    {errors.hometown && touched.hometown ? (
+                      <StyledErrorMessage>{errors.hometown}</StyledErrorMessage>
                     ) : null}
                   </div>
                   <div className='mb-5'>
                     <label className='form-label'>Thông tin bổ sung</label>
                     <MyTextArea
                       label='Ghi chú'
-                      name='Thongtinbosung'
+                      name='additional_info'
                       rows='6'
-                      placeholder='Nhập các thông tin của đối tượng, bao gồm số điện thoại, tính cách, liên quan, ....Tất cả thông tin này được dùng để tìm kiếm chính xác'
+                      placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                     />
                   </div>
                   <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                     <div style={{marginRight: '30px'}}>
                       <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='donvi_id'>
+                      <MySelect label='Job Type' name='unit_id'>
                         <option value=''>Lựa chọn đơn vị</option>
-                        {donvi &&
-                          donvi?.map((data: donvi, index: number) => {
+                        {units &&
+                          units?.map((data: units, index: number) => {
                             return (
                               <option value={data.id} key={index}>
                                 {data.name}
@@ -250,9 +264,9 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                     </div>
                     <div>
                       <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='ctnv_id'>
+                      <MySelect label='Job Type' name='task_id'>
                         <option value=''>Lựa chọn CTNV</option>
-                        {ctnv.map((data: ctnv, index: number) => {
+                        {tasks.map((data: tasks, index: number) => {
                           return (
                             <option value={data.id} key={index}>
                               {data.name}
@@ -265,6 +279,9 @@ const UpdateModal = ({show, handleClose, title, doituong}: Props) => {
                 </div>
               </div>
               <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
+                <button className='btn btn-info' style={{marginLeft: '5px'}}>
+                  Xóa dữ liệu
+                </button>
                 <button className='btn btn-primary' type='submit'>
                   Lưu
                 </button>
@@ -295,18 +312,13 @@ const StyledSelect = styled.select`
 export interface ToggleFieldProps {
   name: string
 }
-
-// toggle field converts yes or no to true or false
 export const ToggleField = (props: ToggleFieldProps) => {
   const [field] = useField<boolean>(props)
-
-  // Yes = true, otherwise false
   const handleChange = useCallback(
     (event: any) => field.onChange(event.target.value === 'Yes'),
     [field.onChange]
   )
 
-  // use `field` but override onChange
   return (
     <>
       <label>
@@ -343,7 +355,7 @@ const ImagUploder: React.FC<ImageuploadProps> = ({name, ...props}) => {
         withIcon={false}
         withPreview={true}
         label={''}
-        buttonText='Thay ảnh đại diện'
+        buttonText='Thêm ảnh đại diện'
         buttonClassName='upload-btn waves-effect waves-light red light-blue darken-4'
         imgExtension={['.jpg', '.gif', '.png', '.gif']}
         onChange={(e, f) => setValue(f[0])}
@@ -372,7 +384,6 @@ const MyDatePicker = ({name = '', ...rest}) => {
 
 const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
   const [field, meta] = useField(props as any)
-
   return (
     <>
       <StyledSelect {...field} {...props} style={{width: width}} />
@@ -410,6 +421,7 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({children,setKOL, KOL ,...props})
     </div>
   )
 }
+const modalsRoot = document.getElementById('root-modals') || document.body
 const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
   const [field, meta] = useField(props as any)
 
@@ -420,9 +432,10 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
       {meta.touched && meta.error ? (
         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
       ) : field.value === undefined || field.value === '' || field.value === 0 ? (
-        <StyledErrorMessage>Vui lòng lựa chọn</StyledErrorMessage>
+        <StyledErrorMessage>Nhập thông tin bổ sung</StyledErrorMessage>
       ) : null}
     </>
+    
   )
 }
-export {UpdateModal}
+export {CreateAppModal}

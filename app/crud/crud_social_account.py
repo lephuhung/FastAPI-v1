@@ -15,11 +15,11 @@ class CRUDSocialAccount(CRUDBase[SocialAccount, SocialAccountCreate, SocialAccou
     def get_by_status(self, db: Session, *, status_id: int) -> List[SocialAccount]:
         return db.query(SocialAccount).filter(SocialAccount.status_id == status_id).all()
 
-    def get_by_account_type(self, db: Session, *, account_type_id: int) -> List[SocialAccount]:
-        return db.query(SocialAccount).filter(SocialAccount.account_type_id == account_type_id).all()
+    def get_by_account_type(self, db: Session, *, type_id: int) -> List[SocialAccount]:
+        return db.query(SocialAccount).filter(SocialAccount.type_id == type_id).all()
 
-    def get_linked_accounts(self, db: Session) -> List[SocialAccount]:
-        return db.query(SocialAccount).filter(SocialAccount.is_linked == True).all()
+    def get_active_accounts(self, db: Session) -> List[SocialAccount]:
+        return db.query(SocialAccount).filter(SocialAccount.is_active == True).all()
 
 
 social_account = CRUDSocialAccount(SocialAccount) 

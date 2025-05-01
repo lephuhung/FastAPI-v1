@@ -28,7 +28,7 @@ export interface trichtin {
     created_at : string
     updated_at : string
 }
-export interface doituong{
+export interface individual{
     id: string,
     client_name: string,
     CMND: string,
@@ -41,11 +41,11 @@ export interface doituong{
     SDT: string,
     KOL: boolean,
 }
-export interface doituongsearch {
+export interface individualsearch {
     _index: string,
     _id: string,
     _score: string,
-    _source: doituong,
+    _source: individual,
     sort: number[]
 }
 export interface trichtinsearch {

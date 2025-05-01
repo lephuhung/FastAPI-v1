@@ -77,12 +77,11 @@ CREATE INDEX idx_individual_social_accounts_social_account_uid ON "individual_so
 -- Bảng quản trị viên (administrators)
 CREATE TABLE "administrators" (
   "id" SERIAL PRIMARY KEY,
-  "facebook_uid" varchar(100) NOT NULL,
+  "uid_administrator" varchar(100) NOT NULL,
   "social_account_uid" varchar(100) NOT NULL,
   "relationship_id" int NOT NULL,
   "created_at" timestamp DEFAULT NOW(),
   "updated_at" timestamp DEFAULT NOW(),
-  CONSTRAINT unique_facebook_uid UNIQUE ("facebook_uid"),
   CONSTRAINT fk_administrators_social_account FOREIGN KEY ("social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE CASCADE,
   CONSTRAINT fk_administrators_relationship FOREIGN KEY ("relationship_id") REFERENCES "relationships" ("id") ON DELETE RESTRICT
 );
