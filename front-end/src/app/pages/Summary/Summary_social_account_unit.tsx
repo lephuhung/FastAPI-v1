@@ -13,17 +13,10 @@ const Thongkectnv: React.FC = () => {
     {
       queryKey: ['posts'],
       queryFn: () =>
-        axios.get(`${URL}/summary/units`).then((res) => {
+        axios.get(`${URL}/summary/social-accounts-units`).then((res) => {
           return res.data
-        }),
-    },
-    {
-      queryKey: ['users'],
-      queryFn: () =>
-        axios.get(`${URL}/thongke/thongkedoituongctnv`).then((res) => {
-          return res.data
-        }),
-    },
+        })
+    }
   ])
 
   return (
@@ -50,34 +43,6 @@ const Thongkectnv: React.FC = () => {
                 return (
                   <div className='col-md-6 col-xl-4' key={index}>
                     <CardItemCtnv title={el.unit.name} count={0} item={el} />
-                  </div>
-                )
-              })}
-          </div>
-        </div>
-      </div>
-      <div className='mb-5'>
-        <div
-          className='accordion-header py-3 d-flex'
-          data-bs-toggle='collapse'
-          data-bs-target='#kt_accordion_2_item_2'
-        >
-          <span className='accordion-icon'>
-            <KTSVG className='svg-icon svg-icon-4' path='media/icons/duotune/arrows/arr064.svg' />
-          </span>
-          <h3 className='fs-4 text-gray-800 fw-bold mb-0 ms-4'>Phân loại CTNV theo Đối tượng</h3>
-        </div>
-        <div
-          id='kt_accordion_2_item_2'
-          className='collapse fs-6 ps-10 show ps-10'
-          data-bs-parent='#kt_accordion_2'
-        >
-          <div className='row g-5'>
-            {result[1].data &&
-              result[1].data.map((el: any, index: number) => {
-                return (
-                  <div className='col-md-6 col-xl-4' key={index}>
-                    <CardItemdoituongCtnv title={el.ctnv_name} count={el.count} item={el} />
                   </div>
                 )
               })}

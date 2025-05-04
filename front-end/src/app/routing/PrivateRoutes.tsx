@@ -20,7 +20,7 @@ import { IndividualDetailsPage } from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
 import { Phanloai } from '../pages/Utils/Phanloai'
 import { Thongkedonvi } from '../pages/Summary'
-import { Thongkephanloai } from '../pages/Summary/Thongkephanloai'
+import { Thongkephanloai } from '../pages/Summary/Summary_individual_unit'
 import {Thongketinhchat} from '../pages/Summary/Thongketinhchat'
 import { Thongkectnv } from '../pages/Summary/Summary_social_account_unit'
 import { Details_donvi} from '../pages/Summary/details-donvi'
@@ -59,10 +59,10 @@ const PrivateRoutes = () => {
         <Route path='individual/details/:id' element={<IndividualDetailsPage/>} />
         <Route path='individual' element={<IndividualPage/>} />
         <Route path='thongke-donvi/details/:id' element={<Details_donvi/>} />
-        <Route path='thongke-donvi' element={<Thongkedonvi/>} />
-        <Route path='thongke-phanloai' element={<Thongkephanloai/>} />
-        <Route path='thongke-ctnv' element={<Thongkectnv/>} /> 
-        <Route path='thongke-tinhchat' element={<Thongketinhchat/>} />
+        {/* <Route path='thongke-donvi' element={<Thongkedonvi/>} />
+        <Route path='thongke-phanloai' element={<Thongkephanloai/>} /> */}
+        <Route path='summary-individual-unit' element={<Thongkephanloai/>} />
+        <Route path='summary-social-account-unit' element={<Thongkectnv/>} />
         {/* <Route path='reports/:id' element={<ReportWrap/>}/> */}
         <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />

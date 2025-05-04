@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from 'react'
 import {useQuery} from 'react-query'
-
-import { CardItemPhanloai } from './CardItem-phanloai'
+import {CardItemIndividual} from './CardItem-individuals'
 import axios from 'axios'
 const URL = process.env.REACT_APP_API_URL
 
@@ -13,7 +12,7 @@ const Thongkephanloai: React.FC = () => {
     queryKey: ['thongketinhchat', loading],
     queryFn: async () => {
       setloading(false)
-      const respone = await axios.get(`${URL}/thongke/thongkephanloai`)
+      const respone = await axios.get(`${URL}/summary/individuals-units`)
       const {data} = respone
       return data
     },
@@ -31,9 +30,9 @@ const Thongkephanloai: React.FC = () => {
           data.map((el: any, index: number) => {
             return (
               <div className='col-md-6 col-xl-4' key={index}>
-                <CardItemPhanloai
-                  title={el.trangthai_name}
-                  count = {el.count}
+                <CardItemIndividual
+                  title={el.unit.name}
+                  count = {0}
                   item={el}
                 />
               </div>

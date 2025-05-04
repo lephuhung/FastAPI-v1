@@ -61,10 +61,10 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen025.svg '
       >
-        <AsideMenuItem to='/thongke-donvi' title='Thống kê theo đơn vị' hasBullet={true} />
-        <AsideMenuItem to='/thongke-tinhchat' title='Thống kê theo tính chất' hasBullet={true} />
-        <AsideMenuItem to='/thongke-phanloai' title='Thống kê theo phân loại' hasBullet={true} />
-        <AsideMenuItem to='/thongke-ctnv' title='Thống kê theo công tác NV' hasBullet={true} />
+        {/* <AsideMenuItem to='/thongke-donvi' title='Thống kê theo đơn vị' hasBullet={true} />
+        <AsideMenuItem to='/thongke-tinhchat' title='Thống kê theo tính chất' hasBullet={true} /> */}
+        <AsideMenuItem to='/summary-individual-unit' title='Thống kê theo đối tượng' hasBullet={true} />
+        <AsideMenuItem to='/summary-social-account-unit' title='Thống kê tài khoản MXH' hasBullet={true} />
       </AsideMenuItemWithSub>
       <AsideMenuItemWithSub
         to='/post'
@@ -73,10 +73,10 @@ export function AsideMenuMain() {
         icon='/media/icons/duotune/general/gen022.svg'
       >
         <AsideMenuItem to='/tags' title='TAGS' hasBullet={true} />
-        <AsideMenuItem to='/tinhchat' title='TÍNH CHẤT' hasBullet={true} />
-        <AsideMenuItem to='/trangthai' title='PHÂN LOẠI' hasBullet={true} />
-        <AsideMenuItem to='/moiquanhe' title='MỐI QUAN HÊ' hasBullet={true} />
-        <AsideMenuItem to='/ctnv' title='CÔNG TÁC NGHIỆP VỤ' hasBullet={true} />
+        <AsideMenuItem to='/characteristics' title='TÍNH CHẤT' hasBullet={true} />
+        <AsideMenuItem to='/status' title='PHÂN LOẠI' hasBullet={true} />
+        <AsideMenuItem to='/relationship' title='MỐI QUAN HÊ' hasBullet={true} />
+        <AsideMenuItem to='/task' title='CÔNG TÁC NGHIỆP VỤ' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
