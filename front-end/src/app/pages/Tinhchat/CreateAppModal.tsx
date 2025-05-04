@@ -15,7 +15,7 @@ type Props = {
 }
 const URL = process.env.REACT_APP_API_URL;
 const modalsRoot = document.getElementById('root-modals') || document.body
-const CreateAppModal = ({ show, handleClose, handleLoading ,title }: Props) => {
+const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
   // const [data, setData] = useState<ICreateAppData>(defaultCreateAppData)
   return createPortal(
     <Modal
@@ -74,32 +74,32 @@ const CreateAppModal = ({ show, handleClose, handleLoading ,title }: Props) => {
                 })
               }
             })
-            .catch((error) => {
-              if (error.response.status === 422) {
-                toast.warning('Dữ liệu nhập vào chưa đầy đủ', {
-                  position: 'top-center',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: 'light',
-                })
-              } else {
-                toast.warning('Thêm không thành công', {
-                  position: 'top-center',
-                  autoClose: 5000,
-                  type: 'error',
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: 'light',
-                })
-              }
-            })
+              .catch((error) => {
+                if (error.response.status === 422) {
+                  toast.warning('Dữ liệu nhập vào chưa đầy đủ', {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                } else {
+                  toast.warning('Thêm không thành công', {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    type: 'error',
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                  })
+                }
+              })
 
           }}
 
@@ -114,8 +114,8 @@ const CreateAppModal = ({ show, handleClose, handleLoading ,title }: Props) => {
                 placeholder=""
               />
             </div>
-            <div style={{ display: 'flex',flexDirection: 'row-reverse' }}>
-              <button className="btn btn-info" style={{marginLeft:'5px'}}>Xóa dữ liệu</button>
+            <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+              <button className="btn btn-info" style={{ marginLeft: '5px' }}>Xóa dữ liệu</button>
               <button className="btn btn-primary" type="submit">Lưu</button>
             </div>
           </Form>

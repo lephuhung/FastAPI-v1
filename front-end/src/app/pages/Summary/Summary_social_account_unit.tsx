@@ -13,7 +13,7 @@ const Thongkectnv: React.FC = () => {
     {
       queryKey: ['posts'],
       queryFn: () =>
-        axios.get(`${URL}/thongke/thongkectnv`).then((res) => {
+        axios.get(`${URL}/summary/units`).then((res) => {
           return res.data
         }),
     },
@@ -49,7 +49,7 @@ const Thongkectnv: React.FC = () => {
               result[0].data.map((el: any, index: number) => {
                 return (
                   <div className='col-md-6 col-xl-4' key={index}>
-                    <CardItemCtnv title={el.ctnv_name} count={el.count} item={el} />
+                    <CardItemCtnv title={el.unit.name} count={0} item={el} />
                   </div>
                 )
               })}

@@ -26,7 +26,8 @@ from app.Routes.router_api import (
     account_type,
     user_role,
     user_permission,
-    role_permission
+    role_permission,
+    summary
 )
 
 api_router = APIRouter()
@@ -58,3 +59,4 @@ api_router.include_router(account_type)
 api_router.include_router(user_role)
 api_router.include_router(user_permission)
 api_router.include_router(role_permission)
+api_router.include_router(summary)

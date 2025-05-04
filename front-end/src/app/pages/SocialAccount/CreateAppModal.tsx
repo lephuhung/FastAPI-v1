@@ -85,7 +85,7 @@ const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
             task_id: 0,
             unit_id: '',
             status_id: 0,
-            is_active: false
+            is_active: true
           }}
           validationSchema={ValidateUid}
           onSubmit={(values: SocialAccountModal) => {
@@ -141,7 +141,7 @@ const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
         >
           {({ errors, touched }) => (
             <Form>
-              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
+              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <div style={{ marginRight: '30px' }}>
                   <label className='form-label'>UID TÀI KHOẢN MẠNG XÃ HỘI</label>
                   <Field type='text' name='uid' className='form-control' placeholder='' />
@@ -152,7 +152,7 @@ const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
                 <div>
                   <label className='form-label'> TRẠNG THÁI TÀI KHOẢN</label>
                   <MySelect label='Job Type' name='status_id' width={200}>
-                    <option value=''>Lựa chọn phân loại</option>
+                    <option value=''>Lựa chọn trạng thái</option>
                     {status.map((data: status, index: number) => {
                       return (
                         <option value={data.id} key={index}>
@@ -175,11 +175,11 @@ const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
                     })}
                   </MySelect>
                 </div>
-              </div>
-              <div className='mb-5'>
-                <MyCheckbox name='is_active'>
-                  <span className='form-label'>HOẠT ĐỘNG</span>
-                </MyCheckbox>
+                <div style={{ marginLeft: '30px', display: 'flex', alignItems: 'center' }}>
+                  <MyCheckbox name='is_active' checked={true}>
+                    <span className='form-label'>HOẠT ĐỘNG</span>
+                  </MyCheckbox>
+                </div>
               </div>
               <div className='mb-5'>
                 <label className='form-label'>TÊN TÀI KHOẢN</label>
@@ -327,8 +327,8 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({ children, ...props }) => {
   const [field, meta] = useField(props as any)
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <div className='form-check form-check-custom form-check-solid'>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className='form-check form-check-custom form-check-solid' style={{ display: 'flex', alignItems: 'center' }}>
         <input
           className='form-check-input'
           {...field}
@@ -336,8 +336,9 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({ children, ...props }) => {
           type='checkbox'
           id='flexCheckDefault'
           style={{ marginRight: '10px' }}
+          checked={field.value}
         />
-        {children}
+        <label style={{ marginBottom: 0 }}>{children}</label>
       </div>
       {meta.touched && meta.error ? <div className='error'>{meta.error}</div> : null}
     </div>

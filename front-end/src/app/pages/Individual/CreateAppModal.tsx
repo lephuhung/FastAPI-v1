@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {createPortal} from 'react-dom'
-import {Modal} from 'react-bootstrap'
-import {KTSVG} from '../../../_metronic/helpers'
-import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {individual, units, tasks} from './individual'
+import { createPortal } from 'react-dom'
+import { Modal } from 'react-bootstrap'
+import { KTSVG } from '../../../_metronic/helpers'
+import { Formik, Form, Field, useField, FieldAttributes } from 'formik'
+import { individual, units, tasks } from './individual'
 import axios from 'axios'
 import styled from '@emotion/styled'
 // import ImageUploader, {FileObjectType as FileUploaderProps} from 'react-image-upload'
 import 'react-image-upload/dist/index.css'
 import ImageUploader from 'react-images-upload'
-import {useCallback, useState} from 'react'
+import { useCallback, useState } from 'react'
 import DatePicker from 'react-datepicker'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-datepicker/dist/react-datepicker.css'
 import * as Yup from 'yup'
 type Props = {
@@ -35,9 +35,9 @@ const ValidateDoituong = Yup.object().shape({
 })
 const labelStyle = {
   display: 'inline-block',
-  marginRight: '20px', 
-  fontFamily: 'Arial, sans-serif', 
-  fontSize: '16px', 
+  marginRight: '20px',
+  fontFamily: 'Arial, sans-serif',
+  fontSize: '16px',
   color: '#333'
 };
 
@@ -45,9 +45,9 @@ const radioStyle = {
   marginRight: '5px',
   verticalAlign: 'middle'
 };
-const CreateAppModal = ({show, handleClose, title}: Props) => {
+const CreateAppModal = ({ show, handleClose, title }: Props) => {
   const unitsString = localStorage.getItem('units')
-  const [KOLL, setKOLL]= useState<boolean>(false)
+  const [KOLL, setKOLL] = useState<boolean>(false)
   const units: units[] = typeof unitsString === 'string' ? JSON.parse(unitsString) : []
   const tasksString = localStorage.getItem('tasks')
   const tasks: tasks[] = typeof tasksString === 'string' ? JSON.parse(tasksString) : []
@@ -80,7 +80,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
             is_male: '1',
             hometown: '',
             additional_info: 'Chưa có thông tin',
-            phone_number: '0923123232',
+            phone_number: '',
             is_kol: false,
             task_id: 0,
             unit_id: '',
@@ -91,7 +91,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
             data.is_male === '1' ? (data.is_male = true) : (data.is_male = false)
             // Tách unit_id và task_id ra khỏi data
             const { unit_id, task_id, ...individualData } = data
-            
+
             // Tạo đối tượng gửi lên server
             const requestData = {
               ...individualData,
@@ -149,12 +149,12 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
               })
           }}
         >
-          {({errors, touched}) => (
+          {({ errors, touched }) => (
             <Form>
-              <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
+              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
                 <ImagUploder name='image_url' />
-                <div style={{marginLeft: '30px'}}>
-                  <div style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{ marginLeft: '30px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div>
                       <label className='form-label'>TÊN ĐỐI TƯỢNG</label>
                       <Field
@@ -162,17 +162,17 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         name='full_name'
                         className='form-control'
                         placeholder=''
-                        style={{width: '500px'}}
+                        style={{ width: '500px' }}
                       />
                       {errors.full_name && touched.full_name ? (
                         <StyledErrorMessage>{String(errors.full_name)}</StyledErrorMessage>
                       ) : null}
                     </div>
-                    <div style={{marginLeft: '30px', paddingTop: '40px'}}>
-                      <MyCheckbox name='is_kol' setKOL ={setKOLL} KOL= {KOLL}>KOL</MyCheckbox>
+                    <div style={{ marginLeft: '30px', paddingTop: '40px' }}>
+                      <MyCheckbox name='is_kol' setKOL={setKOLL} KOL={KOLL}>  {`  KOL`}</MyCheckbox>
                     </div>
                   </div>
-                  <div style={{display: 'flex', flexDirection: 'row'}}>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div className='mb-5'>
                       <label className='form-label'>CCCD</label>
                       <Field
@@ -185,7 +185,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         <StyledErrorMessage>{String(errors.citizen_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
-                    <div className='mb-5' style={{marginLeft: '30px'}}>
+                    <div className='mb-5' style={{ marginLeft: '30px' }}>
                       <label className='form-label'>CMND</label>
                       <Field
                         type='text'
@@ -197,45 +197,48 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                         <StyledErrorMessage>{String(errors.national_id)}</StyledErrorMessage>
                       ) : null}
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', marginLeft: '30px'}}>
+                    <div style={{ display: 'flex', flexDirection: 'row', marginLeft: '30px' }}>
                       <div
                         role='group'
                         aria-labelledby='my-radio-group'
-                        style={{display: 'flex', flexDirection: 'row', alignItems:'center'}}
+                        style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                       >
                         <div
                           className='form-check form-check-custom form-check-solid'
-                          style={{marginRight: '30px'}}
+                          style={{ marginRight: '30px' }}
                         >
                           <label style={labelStyle}>
-                            <Field type='radio' name='is_male' value='1' style={radioStyle}/>
+                            <Field type='radio' name='is_male' value='1' style={radioStyle} />
                             Nam
                           </label>
                         </div>
                         <div className='form-check form-check-custom form-check-solid'>
                           <label style={labelStyle}>
-                            <Field type='radio' name='is_male' value='2' style={radioStyle}/>
+                            <Field type='radio' name='is_male' value='2' style={radioStyle} />
                             Nữ
                           </label>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <div className='mb-5' style={{paddingRight: '30px'}}>
-                    <label className='form-label'> LOẠI KOL </label>
-                      {/* <MySelect label='Job Type' name='phone_number' disabled={!KOLL} width={200}>
-                        <option value=''>Lựa chọn loại KOL</option>
-                        <option value='KOL MẠNG'>KOL MẠNG</option>
-                        <option value='KOL UY TÍN'>KOL UY TÍN</option>
-                        <option value='KOL ẨN'>KOL ẨN</option>
-                      </MySelect> */}
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div className='mb-5' style={{ paddingRight: '30px' }}>
+                      <label className='form-label'> Số điện thoại  </label>
+                      <Field
+                        type='text'
+                        className='form-control'
+                        name='phone_number'
+                        placeholder='09.....'
+                      />
+                      {errors.phone_number && touched.phone_number ? (
+                        <StyledErrorMessage>{String(errors.phone_number)}</StyledErrorMessage>
+                      ) : null}
                     </div>
                     <div>
                       <label className='form-label'>Ngày/tháng/năm sinh</label>
                       <MyDatePicker name='date_of_birth' />
                     </div>
-                    
+
                   </div>
                   <div className='mb-5'>
                     <label className='form-label'>Quê quán</label>
@@ -258,10 +261,10 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                       placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                     />
                   </div>
-                  <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-                    <div style={{marginRight: '30px'}}>
+                  <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ marginRight: '30px' }}>
                       <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='unit_id'>
+                      <MySelect label='Job Type' name='unit_id' width={200}>
                         <option value=''>Lựa chọn đơn vị</option>
                         {units &&
                           units?.map((data: units, index: number) => {
@@ -275,7 +278,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                     </div>
                     <div>
                       <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                      <MySelect label='Job Type' name='task_id'>
+                      <MySelect label='Job Type' name='task_id' width={200}>
                         <option value=''>Lựa chọn CTNV</option>
                         {tasks.map((data: tasks, index: number) => {
                           return (
@@ -289,8 +292,8 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                   </div>
                 </div>
               </div>
-              <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
-                <button className='btn btn-info' style={{marginLeft: '5px'}}>
+              <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+                <button className='btn btn-info' style={{ marginLeft: '5px' }}>
                   Xóa dữ liệu
                 </button>
                 <button className='btn btn-primary' type='submit'>
@@ -310,9 +313,13 @@ interface MyTextAreaProps extends FieldAttributes<any> {
 }
 interface MyCheckboxProps extends FieldAttributes<any> {
   children: React.ReactNode
+  setKOL?: (value: boolean) => void
+  KOL?: boolean
+  name: string
 }
 interface MySelectProps extends FieldAttributes<any> {
   label: string
+  width: number | undefined
 }
 interface ImageuploadProps extends FieldAttributes<any> {
   name: string
@@ -356,10 +363,10 @@ const StyledErrorMessage = styled.div`
     color: var(--red-300);
   }
 `
-const ImagUploder: React.FC<ImageuploadProps> = ({name, ...props}) => {
+const ImagUploder: React.FC<ImageuploadProps> = ({ name, ...props }) => {
   const [field, meta, helpers] = useField(name)
-  const {value} = meta
-  const {setValue} = helpers
+  const { value } = meta
+  const { setValue } = helpers
   return (
     <>
       <ImageUploader
@@ -379,25 +386,25 @@ const ImagUploder: React.FC<ImageuploadProps> = ({name, ...props}) => {
     </>
   )
 }
-const MyDatePicker = ({name = '', ...rest}) => {
+const MyDatePicker = ({ name = '', ...rest }) => {
   const [field, meta, helpers] = useField(name)
 
-  const {value} = meta
-  const {setValue} = helpers
+  const { value } = meta
+  const { setValue } = helpers
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <DatePicker {...field} {...rest} selected={value} onChange={(date) => setValue(date)} />
       {meta.error && meta.touched && <StyledErrorMessage>{meta.error}</StyledErrorMessage>}
     </div>
   )
 }
 
-const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
+const MySelect: React.FC<MySelectProps> = ({ label, width, ...props }) => {
   const [field, meta] = useField(props as any)
   return (
     <>
-      <StyledSelect {...field} {...props} style={{width: width}} />
+      <StyledSelect {...field} {...props} style={{ width: width }} />
       {meta.touched && meta.error ? (
         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
       ) : field.value === undefined || field.value === '' || field.value === 0 ? (
@@ -406,23 +413,23 @@ const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
     </>
   )
 }
-const MyCheckbox: React.FC<MyCheckboxProps> = ({children,setKOL, KOL ,...props}) => {
+const MyCheckbox: React.FC<MyCheckboxProps> = ({ children, setKOL, KOL, name, ...props }) => {
   const [field, meta, helpers] = useField(props as any)
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked; // Get the new value of the checkbox
     helpers.setValue(newValue); // Update the formik field value
-    setKOL(newValue); // Update KOL state
+    setKOL && setKOL(newValue); // Update KOL state if setKOL exists
   };
   return (
-    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-      <div className='form-check form-check-custom form-check-solid'>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className='form-check form-check-custom form-check-solid' style={{ display: 'flex', alignItems: 'center' }}>
         <input
           className='form-check-input'
           {...field}
           {...props}
           type='checkbox'
           id='flexCheckDefault'
-          style={{paddingRight: '10px'}}
+          style={{ paddingRight: '10px' }}
           checked={field.value}
           onChange={handleCheckboxChange}
         />
@@ -432,8 +439,9 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({children,setKOL, KOL ,...props})
     </div>
   )
 }
+
 const modalsRoot = document.getElementById('root-modals') || document.body
-const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
+const MyTextArea: React.FC<MyTextAreaProps> = ({ label, ...props }) => {
   const [field, meta] = useField(props as any)
 
   return (
@@ -446,7 +454,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
         <StyledErrorMessage>Nhập thông tin bổ sung</StyledErrorMessage>
       ) : null}
     </>
-    
+
   )
 }
-export {CreateAppModal}
+export { CreateAppModal }

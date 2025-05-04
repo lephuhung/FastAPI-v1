@@ -203,7 +203,7 @@ export const Table: FC<Props> = ({className, socialAccount}) => {
                         className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm'
                         onClick={() => {
                           axios
-                            .delete(`${URL}/uid/delete/${el.uid}`)
+                            .delete(`${URL}/social-accounts/${el.uid}`)
                             .then((res) => {
                               if (res.status === 200) {
                                 toast.success('Xóa thành công', {

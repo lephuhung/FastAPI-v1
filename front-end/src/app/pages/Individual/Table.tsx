@@ -80,10 +80,11 @@ export const IndividualTable: React.FC<Props> = ({className}) => {
     },
   })
   if (isLoading) {
-    ;<div>Loading</div>
+    return <div>Loading</div>
   }
   if (error) {
     console.log(error)
+    window.location.reload()
   }
   return (
     <div className={`card ${className}`}>
