@@ -50,9 +50,9 @@ const UpdateModal = ({show, handleClose, handleLoading, title, dataModal}: Props
   const ctnvString = localStorage.getItem('ctnv')
   const ctnv: task[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
   useEffect(() => {
-    axios.get(`${URL}/trangthai`).then((response) => {
-      setData(response.data)
-    })
+    // axios.get(`${URL}/trangthai`).then((response) => {
+    //   setData(response.data)
+    // })
   }, [])
 
   return createPortal(

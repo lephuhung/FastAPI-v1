@@ -24,8 +24,7 @@ import { Thongkephanloai } from '../pages/Thongkedonvi/Thongkephanloai'
 import {Thongketinhchat} from '../pages/Thongkedonvi/Thongketinhchat'
 import { Thongkectnv } from '../pages/Thongkedonvi/Thongkectnv'
 import { Details_donvi} from '../pages/Thongkedonvi/details-donvi'
-import { TrichtinWrap } from '../pages/Trichtin'
-import { TrichtinVaiaoWrap } from '../pages/Trichtin/trichtinvaiao'
+import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
 // import {individualsearch } from '../pages/Search/doituong-search'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
@@ -64,8 +63,8 @@ const PrivateRoutes = () => {
         <Route path='thongke-phanloai' element={<Thongkephanloai/>} />
         <Route path='thongke-ctnv' element={<Thongkectnv/>} /> 
         <Route path='thongke-tinhchat' element={<Thongketinhchat/>} />
-        <Route path='trichtin/:id' element={<TrichtinWrap/>}/>
-        <Route path='trichtinvaiao/:id' element={<TrichtinVaiaoWrap/>}/>
+        {/* <Route path='reports/:id' element={<ReportWrap/>}/> */}
+        <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
         {/* <Route path='search-doituong' element={<individualsearch/>} /> */}
         <Route path='search-trichtin' element={<TrichinSearch/>} />

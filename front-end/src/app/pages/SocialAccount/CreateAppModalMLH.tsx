@@ -7,7 +7,7 @@ import {Modal} from 'react-bootstrap'
 // import {StepperComponent} from '../../../assets/ts/components'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {account_type, status, unit, task, characteristics, SocialAccountResponse} from './SocialAccount'
+import {account_type, status, unit, task, characteristics, relationship, SocialAccountResponse, SocialAccountTypeResponse, SocialAccountTypeGroup, SocialAccountSimple} from './SocialAccount'
 import {toast} from 'react-toastify'
 import instance from '../../modules/axiosInstance'
 import '../SocialAccount/style.css'
@@ -24,25 +24,68 @@ type Props = {
 const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
-
+const getTypeColor = (typeId: number) => {
+  switch (typeId) {
+    case 1: // Facebook cá nhân
+      return '#1a73e8' // Blue
+    case 2: // Nhóm Facebook
+      return '#34a853' // Green
+    case 3: // Fanpage Facebook/KOL
+      return '#ea4335' // Red
+    default:
+      return '#5f6368' // Gray
+  }
+}
 
 const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
-  const [datagroup, setDataGroup] = useState<SocialAccountResponse[]>([])
-  const [datafacebook, setDataFacebook] = useState<SocialAccountResponse[]>([])
-  const [datamoiquanhe, setDataMoiquanhe] = useState<characteristics[]>([])
+  const [dataadmin, setDataAdmin] = useState<Array<SocialAccountSimple & { type_id: number, type_name: string }>>([])
+  const [data_relationship, setDataRelationship] = useState<characteristics[]>([])
+  const [datarelation, setDataRelation] = useState<Array<SocialAccountSimple & { type_id: number, type_name: string }>>([])
 
+  // Group data by type
+  const groupDataByType = (data: Array<SocialAccountSimple & { type_id: number, type_name: string }>) => {
+    return data.reduce((acc, item) => {
+      const type = item.type_name.toUpperCase();
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(item);
+      return acc;
+    }, {} as Record<string, typeof data>);
+  };
 
   useEffect(() => {
-    axios.get(`${URL}/uid/get-page-group`).then((response) => {
-      setDataGroup(response.data)
+    axios.get(`${URL}/relationships`).then((response) => {
+      setDataRelationship(response.data)
     })
-    axios.get(`${URL}/uid/get-uid`).then((response) => {
-      setDataFacebook(response.data)
+    axios.get(`${URL}/social-accounts/admin-accounts`).then((response) => {
+      const transformedData = response.data.data.flatMap((typeGroup: any) => 
+        typeGroup.data.map((account: any) => ({
+          uid: account.uid,
+          name: account.name,
+          type_id: typeGroup.type_id,
+          type_name: typeGroup.type_name
+        }))
+      )
+      setDataAdmin(transformedData)
     })
-    axios.get(`${URL}/moiquanhe`).then((response) => {
-      setDataMoiquanhe(response.data)
+    axios.get(`${URL}/social-accounts/relation-accounts`).then((response) => {
+      const transformedData = response.data.data.flatMap((typeGroup: any) => 
+        typeGroup.data.map((account: any) => ({
+          uid: account.uid,
+          name: account.name,
+          type_id: typeGroup.type_id,
+          type_name: typeGroup.type_name
+        }))
+      )
+      setDataRelation(transformedData)
     })
   }, [])
+
+  // Group admin and relation data
+  const groupedAdminData = groupDataByType(dataadmin);
+  const groupedRelationData = groupDataByType(datarelation);
+
   return createPortal(
     <Modal
       id='kt_modal_create_app'
@@ -61,15 +104,14 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
       <div className='modal-body py-lg-10 px-lg-10'>
         <Formik
           initialValues={{
-            uid: '',
-            uid_facebook: '',
-            moiquanhe_id: 0
+            uid_administrator: '',
+            relationship_id: 0,
+            social_account_uid: ''
           }}
-          
           onSubmit={(values: any) => {
             console.log(values)
-            instance
-              .post(`${URL}/quantrivien/create`, values)
+            axios
+              .post(`${URL}/administrators`, values)
               .then((res) => {
                 if (res.status === 200) {
                   handleLoading()
@@ -113,7 +155,6 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
                     theme: 'light',
                   })
                 } else {
-                  // Handle other errors
                   console.log('An error occurred:', error.message)
                 }
               })
@@ -122,49 +163,51 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
         {({errors, touched}) => (
           <Form>
             <span>Bảng dữ liệu này nhằm đưa ra mối liên hệ giữa tài khoản Facebook với Nhóm Facebook hoặc Trang Facebook</span>
-            <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-              <div style={{marginRight: '30px'}}>
-                <label className='form-label'>UID FACEBOOK</label>
-                <MySelect label='Job Type' name='uid_facebook' width={250}>
-                  <option value=''>Lựa chọn vai ảo</option>
-                  {datafacebook.map((data: SocialAccountResponse, index: number) => {
-                    return (
-                      <option value={data.uid} key={index}>
-                        {`${data.uid}: ${data.name.toUpperCase()}`}
-                      </option>
-                    )
-                  })}
-                </MySelect>
-              </div>
-              <div style={{marginRight: '30px'}}>
-                <label className='form-label'>MỐI QUAN HỆ</label>
-                <MySelect label='Job Type' name='moiquanhe_id' width={150}>
-                  <option value=''>Lựa chọn MQH</option>
-                  {datamoiquanhe.map((data: characteristics, index: number) => {
-                    return (
-                      <option value={data.id} key={index}>
-                       {data.name.toUpperCase()}
-                      </option>
-                    )
-                  })}
+            <div className='mb-5' style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px'}}>
+              <div>
+                <label className='form-label'>TÀI KHOẢN ADMIN</label>
+                <MySelect label='Job Type' name='uid_administrator' width={250}>
+                  <option value=''>Lựa chọn tài khoản admin</option>
+                  {Object.entries(groupedAdminData).map(([typeName, accounts]) => (
+                    <optgroup key={typeName} label={typeName}>
+                      {accounts.map((data, index) => (
+                        <option value={data.uid} key={index}>
+                          {`${data.uid}: ${data.name.toUpperCase()}`}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </MySelect>
               </div>
               <div>
-                <label className='form-label'> NẮM THÔNG TIN HỘI NHÓM </label>
-                <MySelect label='Job Type' name='uid' width={300}>
-                  <option value=''>Lựa chọn hội nhóm</option>
-                  {datagroup.map((data: SocialAccountResponse, index: number) => {
-                    return (
-                      <option value={data.uid} key={index}>
-                        {`${data.uid}: ${data.name.toUpperCase()}`}
-                      </option>
-                    )
-                  })}
+                <label className='form-label'>MỐI QUAN HỆ</label>
+                <MySelect label='Job Type' name='relationship_id' width={150}>
+                  <option value=''>Lựa chọn MQH</option>
+                  {data_relationship.map((data: relationship, index: number) => (
+                    <option value={data.id} key={index}>
+                      {data.name.toUpperCase()}
+                    </option>
+                  ))}
+                </MySelect>
+              </div>
+              <div>
+                <label className='form-label'>TÀI KHOẢN QUAN HỆ</label>
+                <MySelect label='Job Type' name='social_account_uid' width={250}>
+                  <option value=''>Lựa chọn tài khoản quan hệ</option>
+                  {Object.entries(groupedRelationData).map(([typeName, accounts]) => (
+                    <optgroup key={typeName} label={typeName}>
+                      {accounts.map((data, index) => (
+                        <option value={data.uid} key={index}>
+                          {`${data.uid}: ${data.name.toUpperCase()}`}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </MySelect>
               </div>
             </div>
-            <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
-              <button className='btn btn-info' style={{marginLeft: '5px'}}>
+            <div style={{display: 'flex', flexDirection: 'row-reverse', gap: '10px'}}>
+              <button className='btn btn-info'>
                 Xóa dữ liệu
               </button>
               <button className='btn btn-primary' type='submit'>
@@ -180,6 +223,9 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
 }
 interface MySelectProps extends FieldAttributes<any> {
   label: string
+  width?: number
+  name: string
+  children?: React.ReactNode
 }
 
 // Define styled components if not imported

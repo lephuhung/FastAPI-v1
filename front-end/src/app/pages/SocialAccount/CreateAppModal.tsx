@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import {createPortal} from 'react-dom'
-import {Modal} from 'react-bootstrap'
+import { createPortal } from 'react-dom'
+import { Modal } from 'react-bootstrap'
 // import {defaultCreateAppData, ICreateAppData} from './IAppModels'
 // import {StepperComponent} from '../../../assets/ts/components'
-import {KTSVG} from '../../../_metronic/helpers'
-import {Formik, Form, Field, useField, FieldAttributes} from 'formik'
-import {account_type, SocialAccountModal, status, unit, task, characteristics} from './SocialAccount'
-import {toast} from 'react-toastify'
-import {useNavigate} from 'react-router-dom'
+import { KTSVG } from '../../../_metronic/helpers'
+import { Formik, Form, Field, useField, FieldAttributes } from 'formik'
+import { account_type, SocialAccountModal, status, unit, task, characteristics } from './SocialAccount'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import './style.css'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import axios from 'axios'
 import * as Yup from 'yup'
@@ -30,32 +30,29 @@ const ValidateUid = Yup.object().shape({
     .max(17, 'Quá dài!')
     .required('uid is required')
     .matches(/^\d+$/, 'uid chỉ nhận ký tự số'),
-  reaction: Yup.string()
+  reaction_count: Yup.string()
     .required('Số bạn bè cần nhập')
     .matches(/^\d+$/, 'Số lượng bạn bè chỉ nhận ký tự số'),
-  SDT: Yup.string()
+  phone_number: Yup.string()
     .min(0, 'Quá ngắn')
     .max(11, 'Quá dài')
     .matches(/^\d+$/, 'Số điện thoại là ký tự số, nếu không có điền 0'),
   name: Yup.string().required(),
 })
-const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
+const CreateAppModal = ({ show, handleClose, handleLoading, title }: Props) => {
   const PUBLIC_URL = process.env.PUBLIC_URL
   const [data, setData] = useState<status[]>([])
-  const donviString = localStorage.getItem('donvi')
+  const unitsString = localStorage.getItem('units')
   const navigate = useNavigate()
-  const donvi: unit[] = typeof donviString === 'string' ? JSON.parse(donviString) : []
-  const typeString = localStorage.getItem('type')
-  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
-  const tinhchatString = localStorage.getItem('tinhchat')
-  const tinhchat: characteristics[] = typeof tinhchatString === 'string' ? JSON.parse(tinhchatString) : []
-  const ctnvString = localStorage.getItem('ctnv')
-  const ctnv: task[] = typeof ctnvString === 'string' ? JSON.parse(ctnvString) : []
-  useEffect(() => {
-    axios.get(`${URL}/trangthai`).then((response) => {
-      setData(response.data)
-    })
-  }, [])
+  const units: unit[] = typeof unitsString === 'string' ? JSON.parse(unitsString) : []
+  const account_typeString = localStorage.getItem('account_types')
+  const account_type: account_type[] = typeof account_typeString === 'string' ? JSON.parse(account_typeString) : []
+  const characteristicsString = localStorage.getItem('characteristics')
+  const characteristics: characteristics[] = typeof characteristicsString === 'string' ? JSON.parse(characteristicsString) : []
+  const tasksString = localStorage.getItem('tasks')
+  const tasks: task[] = typeof tasksString === 'string' ? JSON.parse(tasksString) : []
+  const statusString = localStorage.getItem('statuses')
+  const status: status[] = typeof statusString === 'string' ? JSON.parse(statusString) : []
   return createPortal(
     <Modal
       id='kt_modal_create_app'
@@ -64,7 +61,7 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
       dialogClassName='modal-dialog modal-dialog-centered mw-900px'
       show={show}
       onHide={handleClose}
-      // onEntered={loadStepper}
+    // onEntered={loadStepper}
     >
       <div className='modal-header'>
         <h2>{title}</h2>
@@ -80,19 +77,20 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
           initialValues={{
             uid: '',
             name: '',
-            SDT: '0',
-            reaction: 0,
-            trangthai_id: 0,
-            Vaiao: false,
-            ghichu: '',
-            type_id: 2,
-            ctnv_id: 0,
-            donvi_id: '',
+            phone_number: '0',
+            reaction_number: 0,
+            type_id: 0,
+            characteristics_id: 0,
+            note: '',
+            task_id: 0,
+            unit_id: '',
+            status_id: 0,
+            is_active: false
           }}
           validationSchema={ValidateUid}
           onSubmit={(values: SocialAccountModal) => {
             axios
-              .post(`${URL}/uid/create`, values)
+              .post(`${URL}/social-accounts`, values)
               .then((respone) => {
                 console.log(respone.status)
                 if (respone.status === 200) {
@@ -141,21 +139,21 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
               })
           }}
         >
-          {({errors, touched}) => (
+          {({ errors, touched }) => (
             <Form>
-              <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{marginRight: '30px'}}>
-                  <label className='form-label'>UID FACEBOOK</label>
+              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ marginRight: '30px' }}>
+                  <label className='form-label'>UID TÀI KHOẢN MẠNG XÃ HỘI</label>
                   <Field type='text' name='uid' className='form-control' placeholder='' />
                   {errors.uid && touched.uid ? (
                     <StyledErrorMessage>{errors.uid}</StyledErrorMessage>
                   ) : null}
                 </div>
                 <div>
-                  <label className='form-label'> PHÂN LOẠI HỘI NHÓM </label>
-                  <MySelect label='Job Type' name='trangthai_id' width={200}>
+                  <label className='form-label'> TRẠNG THÁI TÀI KHOẢN</label>
+                  <MySelect label='Job Type' name='status_id' width={200}>
                     <option value=''>Lựa chọn phân loại</option>
-                    {data.map((data: status, index: number) => {
+                    {status.map((data: status, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name}
@@ -164,11 +162,11 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                     })}
                   </MySelect>
                 </div>
-                <div style={{marginLeft: '30px'}}>
+                <div style={{ marginLeft: '30px' }}>
                   <label className='form-label'> TÍNH CHẤT HỘI NHÓM </label>
-                  <MySelect label='Job Type' name='tinhchat_id' width={200}>
+                  <MySelect label='Job Type' name='characteristics_id' width={200}>
                     <option value=''>Lựa chọn tính chất</option>
-                    {tinhchat.map((data: characteristics, index: number) => {
+                    {characteristics.map((data: characteristics, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name.toUpperCase()}
@@ -179,23 +177,28 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
               </div>
               <div className='mb-5'>
-                <label className='form-label'>TÊN FACEBOOK</label>
+                <MyCheckbox name='is_active'>
+                  <span className='form-label'>HOẠT ĐỘNG</span>
+                </MyCheckbox>
+              </div>
+              <div className='mb-5'>
+                <label className='form-label'>TÊN TÀI KHOẢN</label>
                 <Field type='text' className='form-control' name='name' placeholder='LÊ PHÚ HƯNG' />
                 {errors.name && touched.name ? (
                   <StyledErrorMessage>{errors.name}</StyledErrorMessage>
                 ) : null}
               </div>
-              <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-                <div className='mr-5' style={{marginRight: '10px'}}>
-                  <label className='form-label'>SỐ LƯỢNG BẠN BÈ</label>
+              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
+                <div className='mr-5' style={{ marginRight: '10px' }}>
+                  <label className='form-label'>SỐ LƯỢNG BẠN B/THEO DÕI</label>
                   <Field
                     type='text'
-                    name='reaction'
+                    name='reaction_number'
                     className='form-control form-control-white'
                     placeholder='123456'
                   />
-                  {errors.reaction && touched.reaction ? (
-                    <StyledErrorMessage>{errors.reaction}</StyledErrorMessage>
+                  {errors.reaction_number && touched.reaction_number ? (
+                    <StyledErrorMessage>{errors.reaction_number}</StyledErrorMessage>
                   ) : null}
                 </div>
                 <div>
@@ -206,12 +209,22 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                     className='form-control form-control-white'
                     placeholder='0912345678'
                   />
-                  {errors.SDT && touched.SDT ? (
-                    <StyledErrorMessage>{errors.SDT}</StyledErrorMessage>
+                  {errors.phone_number && touched.phone_number ? (
+                    <StyledErrorMessage>{errors.phone_number}</StyledErrorMessage>
                   ) : null}
                 </div>
-                <div style={{marginLeft: '30px', paddingTop: '40px'}}>
-                  <MyCheckbox name='Vaiao'> VAI ẢO</MyCheckbox>
+                <div style={{ marginLeft: '30px', paddingTop: '40px' }}>
+                  <MySelect label='Job Type' name='type_id'>
+                    <option value=''>Lựa chọn loại mạng xã hội</option>
+                    {account_type &&
+                      account_type?.map((data: account_type, index: number) => {
+                        return (
+                          <option value={data.id} key={index}>
+                            {data.name}
+                          </option>
+                        )
+                      })}
+                  </MySelect>
                 </div>
               </div>
               <div className='mb-5'>
@@ -223,13 +236,13 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                   placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                 />
               </div>
-              <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{marginRight: '30px'}}>
+              <div className='mb-5' style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ marginRight: '30px' }}>
                   <label className='form-label'> ĐƠN VỊ THỰC HIỆN CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect label='Job Type' name='donvi_id'>
+                  <MySelect label='Job Type' name='unit_id'>
                     <option value=''>Lựa chọn đơn vị</option>
-                    {donvi &&
-                      donvi?.map((data: unit, index: number) => {
+                    {units &&
+                      units?.map((data: unit, index: number) => {
                         return (
                           <option value={data.id} key={index}>
                             {data.name}
@@ -240,9 +253,9 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                 </div>
                 <div>
                   <label className='form-label'> CÔNG TÁC NGHIỆP VỤ </label>
-                  <MySelect label='Job Type' name='ctnv_id' width={200}>
+                  <MySelect label='Job Type' name='task_id' width={200}>
                     <option value=''>Lựa chọn CTNV</option>
-                    {ctnv.map((data: task, index: number) => {
+                    {tasks.map((data: task, index: number) => {
                       return (
                         <option value={data.id} key={index}>
                           {data.name.toUpperCase()}
@@ -252,8 +265,8 @@ const CreateAppModal = ({show, handleClose, handleLoading, title}: Props) => {
                   </MySelect>
                 </div>
               </div>
-              <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
-                <button className='btn btn-info' style={{marginLeft: '5px'}}>
+              <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+                <button className='btn btn-info' style={{ marginLeft: '5px' }}>
                   Xóa dữ liệu
                 </button>
                 <button className='btn btn-primary' type='submit'>
@@ -296,12 +309,12 @@ const StyledErrorMessage = styled.div`
     color: var(--red-300);
   }
 `
-const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
+const MySelect: React.FC<MySelectProps> = ({ label, width, ...props }) => {
   const [field, meta] = useField(props as any)
 
   return (
     <>
-      <StyledSelect {...field} {...props} style={{width: width}} />
+      <StyledSelect {...field} {...props} style={{ width: width }} />
       {meta.touched && meta.error ? (
         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
       ) : field.value === undefined || field.value === '' || field.value === 0 ? (
@@ -310,11 +323,11 @@ const MySelect: React.FC<MySelectProps> = ({label, width, ...props}) => {
     </>
   )
 }
-const MyCheckbox: React.FC<MyCheckboxProps> = ({children, ...props}) => {
+const MyCheckbox: React.FC<MyCheckboxProps> = ({ children, ...props }) => {
   const [field, meta] = useField(props as any)
 
   return (
-    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <div className='form-check form-check-custom form-check-solid'>
         <input
           className='form-check-input'
@@ -322,7 +335,7 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({children, ...props}) => {
           {...props}
           type='checkbox'
           id='flexCheckDefault'
-          style={{marginRight: '10px'}}
+          style={{ marginRight: '10px' }}
         />
         {children}
       </div>
@@ -330,7 +343,7 @@ const MyCheckbox: React.FC<MyCheckboxProps> = ({children, ...props}) => {
     </div>
   )
 }
-const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
+const MyTextArea: React.FC<MyTextAreaProps> = ({ label, ...props }) => {
   const [field, meta] = useField(props as any)
 
   return (
@@ -341,4 +354,4 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({label, ...props}) => {
     </>
   )
 }
-export {CreateAppModal}
+export { CreateAppModal }

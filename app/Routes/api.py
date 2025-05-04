@@ -21,7 +21,6 @@ from app.Routes.router_api import (
     social_account,
     auth,
     user,
-    uid,
     search,
     dashboard,
     account_type,
@@ -53,7 +52,6 @@ api_router.include_router(individual_tag)
 api_router.include_router(social_account)
 api_router.include_router(auth)
 api_router.include_router(user)
-api_router.include_router(uid)
 api_router.include_router(search)
 api_router.include_router(dashboard)
 api_router.include_router(account_type)

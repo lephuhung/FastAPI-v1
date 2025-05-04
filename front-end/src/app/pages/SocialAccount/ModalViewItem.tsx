@@ -9,6 +9,22 @@ import { useQuery } from 'react-query'
 import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
 import { SocialAccountResponse } from './SocialAccount';
+
+type Report = {
+  id: number;
+  social_account_uid: string;
+  content_note: string;
+  comment: string;
+  action: string;
+  linked_social_account_uid: string;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: string;
+    name: string;
+  } | null;
+}
+
 type Props = {
   show: boolean
   handleClose: () => void
@@ -22,18 +38,26 @@ const modalsRoot = document.getElementById('root-modals') || document.body
 
 const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
   const navigate = useNavigate()
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<Report[]>([]);
   const [error, setError]=useState('');
+  
   useEffect(() => {
-    axios.get(`${URL}/uid/get-history/${item?.uid}`, )
-      .then((res) => {
-        if (res.data.STATUS === '200')
-        console.log(res.data)
+    if (item?.uid) {
+      console.log('Fetching reports for UID:', item.uid);
+      axios.get(`${URL}/reports/social-account/${item.uid}`)
+        .then((res) => {
+          console.log('Reports response:', res.data);
           setData(res.data)
-        if (res.data.STATUS === '400')
-          setError('TAI KHOAN DA BI KHOA');
-      })
-      .catch(() => { });
+        })
+        .catch((err) => {
+          console.error('Error details:', {
+            message: err.message,
+            response: err.response?.data,
+            status: err.response?.status
+          });
+          // setError('Không thể tải dữ liệu báo cáo');
+        });
+    }
   }, [item])
 
   return createPortal(
@@ -47,7 +71,7 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
     >
       <div className='modal-header'>
         <h2>{title}</h2>
-        {error===''? <span>{error}</span>:<></>}
+        {error ? <span className='text-danger'>{error}</span> : null}
         {/* begin::Close */}
         <div className='btn btn-sm btn-icon btn-active-color-primary' onClick={handleClose}>
           <KTSVG className='svg-icon-1' path='/media/icons/duotune/arrows/arr061.svg' />
@@ -113,6 +137,21 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
                     </a>
                   </div>
                 </div>
+                  <div className='card-toolbar' style={{marginLeft: 'auto'}}>
+                    <button
+                        type='button'
+                        className='btn btn-sm btn-secondary'
+                        onClick={(e) => {
+                          navigate(`${PUBLIC_URL}/reports/social-account/${item?.uid}`)
+                        }}
+                        style={{marginRight: '10px'}}
+                      >
+                        Mở Trích tin
+                      </button>
+                      <button type='button' className='btn btn-sm btn-secondary'>
+                        Mở hồ sơ chi tiết
+                      </button>
+                    </div>
               </div>
 
               <div className='d-flex flex-wrap flex-stack'>
@@ -164,7 +203,7 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
                           path='/media/icons/duotune/arrows/arr066.svg'
                           className='svg-icon-3 svg-icon-success me-2'
                         />
-                        <div className='fs-4 fw-bolder'>{item? item?.updated_at.split(' ')[0]: 'Chưa rõ'}</div>
+                        <div className='fs-4 fw-bolder'>{item? item?.updated_at.split('T')[0]: 'Chưa rõ'}</div>
                       </div>
 
                       <div className='fw-bold fs-6 text-gray-400'>Cập nhật cuối</div>
@@ -172,31 +211,24 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
                   </div>
                 </div>
 
-                <div className='card card-flush card-px-0 card-border'>
-                  <div className='card-header'>
-                    <h3 className='fs-4 fw-bolder card-title'>THÔNG TIN ĐỐI TƯỢNG</h3>
-                    <div className='card-toolbar'>
-                    <button
-                        type='button'
-                        className='btn btn-sm btn-light'
-                        onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/trichtin/${item?.uid}`)
-                        }}
-                        style={{marginRight: '10px'}}
-                      >
-                        Mở Trích tin
-                      </button>
-                      <button type='button' className='btn btn-sm btn-light'>
-                        Mở hồ sơ chi tiết
-                      </button>
-                    </div>
+                {/* <div className='card card-flush card-px-0 card-border'> */}
+                  <div className='py-5 fs-4' style={{
+                    fontSize: '0.8rem',
+                    border: '1px solid #e4e6ef',
+                    borderRadius: '0.475rem',
+                    backgroundColor: '#f8f9fa',
+                    padding: '1rem',
+                    marginTop: '1rem',
+                    lineHeight: '1.5',
+                    color: '#5E6278'
+                  }}>
+                    {item?.note ===''? 'Không có dữ liệu': item?.note}
                   </div>
-                  <div className='card-body py-5 fs-4'>{item?.note ===''? 'Không có dữ liệu': item?.note}</div>
-                </div>
+                {/* </div> */}
               </div>
             </div>
           </div>
-        <h3>LỊCH SỬ THAY ĐỔI</h3>
+        <h3>DANH SÁCH TRÍCH TIN</h3>
         </div>
         </div>
         }
@@ -207,15 +239,16 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
           <thead>
             <tr className='fw-bold text-muted bg-light'>
               <th className='min-w-40px text-center'>STT</th>
-              <th className='ps-4 min-w-200px rounded-start'>UID</th>
-              <th className='min-w-100px'>BẠN BÈ</th>
-              <th className='min-w-300px'>GHI CHÚ</th>
+              <th className='ps-4 min-w-200px rounded-start'>NGƯỜI CẬP NHẬT</th>
+              <th className='min-w-100px'>THỜI GIAN</th>
+              <th className='min-w-300px'>NỘI DUNG</th>
+              <th className='min-w-100px'>ĐÁNH GIÁ</th>
             </tr>
           </thead>
           {/* end::Table head */}
           {/* begin::Table body */}
           <tbody>
-            {data && data.map((el: SocialAccountResponse, index: number) =>
+            {data && data.map((report: Report, index: number) =>
               <tr key={index}>
                 <td>
                   <span className='text-muted fw-semibold text-muted d-block fs-7 text-center'>{index+1}</span>
@@ -223,21 +256,54 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
                 <td>
                   <div className='d-flex align-items-center'>
                     <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary mb-1 fs-6'>
-                        {el.name}
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        {el.updated_at.split('.')[0]}
+                      <span className='text-dark text-hover-primary mb-1 fs-6'>
+                        {report.user?.name || 'Không xác định'}
                       </span>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <span className='badge badge-light-primary fs-7 fw-semibold'>{el.reaction_count}</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                    {new Date(report.updated_at).toLocaleString()}
+                  </span>
                 </td>
                 <td>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7' style={{whiteSpace:'pre-wrap'}}>{el.note}</span>
+                  <div className='d-flex flex-column'>
+                    <div className='text-wrap text-break' style={{
+                      maxWidth: '300px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      fontSize: '0.9rem',
+                      lineHeight: '1.4'
+                    }}>
+                      {report.content_note || report.comment || 'Không có nội dung'}
+                    </div>
+                  </div>
                 </td>
+                <td>
+                  <div className='d-flex flex-column'>
+                    <div className='text-wrap text-break' style={{
+                      maxWidth: '300px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      fontSize: '0.9rem',
+                      lineHeight: '1.4'
+                    }}>
+                      {report.action || 'Chưa có nội dung'}
+                    </div>
+                  </div>
+                </td>
+                {/* <td>
+                  <span className='badge badge-light-primary fs-7 fw-semibold'>
+                    {report.action || 'Không có hành động'}
+                  </span>
+                </td> */}
               </tr>
             )}
           </tbody>

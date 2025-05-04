@@ -19,7 +19,6 @@ from app.Routes.router_api.individual_tag import router as individual_tag
 from app.Routes.router_api.social_account import router as social_account
 from app.Routes.router_api.auth import router as auth
 from app.Routes.router_api.user import router as user
-from app.Routes.router_api.uid import router as uid
 from app.Routes.router_api.search import router as search
 from app.Routes.router_api.dashboard import router as dashboard
 from app.Routes.router_api.account_type import router as account_type

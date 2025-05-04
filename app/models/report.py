@@ -1,4 +1,3 @@
-
 from app.db.base_class import Base
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
@@ -15,7 +14,7 @@ class Report(Base):
     content_note = Column(String(1000))
     comment = Column(String(1000))
     action = Column(String(1000))
-    linked_social_account_uid = Column(String(255))
+    related_social_account_uid = Column(String(255))
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(

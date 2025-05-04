@@ -25,7 +25,7 @@ class CRUDSocialAccount(CRUDBase[SocialAccount, SocialAccountCreate, SocialAccou
         return db.query(self.model).filter(self.model.type_id == type_id).all()
 
     def get_all_by_status_id(self, db: Session, *, status_id: int) -> List[SocialAccount]:
-        return db.query(self.model).filter(self.model.trangthai_id == status_id).all()
+        return db.query(self.model).filter(self.model.status_id == status_id).all()
 
     def get_by_is_active(self, db: Session, *, is_active: bool) -> List[SocialAccount]:
         return db.query(self.model).filter(self.model.is_active == is_active).all()

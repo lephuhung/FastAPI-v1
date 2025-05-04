@@ -18,22 +18,22 @@ type Props = {
   show: boolean
   handleClose: () => void
   title: string
+  id: string
 }
 const URL = process.env.REACT_APP_API_URL
 
 const Validatetrichtin = Yup.object().shape({
-  nhanxet: Yup.string().required('Nhập nội dung nhận xét'),
-  ghichu_noidung: Yup.string().required('Nhập nội dung trích tin'),
-  xuly: Yup.string().required(),
+  comment: Yup.string().required('Nhập nội dung nhận xét'),
+  content_note: Yup.string().required('Nhập nội dung trích tin'),
+  action: Yup.string().required(),
+  related_social_account_uid: Yup.string().required(),
 })
-const CreateAppModal = ({show, handleClose, title}: Props) => {
-  const {id} = useParams()
+const CreateAppModal = ({show, handleClose, title, id}: Props) => {
   const {isLoading, data, error} = useQuery({
     queryKey: ['facebook'],
     queryFn: async () => {
-      const respone = await axios.get(`${URL}/uid/get-vaiao`)
-      const {data} = respone
-      return data
+      const response = await axios.get(`${URL}/social-accounts/type/4`)
+      return response.data.data
     },
   })
   return createPortal(
@@ -44,7 +44,6 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
       dialogClassName='modal-dialog modal-dialog-centered mw-900px'
       show={show}
       onHide={handleClose}
-      // onEntered={loadStepper}
     >
       <div className='modal-header'>
         <h2>{title}</h2>
@@ -58,16 +57,17 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
       <div className='modal-body py-lg-10 px-lg-10'>
         <Formik
           initialValues={{
-            uid: id,
-            ghichu_noidung: '',
-            nhanxet: '',
-            xuly: '',
-            uid_vaiao: '',
+            social_account_uid: id,
+            content_note: '',
+            comment: '',
+            action: '',
+            related_social_account_uid: '',
           }}
           validationSchema={Validatetrichtin}
           onSubmit={(data: any) => {
+            // Get token from localStorage
             axios
-              .post(`${URL}/trichtin/create`, data)
+              .post(`${URL}/reports`, data)
               .then((res) => {
                 handleClose()
                 toast.success('Thêm trích tin thành công', {
@@ -104,25 +104,24 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                       <label className='form-label'>ID Đối tượng</label>
                       <Field
                         type='text'
-                        name='uid'
+                        name='social_account_uid'
                         className='form-control'
                         placeholder=''
                         disabled={true}
+                        value={id}
                         style={{width: '500px'}}
                       />
                     </div>
                     <div style={{paddingLeft: '20px'}}>
-                      <label className='form-label'> VAI ẢO TRÍCH TIN </label>
-                      <MySelect label='Job Type' name='uid_vaiao'>
+                      <label className='form-label'> SỬ DỤNG VAI ẢO </label>
+                      <MySelect label='Job Type' name='related_social_account_uid'>
                         <option value=''>Lựa chọn Vai ảo </option>
                         {data &&
-                          data.map((data: any, index: number) => {
-                            return (
-                              <option value={data.uid} key={index}>
-                                {data.name}
-                              </option>
-                            )
-                          })}
+                          data.map((account: any) => (
+                            <option key={account.id} value={account.uid}>
+                              {account.name} - {account.uid}
+                            </option>
+                          ))}
                       </MySelect>
                     </div>
                   </div>
@@ -130,27 +129,27 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                     <label className='form-label'>NỘI DUNG TRÍCH TIN</label>
                     <MyTextArea
                       label='Trích tin'
-                      name='ghichu_noidung'
+                      name='content_note'
                       rows='6'
-                      placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
+                      placeholder='Nhập nội dung trích tin...'
                     />
                   </div>
                   <div className='mb-5'>
                     <label className='form-label'>NHẬN XÉT</label>
                     <MyTextArea
                       label='Nhận xét'
-                      name='nhanxet'
+                      name='comment'
                       rows='6'
-                      placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
+                      placeholder='Nhập nhận xét...'
                     />
                   </div>
                   <div className='mb-5'>
                     <label className='form-label'>ĐỀ XUẤT XỬ LÝ</label>
                     <MyTextArea
                       label='Xử lý'
-                      name='xuly'
+                      name='action'
                       rows='6'
-                      placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
+                      placeholder='Nhập đề xuất xử lý...'
                     />
                   </div>
                 </div>

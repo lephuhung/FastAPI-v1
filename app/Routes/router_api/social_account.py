@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Security, Response
 from typing import List, Any, Dict
-from app.schemas.social_account import SocialAccountCreate, SocialAccountUpdate, SocialAccount
+from app.schemas.social_account import SocialAccountCreate, SocialAccountUpdate, SocialAccount, SocialAccountWithRelations
 from app.crud.crud_social_account import social_account
 from app.Routes import deps
 from sqlalchemy.orm import Session
@@ -53,7 +53,7 @@ def get_social_account_with_relations(account: SocialAccountModel, db: Session) 
     
     return account_dict
 
-@router.get("/", response_model=List[Dict[str, Any]])
+@router.get("/", response_model=List[SocialAccountWithRelations])
 async def get_social_accounts(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -65,7 +65,6 @@ async def get_social_accounts(
     """
     social_accounts = social_account.get_multi(db, skip=skip, limit=limit)
     return [get_social_account_with_relations(account, db) for account in social_accounts]
-
 
 @router.post("/", response_model=SocialAccount)
 async def create_social_account(
@@ -79,7 +78,6 @@ async def create_social_account(
     """
     social_account_obj = social_account.create(db=db, obj_in=social_account_in)
     return social_account_obj
-
 
 @router.put("/{uid}", response_model=SocialAccount)
 async def update_social_account(
@@ -98,39 +96,88 @@ async def update_social_account(
     social_account_obj = social_account.update(db=db, db_obj=social_account_obj, obj_in=social_account_in)
     return social_account_obj
 
-
-@router.get("/{uid}", response_model=Dict[str, Any])
-async def get_social_account(
-    *,
+@router.get("/admin-accounts", response_model=Dict[str, Any])
+async def get_admin_accounts(
     db: Session = Depends(deps.get_db),
-    uid: str,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Get social account by UID with unit and task information.
+    Get all active admin accounts (type 1, 2, 3) with only uid and name.
+    Returns empty arrays for types with no accounts.
     """
-    social_account_obj = social_account.get_by_uid(db=db, uid=uid)
-    if not social_account_obj:
-        raise HTTPException(status_code=404, detail="Social account not found")
-    return get_social_account_with_relations(social_account_obj, db)
+    try:
+        # Get accounts with type_id 1-- Facebook cá nhân
+        type1_accounts = social_account.get_all_by_type_id(db=db, type_id=1) or []
+        # Get accounts with type_id 2 -- Nhóm Facebook
+        type2_accounts = social_account.get_all_by_type_id(db=db, type_id=2) or []
+        # Get accounts with type_id 3 -- Fanpage Facebook/KOL
+        type3_accounts = social_account.get_all_by_type_id(db=db, type_id=3) or []
+        
+        # Log the number of accounts found for each type
+        print(f"Found {len(type1_accounts)} type 1 accounts")
+        print(f"Found {len(type2_accounts)} type 2 accounts")
+        print(f"Found {len(type3_accounts)} type 3 accounts")
+        
+        # Format results with only uid and name, filter active accounts
+        all_accounts_type_1 = [{"uid": account.uid, "name": account.name} for account in type1_accounts if account.is_active]
+        all_accounts_type_2 = [{"uid": account.uid, "name": account.name} for account in type2_accounts if account.is_active]
+        all_accounts_type_3 = [{"uid": account.uid, "name": account.name} for account in type3_accounts if account.is_active]
+        
+        # Log the number of active accounts for each type
+        print(f"Found {len(all_accounts_type_1)} active type 1 accounts")
+        print(f"Found {len(all_accounts_type_2)} active type 2 accounts")
+        print(f"Found {len(all_accounts_type_3)} active type 3 accounts")
+        
+        return {
+            "data": [
+                {"type_id": 1, "type_name": "Facebook cá nhân", "data": all_accounts_type_1},
+                {"type_id": 2, "type_name": "Nhóm Facebook", "data": all_accounts_type_2},
+                {"type_id": 3, "type_name": "Fanpage Facebook/KOL", "data": all_accounts_type_3}
+            ]
+        }
+    except Exception as e:
+        print(f"Error in get_admin_accounts: {str(e)}")
+        # Return empty arrays for all types if there's an error
+        return {
+            "data": [
+                {"type_id": 1, "type_name": "Facebook cá nhân", "data": []},
+                {"type_id": 2, "type_name": "Nhóm Facebook", "data": []},
+                {"type_id": 3, "type_name": "Fanpage Facebook/KOL", "data": []}
+            ]
+        }
 
-
-@router.delete("/{uid}", response_model=SocialAccount)
-async def delete_social_account(
-    *,
+@router.get("/relation-accounts", response_model=Dict[str, Any])
+async def get_relation_accounts(
     db: Session = Depends(deps.get_db),
-    uid: str,
-    current_user=Security(deps.get_current_active_user, scopes=[]),
+    # current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Delete a social account.
+    Get relation accounts (type 2, 3).
     """
-    social_account_obj = social_account.get_by_uid(db=db, uid=uid)
-    if not social_account_obj:
-        raise HTTPException(status_code=404, detail="Social account not found")
-    social_account_obj = social_account.remove(db=db, id=social_account_obj.id)
-    return social_account_obj
+    # Get accounts with type_id 2 -- Nhóm Facebook
+    type2_accounts = social_account.get_all_by_type_id(db=db, type_id=2) or []
+    # Get accounts with type_id 3 -- Fanpage Facebook/KOL
+    type3_accounts = social_account.get_all_by_type_id(db=db, type_id=3) or []
+    
+    # Combine and format the results
+    all_accounts_type_2 = []
+    all_accounts_type_3 = []
 
+    if type2_accounts:
+        for account in type2_accounts:
+            account_dict = get_social_account_with_relations(account, db)
+            all_accounts_type_2.append(account_dict)
+    
+    if type3_accounts:
+        for account in type3_accounts:
+            account_dict = get_social_account_with_relations(account, db)
+            all_accounts_type_3.append(account_dict)
+    
+    return {
+        "data": [
+            {"type_id": 2, "type_name": "Nhóm Facebook","data": all_accounts_type_2},
+            {"type_id": 3, "type_name": "Fanpage Facebook/KOL","data": all_accounts_type_3}
+        ]
+    }
 
 @router.get("/type/{type_id}", response_model=Dict[str, Any])
 async def get_social_accounts_by_type(
@@ -153,7 +200,6 @@ async def get_social_accounts_by_type(
         "data": [get_social_account_with_relations(account, db) for account in social_accounts]
     }
 
-
 @router.get("/status/{status_id}", response_model=List[SocialAccount])
 async def get_social_accounts_by_status(
     *,
@@ -165,4 +211,35 @@ async def get_social_accounts_by_status(
     Get social accounts by status ID.
     """
     social_accounts = social_account.get_all_by_status_id(db=db, status_id=status_id)
-    return social_accounts 
+    return social_accounts
+
+@router.get("/{uid}", response_model=SocialAccountWithRelations)
+async def get_social_account(
+    *,
+    db: Session = Depends(deps.get_db),
+    uid: str,
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    """
+    Get social account by UID with unit and task information.
+    """
+    social_account_obj = social_account.get_by_uid(db=db, uid=uid)
+    if not social_account_obj:
+        raise HTTPException(status_code=404, detail="Social account not found")
+    return get_social_account_with_relations(social_account_obj, db)
+
+@router.delete("/{uid}", response_model=SocialAccount)
+async def delete_social_account(
+    *,
+    db: Session = Depends(deps.get_db),
+    uid: str,
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    """
+    Delete a social account.
+    """
+    social_account_obj = social_account.get_by_uid(db=db, uid=uid)
+    if not social_account_obj:
+        raise HTTPException(status_code=404, detail="Social account not found")
+    social_account_obj = social_account.remove(db=db, id=social_account_obj.id)
+    return social_account_obj 

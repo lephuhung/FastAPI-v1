@@ -1,12 +1,15 @@
 export interface SocialAccountModal {
     uid: string,
     name: string,
-    SDT?: string,
-    trangthai_id: number,
+    phone_number?: string,
+    status_id: number,
     type_id: number,
-    ghichu: string,
-    reaction: number,
-    Vaiao: Boolean,
+    note: string,
+    reaction_number: number,
+    characteristics_id: number,
+    unit_id: string,
+    task_id: number,
+    is_active: Boolean,
 }
 export interface SocialAccount extends SocialAccountModal {
     trangthai_name: string,
@@ -35,6 +38,22 @@ export interface SocialAccountResponse {
         name: string
     }
 }
+
+export interface SocialAccountSimple {
+    uid: string
+    name: string
+}
+
+export interface SocialAccountTypeGroup {
+    type_id: number
+    type_name: string
+    data: SocialAccountSimple[]
+}
+
+export interface SocialAccountTypeResponse {
+    data: SocialAccountTypeGroup[]
+}
+
 export interface SocialAccountListResponse {
     account_type_name: string
     data: SocialAccountResponse[]

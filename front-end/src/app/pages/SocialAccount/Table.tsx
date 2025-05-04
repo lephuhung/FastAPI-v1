@@ -74,7 +74,7 @@ export const Table: FC<Props> = ({className, socialAccount}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>{socialAccount?.account_type_name || 'DANH SÁCH TÀI KHOẢN MẠNG XÃ HỘI'}</span>
+          <span className='card-label fw-bold fs-3 mb-1'>{socialAccount?.account_type_name.toUpperCase() || 'DANH SÁCH TÀI KHOẢN MẠNG XÃ HỘI'}</span>
         </h3>
         <div className='card-toolbar'>
           <a

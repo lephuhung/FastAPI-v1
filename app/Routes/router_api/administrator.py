@@ -4,6 +4,8 @@ from app.schemas.administrator import AdministratorCreate, AdministratorUpdate, 
 from app.crud.crud_administrator import administrator
 from app.Routes import deps
 from sqlalchemy.orm import Session
+from app.models.social_account import SocialAccount
+from app.models.relationship import Relationship
 
 router = APIRouter(prefix="/administrators", tags=["Administrators"])
 
@@ -31,12 +33,12 @@ async def create_administrator(
     Create new administrator.
     """
     # Check if social account exists
-    social_account = db.query("SocialAccount").filter_by(uid=administrator_in.social_account_uid).first()
+    social_account = db.query(SocialAccount).filter(SocialAccount.uid == administrator_in.social_account_uid).first()
     if not social_account:
         raise HTTPException(status_code=404, detail="Social account not found")
     
     # Check if relationship exists
-    relationship = db.query("Relationship").filter_by(id=administrator_in.relationship_id).first()
+    relationship = db.query(Relationship).filter(Relationship.id == administrator_in.relationship_id).first()
     if not relationship:
         raise HTTPException(status_code=404, detail="Relationship not found")
     
@@ -60,13 +62,13 @@ async def update_administrator(
     
     # Check if social account exists if being updated
     if administrator_in.social_account_uid != administrator_obj.social_account_uid:
-        social_account = db.query("SocialAccount").filter_by(uid=administrator_in.social_account_uid).first()
+        social_account = db.query(SocialAccount).filter(SocialAccount.uid == administrator_in.social_account_uid).first()
         if not social_account:
             raise HTTPException(status_code=404, detail="Social account not found")
     
     # Check if relationship exists if being updated
     if administrator_in.relationship_id != administrator_obj.relationship_id:
-        relationship = db.query("Relationship").filter_by(id=administrator_in.relationship_id).first()
+        relationship = db.query(Relationship).filter(Relationship.id == administrator_in.relationship_id).first()
         if not relationship:
             raise HTTPException(status_code=404, detail="Relationship not found")
     

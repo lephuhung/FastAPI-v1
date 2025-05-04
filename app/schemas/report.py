@@ -5,11 +5,11 @@ from datetime import datetime
 
 class ReportBase(BaseModel):
     social_account_uid: str
-    content_note: Optional[str] = None
-    comment: Optional[str] = None
-    action: Optional[str] = None
-    linked_social_account_uid: Optional[str] = None
-    user_id: UUID4
+    content_note: str
+    comment: str
+    action: str
+    related_social_account_uid: Optional[str] = None
+    user_id: Optional[UUID4] = None
 
 
 class ReportCreate(ReportBase):
@@ -20,18 +20,25 @@ class ReportUpdate(ReportBase):
     pass
 
 
-class ReportInDBBase(ReportBase):
+class UserBase(BaseModel):
+    id: str
+    name: str
+
+
+class ReportInDB(ReportBase):
     id: int
     created_at: datetime
     updated_at: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
-class Report(ReportInDBBase):
-    pass
+class Report(ReportBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+    user: Optional[UserBase] = None
 
-
-class ReportInDB(ReportInDBBase):
-    pass 
+    class Config:
+        orm_mode = True 

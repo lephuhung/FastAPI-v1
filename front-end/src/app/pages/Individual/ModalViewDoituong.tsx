@@ -177,7 +177,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                         type='button'
                         className='btn btn-sm btn-light'
                         onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/trichtin/${individual?.id}`)
+                          navigate(`${PUBLIC_URL}/reports/social-account/${individual?.id}`)
                         }}
                         style={{marginRight: '10px'}}
                       >
@@ -187,7 +187,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                         type='button'
                         className='btn btn-sm btn-light'
                         onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/doituong/details/${individual?.id}`)
+                          navigate(`${PUBLIC_URL}/individuals/${individual?.id}`)
                         }}
                       >
                         Mở hồ sơ chi tiết

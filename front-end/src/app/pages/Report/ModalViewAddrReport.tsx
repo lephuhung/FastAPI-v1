@@ -8,22 +8,21 @@ import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import {useQuery} from '@tanstack/react-query'
-import {trichtin} from './trichtin'
+import {report} from './reports'
 type Props = {
   show: boolean
   handleClose: () => void
   title: string
-  trichtin?: trichtin
+  report?: report
 }
 const PUBLIC_URL = process.env.PUBLIC_URL
 const URL = process.env.REACT_APP_API_URL
 const modalsRoot = document.getElementById('root-modals') || document.body
 
-const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trichtin}) => {
+const ModalViewAddrReport: React.FC<Props> = ({show, handleClose, title, report}) => {
   const [data, setData] = useState<any>()
   const navigate = useNavigate()
   const [error, setError] = useState('')
-  const type = ['Nhóm Facebook', 'Tài khoản Facebook cá nhân', 'Trang Facebook']
   useEffect(() => {
     // axios
     //   .get(`${URL}/doituong/details/${doituong?.id}`)
@@ -68,9 +67,9 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
               {/* begin::Info */}
               <div className='d-flex flex-column'>
                 <a href='#' className='text-gray-800 text-hover-primary fs-6 fw-bold'>
-                  {trichtin?.user}
+                  {report?.user?.name}
                 </a>
-                <span className='text-gray-400 fw-semibold'>{trichtin?.updated_at}</span>
+                <span className='text-gray-400 fw-semibold'>{report?.updated_at}</span>
               </div>
               {/* end::Info */}
             </div>
@@ -87,7 +86,7 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
           <div className='mb-7'>
             {/* begin::Text */}
             <div className='text-gray-800 mb-5'>
-              {trichtin?.ghichu_noidung}
+              {report?.content_note}
             </div>
             {/* end::Text */}
 
@@ -101,7 +100,7 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
                   path='/media/icons/duotune/communication/com012.svg'
                   className='svg-icon-2'
                 />
-                {`Vai ảo: ${trichtin?.uid_vaiao}`} 
+                {`Vai ảo: ${report?.related_social_account_uid}`} 
               </a>
 
               <a
@@ -109,7 +108,7 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
                 className='btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2'
               >
                 <KTSVG path='/media/icons/duotune/general/gen030.svg' className='svg-icon-2' />
-                {`UID được trích tin: ${trichtin?.uid}|${trichtin?.hoinhom_name}`}
+                {`UID được trích tin: ${report?.social_account_uid}|${report?.related_social_account_uid}`}
               </a>
             </div>
             {/* end::Toolbar */}
@@ -138,7 +137,7 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
 
                 {/* begin::Post */}
                 <span className='text-gray-800 fs-7 fw-normal pt-1'>
-                  {trichtin?.nhanxet}
+                  {report?.comment}
                 </span>
                 {/* end::Post */}
               </div>
@@ -166,7 +165,7 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
 
                 {/* begin::Post */}
                 <span className='text-gray-800 fs-7 fw-normal pt-1'>
-                  {trichtin?.xuly}
+                  {report?.action}
                 </span>
                 {/* end::Post */}
               </div>
@@ -181,4 +180,4 @@ const ModalViewItemTrichtin: React.FC<Props> = ({show, handleClose, title, trich
   )
 }
 
-export {ModalViewItemTrichtin}
+export {ModalViewAddrReport}
