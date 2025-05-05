@@ -2,7 +2,6 @@ import {FC} from 'react'
 import {Link} from 'react-router-dom'
 import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
 import Avatar from 'react-avatar'
-import {colourOptions} from '../Moiquanhe/data'
 type ctnv = {
   ctnv_name: string
   count: number

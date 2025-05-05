@@ -5,7 +5,7 @@ import {IndividualTable} from './Table'
 const IndividualPage: FC = () => {
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Quản lý đối tượng</PageTitle>
+      <PageTitle breadcrumbs={[]}>DANH SÁCH ĐỐI TƯỢNG/KOL TRÊN ĐỊA BÀN</PageTitle>
       <IndividualTable className='mb-5 mb-xl-10'/>
     </>
   )

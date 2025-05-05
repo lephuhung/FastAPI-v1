@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { useIntl } from 'react-intl'
 import { PageTitle } from '../../../_metronic/layout/core'
 import {Table} from './Table'
 import { useParams } from 'react-router-dom'
@@ -8,12 +7,7 @@ import axios from 'axios'
 
 const URL = process.env.REACT_APP_API_URL
 
-const SocialAccountWrap: FC<{uid: string}> = ({uid}) => {
-    const {data: socialAccount, isLoading} = useQuery(
-        ['social-account', uid],
-        () => axios.get(`${URL}/social-accounts/type/${uid}`).then(res => res.data)
-    )
-
+const SocialAccountWrap: FC<{uid: string, socialAccount: any, isLoading: boolean}> = ({uid, socialAccount, isLoading}) => {
     if (isLoading) {
         return <div>Loading...</div>
     }
@@ -26,13 +20,15 @@ const SocialAccountWrap: FC<{uid: string}> = ({uid}) => {
 }
 
 const SocialAccount: FC = () => {
-    const intl = useIntl()
     const {uid} = useParams<{uid: string}>()
-
+    const {data: socialAccount, isLoading} = useQuery(
+        ['social-account', uid],
+        () => axios.get(`${URL}/social-accounts/type/${uid}`).then(res => res.data)
+    )
     return (
       <>
-        {/* <PageTitle breadcrumbs={[]}>{intl.formatMessage({ id: 'MENU.FACEBOOK' })}</PageTitle> */}
-        <SocialAccountWrap uid={uid || ''} />
+        <PageTitle breadcrumbs={[]}>{socialAccount?.account_type_name.toUpperCase()}</PageTitle>
+        <SocialAccountWrap uid={uid || ''} socialAccount={socialAccount} isLoading={isLoading} />
       </>
     )
 }

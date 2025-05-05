@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState, FC} from 'react'
-import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {CreateAppModal} from './CreateAppModal'
-import {useQuery} from 'react-query'
+import React, { useState, FC } from 'react'
+import { KTSVG, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { CreateAppModal } from './CreateAppModal'
+import { useQuery } from 'react-query'
 import axios from 'axios'
-import {UpdateModal} from './UpdateAppModal'
+import { UpdateModal } from './UpdateAppModal'
 import { CreateModelMLH } from './CreateAppModalMLH'
-import {useNavigate} from 'react-router-dom'
-import {ToastContainer, toast} from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
 import { SocialAccountResponse, SocialAccountListResponse } from './SocialAccount'
 import { ModalViewItem } from './ModalViewItem'
 const URL = process.env.REACT_APP_API_URL
@@ -39,18 +39,19 @@ const exampleData = {
   }
 }
 
-export const Table: FC<Props> = ({className, socialAccount}) => {
+export const Table: FC<Props> = ({ className, socialAccount }) => {
   const PUBLIC_URL = process.env.PUBLIC_URL
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalGroup, setShowModalGroup] = useState<boolean>(false)
   const [showModalupdate, setShowModalUpdate] = useState<boolean>(false)
   const [showModalMLH, setShowModalMLH] = useState<boolean>(false)
+  const [searchValue, setSearchValue] = useState<string>('')
   const [ifacebook, setIfacebook] = useState<SocialAccountResponse>()
   const navigate = useNavigate()
   const [ifacebookupdate, setIfacebookupdate] = useState<SocialAccountResponse>(exampleData)
   const [loading, setloading] = useState<boolean>(false)
-  
-  const {isLoading, data, error} = useQuery({
+
+  const { isLoading, data, error } = useQuery({
     queryKey: ['facebook', loading],
     queryFn: async () => {
       setloading(false)
@@ -69,35 +70,69 @@ export const Table: FC<Props> = ({className, socialAccount}) => {
   if (error) {
     console.log(error)
   }
+
+  const handleSearch = () => {
+    setloading(true)
+    // Thực hiện tìm kiếm ở đây
+    console.log('Searching for:', searchValue)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
-        <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>{socialAccount?.account_type_name.toUpperCase() || 'DANH SÁCH TÀI KHOẢN MẠNG XÃ HỘI'}</span>
-        </h3>
-        <div className='card-toolbar'>
-          <a
-            href='#'
-            className='btn btn-sm btn-light-primary'
-            onClick={() => {
-              setShowCreateAppModal(true)
-            }}
-          >
-            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-            Tạo tài khoản Mạng xã hội
-          </a>
-          <a
-            href='#'
-            className='btn btn-sm btn-light-primary'
-            onClick={() => {
-              setShowModalMLH(true)
-            }}
-            style={{marginLeft:'30px'}}
-          >
-            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-            Tạo mối liên hệ
-          </a>
+        <div className='card-toolbar d-flex justify-content-between w-100'>
+          {/* Phần input search căn trái */}
+          <div className='d-flex align-items-center position-relative'>
+            <KTSVG
+              path='/media/icons/duotune/general/gen021.svg'
+              className='svg-icon-3 position-absolute ms-4'
+            />
+            <input
+              type='text'
+              className='form-control form-control-solid w-250px ps-12'
+              placeholder='Tìm kiếm...'
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            <button
+              className='btn btn-icon btn-light-primary btn-active-light-primary ms-2'
+              onClick={handleSearch}
+            >
+              <KTSVG path='/media/icons/duotune/general/gen021.svg' className='svg-icon-2' />
+            </button>
+          </div>
+
+          {/* Phần 2 button căn phải */}
+          <div className='d-flex'>
+            <a
+              href='#'
+              className='btn btn-sm btn-light-primary me-3'
+              onClick={() => {
+                setShowCreateAppModal(true)
+              }}
+            >
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Tạo tài khoản Mạng xã hội
+            </a>
+            <a
+              href='#'
+              className='btn btn-sm btn-light-primary'
+              onClick={() => {
+                setShowModalMLH(true)
+              }}
+            >
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Tạo mối liên hệ
+            </a>
+          </div>
         </div>
       </div>
       {/* end::Header */}
@@ -152,9 +187,9 @@ export const Table: FC<Props> = ({className, socialAccount}) => {
                         {el.status_name?.toUpperCase()}
                       </span>
                     </td>
-                    <td className='text-center align-middle'> 
+                    <td className='text-center align-middle'>
                       <span className='badge badge-primary fs-7 fw-semibold'>
-                        {el.phone_number === '0' ? 'Chưa có': el.phone_number}
+                        {el.phone_number === '0' ? 'Chưa có' : el.phone_number}
                       </span>
                     </td>
                     <td className='align-middle'>
