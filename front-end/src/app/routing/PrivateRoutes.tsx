@@ -14,7 +14,6 @@ import SearchPost from '../pages/Search-post'
 import {CTNV} from '../pages/Tasks'
 import {Moiquanhe} from '../pages/Relationship'
 import {Tags} from '../pages/Tags'
-import {Trangthai} from '../pages/Status'
 import { IndividualPage } from '../pages/Individual'
 import { IndividualDetailsPage } from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
@@ -24,7 +23,7 @@ import { Thongkectnv } from '../pages/Summary/Summary_social_account_unit'
 import { Details_donvi} from '../pages/Summary/details-donvi'
 import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
-// import {individualsearch } from '../pages/Search/doituong-search'
+import ConfigPage from '../pages/Config'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
 import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
@@ -52,7 +51,6 @@ const PrivateRoutes = () => {
         <Route path='search-post' element={<SearchPost/>} />
         <Route path='ctnv' element={<CTNV/>} />
         <Route path='tags' element={<Tags/>} />
-        <Route path='trangthai' element={<Trangthai/>} />
         <Route path='user' element={<User/>} />
         <Route path='individual/details/:id' element={<IndividualDetailsPage/>} />
         <Route path='individual' element={<IndividualPage/>} />
@@ -66,11 +64,12 @@ const PrivateRoutes = () => {
         <Route path='search-uid' element={<UIDSearch/>} />
         {/* <Route path='search-doituong' element={<individualsearch/>} /> */}
         <Route path='search-trichtin' element={<TrichinSearch/>} />
+        {/* <Route path='config' element={<ConfigPage/>} /> */}
         <Route
-          path='crafted/pages/profile/*'
+          path='config/*'
           element={
             <SuspensedView>
-              <ProfilePage />
+              <ConfigPage />
             </SuspensedView>
           }
         />

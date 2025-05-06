@@ -97,7 +97,7 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
             <input
               type='text'
               className='form-control form-control-solid w-250px ps-12'
-              placeholder='Tìm kiếm...'
+              placeholder='Tìm kiếm theo UID ...'
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyPress={handleKeyPress}

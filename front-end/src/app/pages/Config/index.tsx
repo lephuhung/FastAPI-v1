@@ -22,7 +22,7 @@ const profileBreadCrumbs: Array<PageLink> = [
   },
 ]
 
-const ProfilePage = () => (
+const ConfigPage = () => (
   <Routes>
     <Route
       element={
@@ -82,4 +82,4 @@ const ProfilePage = () => (
   </Routes>
 )
 
-export default ProfilePage
+export default ConfigPage
