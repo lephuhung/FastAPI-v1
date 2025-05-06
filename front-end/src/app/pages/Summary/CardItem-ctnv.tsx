@@ -17,7 +17,7 @@ const CardItemCtnv: FC<Props> = ({
 }) => {
   return (
     <Link
-      to='/crafted/pages/profile/overview'
+      to='#'
       className='card border border-2 border-gray-300 '
     >
       <div className='card-header border-0 pt-9'>

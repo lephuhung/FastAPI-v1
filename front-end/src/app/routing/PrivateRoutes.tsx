@@ -14,6 +14,7 @@ import SearchPost from '../pages/Search-post'
 import {CTNV} from '../pages/Tasks'
 import {Moiquanhe} from '../pages/Relationship'
 import {Tags} from '../pages/Tags'
+import ConfigPage from '../pages/Config'
 import { IndividualPage } from '../pages/Individual'
 import { IndividualDetailsPage } from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
@@ -23,7 +24,7 @@ import { Thongkectnv } from '../pages/Summary/Summary_social_account_unit'
 import { Details_donvi} from '../pages/Summary/details-donvi'
 import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
-import ConfigPage from '../pages/Config'
+// import {individualsearch } from '../pages/Search/doituong-search'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
 import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
@@ -37,7 +38,6 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='ssh' element={<SSH/>}/>
@@ -49,27 +49,28 @@ const PrivateRoutes = () => {
         <Route path='tinhchat' element={<Tinhchat/>} />
         <Route path='search-datadoc' element={<Search/>} />
         <Route path='search-post' element={<SearchPost/>} />
-        <Route path='ctnv' element={<CTNV/>} />
-        <Route path='tags' element={<Tags/>} />
         <Route path='user' element={<User/>} />
         <Route path='individual/details/:id' element={<IndividualDetailsPage/>} />
         <Route path='individual' element={<IndividualPage/>} />
         <Route path='thongke-donvi/details/:id' element={<Details_donvi/>} />
-        {/* <Route path='thongke-donvi' element={<Thongkedonvi/>} />
-        <Route path='thongke-phanloai' element={<Thongkephanloai/>} /> */}
         <Route path='summary-individual-unit' element={<Thongkephanloai/>} />
         <Route path='summary-social-account-unit' element={<Thongkectnv/>} />
-        {/* <Route path='reports/:id' element={<ReportWrap/>}/> */}
         <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
-        {/* <Route path='search-doituong' element={<individualsearch/>} /> */}
         <Route path='search-trichtin' element={<TrichinSearch/>} />
-        {/* <Route path='config' element={<ConfigPage/>} /> */}
         <Route
           path='config/*'
           element={
             <SuspensedView>
               <ConfigPage />
+            </SuspensedView>
+          }
+        />
+          <Route
+          path='crafted/pages/profile/*'
+          element={
+            <SuspensedView>
+              <ProfilePage />
             </SuspensedView>
           }
         />

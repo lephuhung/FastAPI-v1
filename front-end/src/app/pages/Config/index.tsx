@@ -1,83 +1,60 @@
 import {Navigate, Routes, Route, Outlet} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-// import {Overview} from './components/Overview'
-// import {Projects} from './components/Projects'
-// import {Campaigns} from './components/Campaigns'
-// import {Documents} from './components/Documents'
-// import {Connections} from './components/Connections'
-// import {ProfileHeader} from './ProfileHeader'
+import {TableTasks} from './Table-tasks'
+import {TableCharacteristics} from './Table-characteristics'
+import {TableStatus} from './Table-status'
+import {ProfileHeader} from './ProfileHeader'
+import {TableTags} from './Table-tags'
+import {Overview} from '../../modules/profile/components/Overview'
 
-const profileBreadCrumbs: Array<PageLink> = [
-  {
-    title: 'Profile',
-    path: '/crafted/pages/profile/overview',
-    isSeparator: false,
-    isActive: false,
-  },
-  {
-    title: '',
-    path: '',
-    isSeparator: true,
-    isActive: false,
-  },
-]
 
 const ConfigPage = () => (
   <Routes>
     <Route
       element={
         <>
-          {/* <ProfileHeader /> */}
+          <ProfileHeader />
           <Outlet />
         </>
       }
     >
       <Route
-        path='overview'
+        path='tasks'
         element={
           <>
-            <PageTitle breadcrumbs={profileBreadCrumbs}>Overview</PageTitle>
-            {/* <Overview /> */}
+            <PageTitle breadcrumbs={[]}>CÔNG TÁC NGHIỆP VỤ</PageTitle>
+            <TableTasks className="mb-5 mb-xl-8"/>
           </>
         }
       />
       <Route
-        path='projects'
+        path='characteristic'
         element={
           <>
-            <PageTitle breadcrumbs={profileBreadCrumbs}>Projects</PageTitle>
-            {/* <Projects /> */}
+            <PageTitle breadcrumbs={[]}>Tính chất hội nhóm/ đối tượng</PageTitle>
+            <TableCharacteristics className="mb-5 mb-xl-8"/>
           </>
         }
       />
       <Route
-        path='campaigns'
+        path='status'
         element={
           <>
-            <PageTitle breadcrumbs={profileBreadCrumbs}>Campaigns</PageTitle>
-            {/* <Campaigns /> */}
+            <PageTitle breadcrumbs={[]}>Trạng thái</PageTitle>
+            <TableStatus className="mb-5 mb-xl-8"/>
           </>
         }
       />
       <Route
-        path='documents'
+        path='tags'
         element={
           <>
-            <PageTitle breadcrumbs={profileBreadCrumbs}>Documents</PageTitle>
-            {/* <Documents /> */}
+            <PageTitle breadcrumbs={[]}>Tags</PageTitle>
+            <TableTags className="mb-5 mb-xl-8"/>
           </>
         }
       />
-      <Route
-        path='connections'
-        element={
-          <>
-            <PageTitle breadcrumbs={profileBreadCrumbs}>Connections</PageTitle>
-            {/* <Connections /> */}
-          </>
-        }
-      />
-      <Route index element={<Navigate to='/crafted/pages/profile/overview' />} />
+      <Route index element={<Navigate to='/config/tasks' />} />
     </Route>
   </Routes>
 )

@@ -18,16 +18,16 @@ export interface reaction {
   shares: number
 }
 
-const Table: React.FC<Props> = ({className}) => {
+const TableTags: React.FC<Props> = ({className}) => {
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [UID, setUID] = useState<string>('')
   const [page] = useSearchParams()
   const [content, setContent] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const {isLoading, data, error} = useQuery({
-    queryKey: ['post', page.get('page')],
+    queryKey: ['post'],
     queryFn: async () => {
-      const respone = await instance.get(`${URL}/trangthai`)
+      const respone = await instance.get(`${URL}/tags`)
       const {data} = respone
       return data
     },
@@ -163,4 +163,4 @@ export function cutString(string: string, maxLength: number): string {
   }
   return string
 }
-export {Table}
+export {TableTags}

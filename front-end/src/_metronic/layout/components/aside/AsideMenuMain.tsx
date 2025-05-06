@@ -66,18 +66,18 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/summary-individual-unit' title='Thống kê theo đối tượng' hasBullet={true} />
         <AsideMenuItem to='/summary-social-account-unit' title='Thống kê tài khoản MXH' hasBullet={true} />
       </AsideMenuItemWithSub>
-      <AsideMenuItemWithSub
-        to='/post'
+      <AsideMenuItem
+        to='/config'
         title='CẤU HÌNH DỮ LIỆU'
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen022.svg'
-      >
-        <AsideMenuItem to='/tags' title='TAGS' hasBullet={true} />
+      />
+        {/* <AsideMenuItem to='/tags' title='TAGS' hasBullet={true} />
         <AsideMenuItem to='/characteristics' title='TÍNH CHẤT' hasBullet={true} />
         <AsideMenuItem to='/status' title='PHÂN LOẠI' hasBullet={true} />
         <AsideMenuItem to='/relationship' title='MỐI QUAN HÊ' hasBullet={true} />
         <AsideMenuItem to='/task' title='CÔNG TÁC NGHIỆP VỤ' hasBullet={true} />
-      </AsideMenuItemWithSub>
+      </AsideMenuItemWithSub> */}
 
       <AsideMenuItemWithSub
         to='/crafted/widgets'
