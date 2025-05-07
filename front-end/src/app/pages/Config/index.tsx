@@ -23,7 +23,7 @@ const ConfigPage = () => (
         element={
           <>
             <PageTitle breadcrumbs={[]}>CÔNG TÁC NGHIỆP VỤ</PageTitle>
-            <TableTasks className="mb-5 mb-xl-8"/>
+            <TableTasks className=""/>
           </>
         }
       />
@@ -31,7 +31,7 @@ const ConfigPage = () => (
         path='characteristic'
         element={
           <>
-            <PageTitle breadcrumbs={[]}>Tính chất hội nhóm/ đối tượng</PageTitle>
+            <PageTitle breadcrumbs={[]}>TÍNH CHẤT HỘI NHÓM/ ĐỐI TƯỢNG</PageTitle>
             <TableCharacteristics className="mb-5 mb-xl-8"/>
           </>
         }
@@ -40,7 +40,7 @@ const ConfigPage = () => (
         path='status'
         element={
           <>
-            <PageTitle breadcrumbs={[]}>Trạng thái</PageTitle>
+            <PageTitle breadcrumbs={[]}>TRẠNG THÁI</PageTitle>
             <TableStatus className="mb-5 mb-xl-8"/>
           </>
         }
@@ -49,7 +49,7 @@ const ConfigPage = () => (
         path='tags'
         element={
           <>
-            <PageTitle breadcrumbs={[]}>Tags</PageTitle>
+            <PageTitle breadcrumbs={[]}>TAGS</PageTitle>
             <TableTags className="mb-5 mb-xl-8"/>
           </>
         }
