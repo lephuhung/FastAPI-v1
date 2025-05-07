@@ -3,17 +3,11 @@ import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
 import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
-// import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
-// import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import { User } from '../pages/Users'
-import { Tinhchat } from '../pages/Characteristics'
 import Search from '../pages/Search-datadoc'
 import SearchPost from '../pages/Search-post'
-import {CTNV} from '../pages/Tasks'
-import {Moiquanhe} from '../pages/Relationship'
-import {Tags} from '../pages/Tags'
 import ConfigPage from '../pages/Config'
 import { IndividualPage } from '../pages/Individual'
 import { IndividualDetailsPage } from '../pages/Individual/details'
@@ -24,7 +18,6 @@ import { Thongkectnv } from '../pages/Summary/Summary_social_account_unit'
 import { Details_donvi} from '../pages/Summary/details-donvi'
 import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
-// import {individualsearch } from '../pages/Search/doituong-search'
 import { TrichinSearch } from '../pages/Search/trichtin-search'
 import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
@@ -45,8 +38,6 @@ const PrivateRoutes = () => {
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='users' element={<User/>} />
         <Route path='social-account/:uid' element={<SocialAccount/>} />
-        <Route path='moiquanhe' element={<Moiquanhe/>} />
-        <Route path='tinhchat' element={<Tinhchat/>} />
         <Route path='search-datadoc' element={<Search/>} />
         <Route path='search-post' element={<SearchPost/>} />
         <Route path='user' element={<User/>} />

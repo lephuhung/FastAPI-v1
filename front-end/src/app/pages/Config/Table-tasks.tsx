@@ -2,13 +2,13 @@
 import React, {useState} from 'react'
 import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useQuery} from 'react-query'
-import {ITrangthaiResponse} from './trangthai'
 import Avatar from 'react-avatar'
 import instance from '../../modules/axiosInstance'
 import {CreateAppModal} from './CreateAppModal'
 import {useSearchParams} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import axios from 'axios'
+import {Task} from './config'
 const URL = process.env.REACT_APP_API_URL
 type Props = {
   className: string
@@ -73,15 +73,15 @@ const TableTasks: React.FC<Props> = ({className}) => {
                 <th className='ps-4 min-w-625px rounded-start'>TÊN</th>
                 {/* <th className='min-w-125px'>UID</th> */}
                 <th className='min-w-150px'>THỜI GIAN</th>
-                <th className='min-w-100px'>MÀU SẮC</th>
-                <th className='min-w-100px'>HIỆN THỊ MÀU</th>
+                {/* <th className='min-w-100px'>MÀU SẮC</th>
+                <th className='min-w-100px'>HIỆN THỊ MÀU</th> */}
                 {/* <th className='min-w-150px'>Anh bai viet</th> */}
                 <th className='min-w-100px text-center rounded-end'>HÀNH ĐỘNG</th>
               </tr>
             </thead>
             <tbody>
               {data &&
-                data.map((el: ITrangthaiResponse, index: number) => (
+                data.map((el: Task, index: number) => (
                   <tr className='fw-bolder fs-6 text-gray-800' key={index}>
                     <td>
                       <div className='d-flex align-items-center'>
@@ -103,14 +103,6 @@ const TableTasks: React.FC<Props> = ({className}) => {
                         {el.created_at}
                       </span>
                     </td>
-                    <td style={{color: `${el.color}`}}>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        {el.color}
-                      </span>
-                    </td>
-                    <td>
-                      <Avatar color={el.color} name='' round={true} size='50px' />
-                    </td>
                     <td className='text-canter'>
                       <span
                         className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4'
@@ -122,6 +114,18 @@ const TableTasks: React.FC<Props> = ({className}) => {
                         }}
                       >
                         Hiện thị
+                      </span>
+                      <span
+                        className='btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4'
+                        style={{marginLeft: '10px'}}
+                        onClick={() => {
+                          // setShowCreateAppModal(true)
+                          // setUID(el.uid)
+                          // setContent(cutString(el.message, 200))
+                          // setPost(el)
+                        }}
+                      >
+                       Xóa
                       </span>
                     </td>
                   </tr>
