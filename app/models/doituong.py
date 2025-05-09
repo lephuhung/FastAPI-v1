@@ -12,11 +12,11 @@ class Doituong(Base):
     """
     __tablename__='doituong'
     id = Column(UUID(as_uuid=True),primary_key=True,nullable=False, default=uuid4)
-    client_name = Column(String(255))
-    CMND = Column(String(20), default=None)
-    CCCD = Column(String(20), default=None)
-    Image = Column(String(255), default=None)
-    Ngaysinh= Column(Date, default=None)
+    full_name = Column(String(255))
+    national_id = Column(String(20), default=None)
+    citizen_id = Column(String(20), default=None)
+    image_url = Column(String(255), default=None)
+    date_of_birth= Column(Date, default=None)
     # True is Nam, False is Nu
     Gioitinh = Column(Boolean, default=True)
     Quequan= Column(String(255), default=None)

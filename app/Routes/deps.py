@@ -44,7 +44,7 @@ def get_current_user(
         authenticate_value = "Bearer"
     credentials_exception = HTTPException(
         status_code=401,
-        detail="Could not validate credentials",
+        detail="Could not validate credentials test1",
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
@@ -56,12 +56,11 @@ def get_current_user(
             print("[DEBUG] Username not found in token payload")
             raise credentials_exception
         token_data = AccessTokenData(**payload)
-        print(f"[DEBUG] Token data: {token_data}")
     except (jwt.JWTError, ValidationError) as e:
-        print(f"[DEBUG] Token validation error: {str(e)}")
+        logger.error(f"Token validation failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            detail="Could not validate credentials test 403",
         )
     user = crud_user.get(db, token_data.id)
     if not user:

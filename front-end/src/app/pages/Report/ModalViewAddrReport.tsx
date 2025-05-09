@@ -25,7 +25,7 @@ const ModalViewAddrReport: React.FC<Props> = ({show, handleClose, title, report}
   const [error, setError] = useState('')
   useEffect(() => {
     // axios
-    //   .get(`${URL}/doituong/details/${doituong?.id}`)
+    //   .get(`${URL}/individual/details/${individual?.id}`)
     //   .then((res) => {
     //     if (res.data.STATUS === '200') console.log('details' + res.data)
     //     setData(res.data)

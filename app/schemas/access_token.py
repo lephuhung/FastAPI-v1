@@ -11,4 +11,4 @@ class AccessTokenData(BaseModel):
     unit_id: UUID4
     username: str | None = None
     role: list[str] =[]
-    permission: list[str] = []
+    permissions: list[str] = []

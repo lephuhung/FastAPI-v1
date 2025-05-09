@@ -1,20 +1,16 @@
-from elasticsearch import Elasticsearch
 
 
-# Your API token
-api_token = "eTJJbEZwRUJuWUN5MmZocjZFVy06T3lZREl5aE9TM2FKTTlyT25jU091dw=="
+def individual_search(query: str = ''):
+    pass
+    # resp = client.search(index="individual_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
+    # return resp["hits"]["hits"]
 
-client = Elasticsearch("http://elasticsearch:9200/", api_key=api_token)
+def social_account_search(query: str = ''):
+    pass
+    # resp = client.search(index="social_account_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
+    # return resp["hits"]["hits"]
 
-
-def doituong_search(query: str = ''):
-    resp = client.search(index="doituong_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
-    return resp["hits"]["hits"]
-
-def uid_search(query: str = ''):
-    resp = client.search(index="uid_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
-    return resp["hits"]["hits"]
-
-def trichtin_search(query: str = ''):
-    resp = client.search(index="trichtin_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
-    return resp["hits"]["hits"]
+def report_search(query: str = ''):
+    pass
+    # resp = client.search(index="report_index", query={"multi_match": {"query": f"{query}", "fields": ["*"]}})
+    # return resp["hits"]["hits"]

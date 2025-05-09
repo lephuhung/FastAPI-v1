@@ -1,18 +1,18 @@
 -- use this line to using UUID generation--
 CREATE EXTENSION "uuid-ossp";
 
-CREATE TABLE "doituong" (
+CREATE TABLE "individual" (
   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  "client_name" varchar,
-  "CMND" varchar,
-  "CCCD" varchar,
-  "Image" varchar,
-  "Ngaysinh" date,
-  "Gioitinh" boolean,
-  "Quequan" varchar,
-  "Thongtinbosung" varchar,
-  "SDT" varchar,
-  "KOL" boolean,
+  "full_name" varchar,
+  "national_id" varchar,
+  "citizen_id" varchar,
+  "image_url" varchar,
+  "date_of_birth" date,
+  "is_male" boolean,
+  "hometown" varchar,
+  "additional_info" varchar,
+  "phone_number" varchar,
+  "is_kol" boolean,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -39,18 +39,18 @@ CREATE TABLE "uid" (
   "uid" varchar,
   "name" varchar,
   "reaction" int,
-  "SDT" varchar,
-  "trangthai_id" int,
-  "type_id" int,
-  "ghichu" varchar,
+  "phone_number" varchar,
+  "status" int,
+  "account_type_id" int,
+  "note" varchar,
   "Vaiao" boolean,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "doituong_uid" (
+CREATE TABLE "individual_uid" (
   "id" SERIAL PRIMARY KEY,
-  "doituong_id" uuid,
+  "individual_id" uuid,
   "uid" varchar,
   "Moiquanhe_id" int,
   "created_at" timestamp,
@@ -61,12 +61,12 @@ CREATE TABLE "quantrivien" (
   "id" SERIAL PRIMARY KEY,
   "uid_facebook" varchar,
   "uid" varchar,
-  "moiquanhe_id" int,
+  "relationship_id" int,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "trangthai" (
+CREATE TABLE "status" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "color" varchar,
@@ -74,7 +74,7 @@ CREATE TABLE "trangthai" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "tinhchat" (
+CREATE TABLE "characteristic" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "color" varchar,
@@ -92,22 +92,22 @@ CREATE TABLE "color" (
 
 CREATE TABLE "trangthai_hoinhom" (
   "id" SERIAL PRIMARY KEY,
-  "trangthai_id" int,
+  "status" int,
   "uid" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "ctnv" (
+CREATE TABLE "task" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "tinhchat_hoinhom" (
+CREATE TABLE "characteristic_hoinhom" (
   "id" SERIAL PRIMARY KEY,
-  "tinhchat_id" int,
+  "characteristic_id" int,
   "uid" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
@@ -120,14 +120,14 @@ CREATE TABLE "type" (
   "updated_at" timestamp
 );
 
-CREATE TABLE "moiquanhe" (
+CREATE TABLE "relationship" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "donvi" (
+CREATE TABLE "unit" (
   "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   "name" varchar,
   "created_at" timestamp,
@@ -145,27 +145,27 @@ CREATE TABLE "trichtin" (
   "created_at" timestamp,
   "updated_at" timestamp
 );
-CREATE TABLE "doituong_donvi" (
+CREATE TABLE "individual_unit" (
   "id" SERIAL PRIMARY KEY,
-  "donvi_id" uuid NOT NULL,
-  "doituong_id" uuid,
+  "unit_id" uuid NOT NULL,
+  "individual_id" uuid,
   "CTNV_ID" int,
   "created_at" timestamp,
   "updated_at" timestamp
 );
-CREATE TABLE "donvi_hoinhom" (
+CREATE TABLE "unit_hoinhom" (
   "id" SERIAL PRIMARY KEY,
-  "donvi_id" uuid NOT NULL,
+  "unit_id" uuid NOT NULL,
   "uid" varchar,
   "CTNV_ID" int,
   "created_at" timestamp,
   "updated_at" timestamp
 );
 
-CREATE TABLE "user_donvi" (
+CREATE TABLE "user_unit" (
   "id" SERIAL PRIMARY KEY,
   "user_id" uuid,
-  "donvi_id" uuid,
+  "unit_id" uuid,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -223,7 +223,7 @@ CREATE TABLE "user" (
   "password" varchar,
   "salt" varchar,
   "active" varchar,
-  "donvi_id" uuid NULL,
+  "unit_id" uuid NULL,
   "created_at" timestamp,
   "updated_at" timestamp
 );

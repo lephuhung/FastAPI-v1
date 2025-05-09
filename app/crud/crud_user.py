@@ -64,22 +64,22 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
-        print(f"[DEBUG] Authenticating user: {username}")
+        # print(f"[DEBUG] Authenticating user: {username}")
         user = self.get_by_username(db, username=username)
         if not user:
             print(f"[DEBUG] User not found: {username}")
             return None
         
-        print(f"[DEBUG] Found user: {username}")
-        print(f"[DEBUG] User salt: {user.salt}")
-        print(f"[DEBUG] User hashed password: {user.password}")
+        # print(f"[DEBUG] Found user: {username}")
+        # print(f"[DEBUG] User salt: {user.salt}")
+        # print(f"[DEBUG] User hashed password: {user.password}")
         
         # Kiểm tra password với salt
         if not verify_password(password, user.password, user.salt):
             print(f"[DEBUG] Password verification failed for user: {username}")
             return None
         
-        print(f"[DEBUG] Password verified successfully for user: {username}")
+        # print(f"[DEBUG] Password verified successfully for user: {username}")
         return user
 
 crud_user = CRUDUser(User)
