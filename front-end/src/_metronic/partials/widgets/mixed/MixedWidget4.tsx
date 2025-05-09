@@ -22,13 +22,13 @@ const MixedWidget4: React.FC<Props> = ({className, color, image, title, date, pr
         <div className='d-flex flex-stack'>
           {/* begin:Info */}
           <div className='d-flex align-items-center'>
-            {/* begin:image_url */}
+            {/* begin:Image */}
             <div className='symbol symbol-60px me-5'>
               <span className={clsx(`symbol-label`, `bg-${color}-light`)}>
                 <img src={toAbsoluteUrl(image)} className='h-50 align-self-center' alt='' />
               </span>
             </div>
-            {/* end:image_url */}
+            {/* end:Image */}
 
             {/* begin:Title */}
             <div className='d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3'>

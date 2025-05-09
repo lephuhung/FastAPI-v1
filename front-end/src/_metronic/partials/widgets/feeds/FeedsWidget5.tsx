@@ -53,14 +53,14 @@ const FeedsWidget5: React.FC<Props> = ({className}) => {
 
         {/* begin::Post */}
         <div className='mb-5'>
-          {/* begin::image_url */}
+          {/* begin::Image */}
           <div
             className='bgi-no-repeat bgi-size-cover rounded min-h-250px mb-5'
             style={{
               backgroundImage: `url('${toAbsoluteUrl('/media/stock/900x600/20.jpg')}')`,
             }}
           ></div>
-          {/* end::image_url */}
+          {/* end::Image */}
 
           {/* begin::Text */}
           <div className='text-gray-800 mb-5'>

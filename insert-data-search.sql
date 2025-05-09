@@ -10,11 +10,11 @@ INSERT INTO "individuals" ("full_name", "id_number", "date_of_birth", "is_male",
 ('Bùi Minh H', '051092005566', '1992-09-25', true, 'Hải Phòng', 'Thành viên tích cực trong các diễn đàn ô tô', '0888999000', false);
 
 
-INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "account_type_id", "note", "is_linked") VALUES
+INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_linked") VALUES
 ('10000123456789', 'Pham Thi D', 150, '0912345678', 1, 1, 'TK chính của Phạm Thị D', true),
-('10001548796548', 'Group Yêu Hà Tĩnh', 5000, '0988112233', 1, 2, 'Nhóm cộng đồng lớn', true), -- account_type_id=2: Nhóm Facebook
+('10001548796548', 'Group Yêu Hà Tĩnh', 5000, '0988112233', 1, 2, 'Nhóm cộng đồng lớn', true), -- type_id=2: Nhóm Facebook
 ('tiktok_dangthuyf', 'Dang Thuy F Official', 150000, '0333444555', 1, 1, 'KOL TikTok', true), -- Giả sử type 1 cũng dùng cho TikTok
-('zalo_vutieng', 'Vũ Tiến (NCLS)', 50, '0777888999', 1, 6, 'Zalo cá nhân', true), -- account_type_id=6: Zalo
+('zalo_vutieng', 'Vũ Tiến (NCLS)', 50, '0777888999', 1, 6, 'Zalo cá nhân', true), -- type_id=6: Zalo
 ('10002366484847', 'Bui Minh H', 250, '0888999000', 1, 1, 'Hay đăng về xe cộ', true);
 
 

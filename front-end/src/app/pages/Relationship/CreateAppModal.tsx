@@ -5,7 +5,7 @@ import {createPortal} from 'react-dom'
 import {Modal} from 'react-bootstrap'
 import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field} from 'formik'
-import {Irelationship} from './IMoiquanhe'
+import {Imoiquanhe} from './IMoiquanhe'
 import instance from '../../modules/axiosInstance'
 import Select from 'react-select'
 import {useQuery} from 'react-query'
@@ -46,7 +46,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
         return {
           value: el.uid,
           label: `${el.uid} - ${el.name}`,
-          account_type_id: el.account_type_id,
+          type_id: el.type_id,
           name: el.name,
         }
       })
@@ -79,11 +79,11 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
             id_client: '',
             uid: '',
             name: '',
-            account_type_id: 1,
+            type_id: 1,
             time_to_crawler: 0,
             time_get_host: 0,
           }}
-          onSubmit={(values: Irelationship) => {
+          onSubmit={(values: Imoiquanhe) => {
             instance
               .post(`${URL}/host`, values)
               .then((res) => {
@@ -153,7 +153,7 @@ const CreateAppModal = ({show, handleClose, title}: Props) => {
                       setFieldValue('uid', values)
                     } else {
                       setFieldValue('uid', _val.value)
-                      setFieldValue('account_type_id', _val.account_type_id)
+                      setFieldValue('type_id', _val.type_id)
                       setFieldValue('name', _val.name)
                       setvalue(_val.value)
                     }

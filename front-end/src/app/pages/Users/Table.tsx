@@ -19,7 +19,7 @@ const Table: React.FC<Props> = ({className}) => {
   const {isLoading, data, error} = useQuery({
     queryKey: ['tele'],
     queryFn: async () => {
-      const respone = await axios.get(`${URL}/unit`)
+      const respone = await axios.get(`${URL}/donvi`)
       const {data} = respone
       return data.DATA
     },

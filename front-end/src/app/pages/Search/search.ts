@@ -1,10 +1,10 @@
 export interface uid {
     uid: string,
     name: string,
-    phone_number?: string,
-    status: number,
-    account_type_id: number,
-    note: string,
+    SDT?: string,
+    trangthai_id: number,
+    type_id: number,
+    ghichu: string,
     reaction: number,
     Vaiao: Boolean,
 
@@ -30,16 +30,16 @@ export interface trichtin {
 }
 export interface individual{
     id: string,
-    full_name: string,
-    national_id: string,
-    citizen_id: string,
-    image_url:string,
-    date_of_birth: string,
-    is_male: boolean,
-    hometown: string,
-    additional_info: string,
-    phone_number: string,
-    is_kol: boolean,
+    client_name: string,
+    CMND: string,
+    CCCD: string,
+    Image:string,
+    Ngaysinh: string,
+    Gioitinh: boolean,
+    Quequan: string,
+    Thongtinbosung: string,
+    SDT: string,
+    KOL: boolean,
 }
 export interface individualsearch {
     _index: string,
