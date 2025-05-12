@@ -56,10 +56,11 @@ def setup_meilisearch_indexes():
         index_individuals.update_settings({
             'searchableAttributes': [ # Các trường tìm kiếm full-text
                 'full_name',
-                'id_number', # CCCD / CMND trong model
+                'national_id',
+                'citizen_id', 
                 'additional_info',
                 'phone_number',
-                'hometown' # Thêm quê quán vào tìm kiếm
+                'hometown' 
             ],
             'filterableAttributes': [ # Các trường filter
                 'is_kol',
@@ -67,7 +68,6 @@ def setup_meilisearch_indexes():
             'sortableAttributes': [ # Các trường có thể sắp xếp
                 'created_at',
                 'updated_at',
-                'full_name'
             ]
             # primaryKey mặc định là 'id' nếu có, nếu không Meili sẽ tự tìm
         })
@@ -84,13 +84,12 @@ def setup_meilisearch_indexes():
             ],
             'filterableAttributes': [
                 'status_id',
-                'account_type_id',
-                'is_linked',
+                'type_id',
+                'is_active',
             ],
             'sortableAttributes': [
                 'created_at',
                 'updated_at',
-                'name',
                 'reaction_count'
             ]
             # primaryKey uid có unique constraint nên Meili có thể tự nhận diện
@@ -105,12 +104,12 @@ def setup_meilisearch_indexes():
                 'content_note',
                 'comment',
                 'action',
-                'linked_social_account_uid'
+                'related_social_account_uid'
             ],
             'filterableAttributes': [
                 'social_account_uid',
                 'user_id',
-                'linked_social_account_uid'
+                'related_social_account_uid'
             ],
             'sortableAttributes': [
                 'created_at',
@@ -130,14 +129,14 @@ def convert_to_searchable_dict(obj: Any) -> Dict[str, Any]:
         return {
             "id": str(obj.id), # Note: Meilisearch cần ID là string hoặc int
             "full_name": obj.full_name,
-            "id_number": obj.id_number,
+            "national_id": obj.national_id,
+            "citizen_id": obj.citizen_id,
             "image_url": obj.image_url,
             "date_of_birth": obj.date_of_birth.isoformat() if obj.date_of_birth else None,
             "is_male": obj.is_male,
             "hometown": obj.hometown,
             "additional_info": obj.additional_info,
             "phone_number": obj.phone_number,
-            "kols_type": obj.kols_type,
             "is_kol": obj.is_kol,
             # Chuyển đổi DateTime thành Unix timestamp (integer) hoặc ISO string
             "created_at": int(obj.created_at.timestamp()) if obj.created_at else None,
@@ -151,9 +150,9 @@ def convert_to_searchable_dict(obj: Any) -> Dict[str, Any]:
             "reaction_count": obj.reaction_count,
             "phone_number": obj.phone_number,
             "status_id": obj.status_id,
-            "account_type_id": obj.account_type_id,
+            "type_id": obj.type_id,
             "note": obj.note,
-            "is_linked": obj.is_linked,
+            "is_active": obj.is_active,
             "created_at": int(obj.created_at.timestamp()) if obj.created_at else None,
             "updated_at": int(obj.updated_at.timestamp()) if obj.updated_at else None,
         }
@@ -164,7 +163,7 @@ def convert_to_searchable_dict(obj: Any) -> Dict[str, Any]:
             "content_note": obj.content_note,
             "comment": obj.comment,
             "action": obj.action,
-            "linked_social_account_uid": obj.linked_social_account_uid,
+            "related_social_account_uid": obj.related_social_account_uid,
             "user_id": str(obj.user_id) if obj.user_id else None, # Chuyển UUID user_id sang string
             "created_at": int(obj.created_at.timestamp()) if obj.created_at else None,
             "updated_at": int(obj.updated_at.timestamp()) if obj.updated_at else None,
@@ -254,43 +253,6 @@ def search_reports_meili(query: str, options: Optional[Dict] = None) -> Dict:
         logger.error(f"Error searching reports in Meilisearch: {e}", exc_info=True)
         return {"hits": [], "error": str(e), "query": query, "options": options}
 
-
-# def search_individuals_meili(query: str, options: Dict = None) -> Dict:
-#     """Tìm kiếm individuals trong Meilisearch"""
-#     try:
-#         logger.info(f"Searching individuals for '{query}' with options: {options}")
-#         search_params = options if options else {}
-#         #NOTE: Giới hạn kết quả: search_params['limit'] = 20
-#         results = client.index(INDEX_INDIVIDUALS).search(query, search_params)
-#         logger.info(f"Meilisearch returned {len(results.get('hits', []))} hits for individuals.")
-#         return results
-#     except Exception as e:
-#         logger.error(f"Error searching individuals in Meilisearch: {e}")
-#         return {"hits": [], "error": str(e)} 
-
-# def search_social_accounts_meili(query: str, options: Dict = None) -> Dict:
-#     """Tìm kiếm tài khoản FB trong Meilisearch"""
-#     try:
-#         logger.info(f"Searching social accounts for '{query}' with options: {options}")
-#         search_params = options if options else {}
-#         results = client.index(INDEX_SOCIAL_ACCOUNTS).search(query, search_params)
-#         logger.info(f"Meilisearch returned {len(results.get('hits', []))} hits for social accounts.")
-#         return results
-#     except Exception as e:
-#         logger.error(f"Error searching social accounts in Meilisearch: {e}")
-#         return {"hits": [], "error": str(e)}
-
-# def search_reports_meili(query: str, options: Dict = None) -> Dict:
-#     """Tìm kiếm trích tin trong Meilisearch"""
-#     try:
-#         logger.info(f"Searching reports for '{query}' with options: {options}")
-#         search_params = options if options else {}
-#         results = client.index(INDEX_REPORTS).search(query, search_params)
-#         logger.info(f"Meilisearch returned {len(results.get('hits', []))} hits for reports.")
-#         return results
-#     except Exception as e:
-#         logger.error(f"Error searching reports in Meilisearch: {e}")
-#         return {"hits": [], "error": str(e)}
 
 # --- Các hàm cập nhật Meilisearch (cho đồng bộ hoá) ---
 

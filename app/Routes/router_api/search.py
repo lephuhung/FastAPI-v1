@@ -152,13 +152,13 @@ async def search_individuals_endpoint(
 
 
 # --- Endpoint tìm kiếm Social Accounts  ---
-#search/social-account?query=&status_id=1&account_type_id=1&sort=updated_at:desc,full_name:asc
+#search/social-account?query=&status_id=1&type_id=1&sort=updated_at:desc,full_name:asc
 @router.get("/social-account", response_model=List[social_account_schema.SocialAccount])
 async def search_social_accounts_endpoint(
     query: str,
     # --- Tham số phân trang ---
     status_id: Optional[int] = Query(None),
-    account_type_id: Optional[int] = Query(None),
+    type_id: Optional[int] = Query(None),
     is_linked: Optional[bool] = Query(None),
     # --- Tham số phân trang ---
     limit: int = Query(20, ge=1, le=100),
@@ -177,7 +177,7 @@ async def search_social_accounts_endpoint(
     # --- Filter ---
     filters = []
     if status_id is not None: filters.append(f"status_id = {status_id}")
-    if account_type_id is not None: filters.append(f"account_type_id = {account_type_id}")
+    if type_id is not None: filters.append(f"type_id = {type_id}")
     if is_linked is not None: filters.append(f"is_linked = {'true' if is_linked else 'false'}")
     filter_string = " AND ".join(filters) if filters else None
     # ---------------------------------

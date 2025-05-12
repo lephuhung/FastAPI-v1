@@ -1,15 +1,24 @@
 from typing import Optional
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, Field, UUID4 
+import uuid 
 from datetime import datetime
 
 
+class UserBase(BaseModel):
+    id: UUID4 
+    username: str   
+
+    class Config:
+        from_attributes = True
+
+
 class ReportBase(BaseModel):
-    social_account_uid: str
-    content_note: str
-    comment: str
-    action: str
+    social_account_uid: str 
+    content_note: Optional[str] = None 
+    comment: Optional[str] = None      
+    action: Optional[str] = None       
     related_social_account_uid: Optional[str] = None
-    user_id: Optional[UUID4] = None
+    user_id: Optional[UUID4] = None 
 
 
 class ReportCreate(ReportBase):
@@ -20,25 +29,20 @@ class ReportUpdate(ReportBase):
     pass
 
 
-class UserBase(BaseModel):
-    id: str
-    name: str
-
-
 class ReportInDB(ReportBase):
     id: int
     created_at: datetime
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True 
 
 
-class Report(ReportBase):
+class Report(ReportBase): 
     id: int
     created_at: datetime
     updated_at: datetime
-    user: Optional[UserBase] = None
+    user: Optional[UserBase] = None 
 
     class Config:
-        orm_mode = True 
+        from_attributes = True 

@@ -36,12 +36,12 @@ class CRUDSocialAccount(CRUDBase[SocialAccount, SocialAccountCreate, SocialAccou
             self.model.type_page == type_page
         ).all()
 
-    def get_all_by_type_id(self, db: Session, *, account_type_id: int) -> List[SocialAccount]:
+    def get_all_by_type_id(self, db: Session, *, type_id: int) -> List[SocialAccount]:
         """
-        Lấy tất cả các social accounts theo account_type_id.
+        Lấy tất cả các social accounts theo type_id.
         """
-        # Giả định model SocialAccount của bạn có trường tên là 'account_type_id'.
-        # Nếu tên trường khác, hãy thay đổi self.model.account_type_id cho phù hợp.
-        return db.query(self.model).filter(self.model.account_type_id == account_type_id).all()
+        # Giả định model SocialAccount của bạn có trường tên là 'type_id'.
+        # Nếu tên trường khác, hãy thay đổi self.model.type_id cho phù hợp.
+        return db.query(self.model).filter(self.model.type_id == type_id).all()
     
 social_account = CRUDSocialAccount(SocialAccount) 

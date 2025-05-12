@@ -1,3 +1,18 @@
+
+
+export interface ReportDataSchema {
+  id: number;
+  social_account_uid: string | null;
+  content_note: string | null;
+  comment: string | null;
+  action: string | null;
+  related_social_account_uid: string | null;
+  user_id: string | null; 
+  created_at: string; // Kiểu string cho ISO date
+  updated_at: string; // Kiểu string cho ISO date
+}
+
+
 export interface uid {
     uid: string,
     name: string,

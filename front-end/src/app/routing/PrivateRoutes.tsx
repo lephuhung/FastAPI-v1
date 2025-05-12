@@ -18,7 +18,7 @@ import { Thongkectnv } from '../pages/Summary/Summary_social_account_unit'
 import { Details_donvi} from '../pages/Summary/details-donvi'
 import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
-import { TrichinSearch } from '../pages/Search/trichtin-search'
+import { TrichTinSearch } from '../pages/Search/trichtin-search'
 import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -48,7 +48,7 @@ const PrivateRoutes = () => {
         <Route path='summary-social-account-unit' element={<Thongkectnv/>} />
         <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
-        <Route path='search-trichtin' element={<TrichinSearch/>} />
+        <Route path='search-trichtin' element={<TrichTinSearch/>} />
         <Route
           path='config/*'
           element={

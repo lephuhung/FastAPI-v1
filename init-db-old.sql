@@ -41,7 +41,7 @@ CREATE TABLE "uid" (
   "reaction" int,
   "phone_number" varchar,
   "status" int,
-  "account_type_id" int,
+  "type_id" int,
   "note" varchar,
   "Vaiao" boolean,
   "created_at" timestamp,

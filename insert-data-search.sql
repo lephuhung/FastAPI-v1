@@ -2,7 +2,7 @@
 -- BỔ SUNG DỮ LIỆU DEMO CHO TÌM KIẾM
 -- =============================================
 
-INSERT INTO "individuals" ("full_name", "id_number", "date_of_birth", "is_male", "hometown", "additional_info", "phone_number", "is_kol") VALUES
+INSERT INTO "individuals" ("full_name", "national_id", "date_of_birth", "is_male", "hometown", "additional_info", "phone_number", "is_kol") VALUES -- Changed id_number to national_id
 ('Phạm Thị D', '038195001122', '1995-05-15', false, 'Nghệ An', 'Có nhiều bài viết tiêu cực về chính sách đền bù đất đai', '0912345678', false),
 ('Hoàng Văn E', '040080002233', '1980-11-20', true, 'Hà Tĩnh', 'Là admin của nhóm "Yêu Hà Tĩnh", thường xuyên đăng tin tức địa phương', '0988112233', false),
 ('Đặng Thuỳ F', '027199003344', '1999-07-01', false, 'Đà Nẵng', 'Beauty blogger, influencer mảng mỹ phẩm, đôi khi có phát ngôn gây tranh cãi', '0333444555', true),
@@ -10,7 +10,7 @@ INSERT INTO "individuals" ("full_name", "id_number", "date_of_birth", "is_male",
 ('Bùi Minh H', '051092005566', '1992-09-25', true, 'Hải Phòng', 'Thành viên tích cực trong các diễn đàn ô tô', '0888999000', false);
 
 
-INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_linked") VALUES
+INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_active") VALUES -- Changed type_id to type_id and is_linked to is_active
 ('10000123456789', 'Pham Thi D', 150, '0912345678', 1, 1, 'TK chính của Phạm Thị D', true),
 ('10001548796548', 'Group Yêu Hà Tĩnh', 5000, '0988112233', 1, 2, 'Nhóm cộng đồng lớn', true), -- type_id=2: Nhóm Facebook
 ('tiktok_dangthuyf', 'Dang Thuy F Official', 150000, '0333444555', 1, 1, 'KOL TikTok', true), -- Giả sử type 1 cũng dùng cho TikTok
@@ -20,7 +20,7 @@ INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", 
 
 INSERT INTO "individual_social_accounts" ("individual_id", "social_account_uid", "relationship_id") VALUES
 ((SELECT id FROM individuals WHERE full_name = 'Phạm Thị D'), '10000123456789', 1),
-((SELECT id FROM individuals WHERE full_name = 'Hoàng Văn E'), '10001548796548', 2), 
+((SELECT id FROM individuals WHERE full_name = 'Hoàng Văn E'), '10001548796548', 2),
 ((SELECT id FROM individuals WHERE full_name = 'Đặng Thuỳ F'), 'tiktok_dangthuyf', 1),
 ((SELECT id FROM individuals WHERE full_name = 'Vũ Tiến G'), 'zalo_vutieng', 1),
 ((SELECT id FROM individuals WHERE full_name = 'Bùi Minh H'), '10002366484847', 1);
@@ -34,5 +34,5 @@ INSERT INTO "reports" ("social_account_uid", "content_note", "comment", "action"
 
 -- Thêm vài liên kết tài khoản (ví dụ)
 INSERT INTO "social_account_links" ("group_social_account_uid", "linked_social_account_uid") VALUES
-('10001548796548', '10000123456789'), 
-('10001548796548', '100001'); 
+('10001548796548', '10000123456789'),
+('10001548796548', '100001');
