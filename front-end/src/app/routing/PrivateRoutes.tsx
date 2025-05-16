@@ -19,6 +19,7 @@ import { Details_donvi} from '../pages/Summary/details-donvi'
 import { ReportWrap } from '../pages/Report'
 import { UIDSearch } from '../pages/Search/uid-search'
 import { TrichTinSearch } from '../pages/Search/trichtin-search'
+import { DoituongSearch } from '../pages/Search/doituong-search'
 import { SocialAccount } from '../pages/SocialAccount'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -49,6 +50,7 @@ const PrivateRoutes = () => {
         <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
         <Route path='search-trichtin' element={<TrichTinSearch/>} />
+        <Route path='search-doituong' element={<DoituongSearch/>} />
         <Route
           path='config/*'
           element={

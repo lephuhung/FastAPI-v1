@@ -440,8 +440,8 @@ INSERT INTO "individuals" ("full_name", "national_id", "date_of_birth", "is_male
 
 INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_active") VALUES -- Changed to type_id and is_active
 ('100001', 'Nguyễn Văn A', 1000, '0123456789', 1, 1, 'Tài khoản chính', true),
-('100002', 'Trần Thị B', 500, '0987654321', 1, 1, 'Tài khoản phụ', true),
-('100003', 'Lê Văn C', 2000, '0456789123', 1, 1, 'Tài khoản quan trọng', true);
+('100002', 'Trần Thị B', 500, '0987654321', 2, 1, 'Tài khoản phụ', true),
+('100003', 'Lê Văn C', 2000, '0456789123', 3, 1, 'Tài khoản quan trọng', true);
 
 
 INSERT INTO "individual_social_accounts" ("individual_id", "social_account_uid", "relationship_id") VALUES
@@ -535,10 +535,10 @@ INSERT INTO "individuals" ("full_name", "national_id", "date_of_birth", "is_male
 
 INSERT INTO "social_accounts" ("uid", "name", "reaction_count", "phone_number", "status_id", "type_id", "note", "is_active") VALUES -- Changed type_id to type_id and is_linked to is_active
 ('10000123456789', 'Pham Thi D', 150, '0912345678', 1, 1, 'TK chính của Phạm Thị D', true),
-('10001548796548', 'Group Yêu Hà Tĩnh', 5000, '0988112233', 1, 2, 'Nhóm cộng đồng lớn', true), -- type_id=2: Nhóm Facebook
+('10001548796548', 'Group Yêu Hà Tĩnh', 5000, '0988112233', 2, 2, 'Nhóm cộng đồng lớn', true), -- type_id=2: Nhóm Facebook
 ('tiktok_dangthuyf', 'Dang Thuy F Official', 150000, '0333444555', 1, 1, 'KOL TikTok', true), -- Giả sử type 1 cũng dùng cho TikTok
-('zalo_vutieng', 'Vũ Tiến (NCLS)', 50, '0777888999', 1, 6, 'Zalo cá nhân', true), -- type_id=6: Zalo
-('10002366484847', 'Bui Minh H', 250, '0888999000', 1, 1, 'Hay đăng về xe cộ', true);
+('zalo_vutieng', 'Vũ Tiến (NCLS)', 50, '0777888999', 3, 6, 'Zalo cá nhân', true), -- type_id=6: Zalo
+('10002366484847', 'Bui Minh H', 250, '0888999000', 4, 1, 'Hay đăng về xe cộ', true);
 
 
 INSERT INTO "individual_social_accounts" ("individual_id", "social_account_uid", "relationship_id") VALUES

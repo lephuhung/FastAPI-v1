@@ -11,12 +11,15 @@ from typing import Annotated
 from app import models, schemas
 from datetime import timedelta
 from app.db.session import SessionLocal
+import logging
 
 from app.search import setup_meilisearch_indexes, index_all_data
 
 import logging
 from sqlalchemy import text
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # --- IMPORT ĐỂ ĐĂNG KÝ LISTENERS ---
 try:
@@ -70,6 +73,5 @@ def on_startup():
 
     except Exception as e:
         print(f"Error during startup: {e}")
-        # Có thể quyết định dừng ứng dụng nếu lỗi nghiêm trọng
 
 logger.info("Application setup complete (post-startup event). Server ready to accept requests.")
