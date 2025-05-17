@@ -15,17 +15,15 @@ from app.search import (
     add_or_update_document,
     delete_document,
     convert_to_searchable_dict,
+    client as meilisearch_client,
     INDEX_INDIVIDUALS,
     INDEX_SOCIAL_ACCOUNTS,
     INDEX_REPORTS,
-    is_meilisearch_available 
 )
 
 logger = logging.getLogger(__name__)
 
 # Lấy cấu hình từ environment variables
-# Sử dụng redis làm broker và result backend
-# redis://<hostname>:<port>/<database_number>
 broker_url = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
 result_backend = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/1')
 
@@ -50,35 +48,38 @@ celery.conf.update(
     task_reject_on_worker_lost=True, # Gửi lại task nếu worker bị mất đột ngột
     # Cấu hình retry mặc định (có thể override trong từng task)
     task_publish_retry_policy = {
-        'max_retries': 3, # Thử lại tối đa 3 lần
-        'interval_start': 0, # Bắt đầu thử lại ngay lập tức
-        'interval_step': 0.2, # Tăng thời gian chờ lên 0.2s mỗi lần
-        'interval_max': 0.2, # Thời gian chờ tối đa giữa các lần thử lại là 0.2s
+        'max_retries': 3, 
+        'interval_start': 0, 
+        'interval_step': 0.2, 
+        'interval_max': 0.2, 
     },
-    # Định nghĩa queues (giúp phân loại task)
-    # task_queues=(
-    #     Queue('default', Exchange('default'), routing_key='default'),
-    #     Queue('meilisearch_sync', Exchange('meilisearch_sync'), routing_key='meilisearch.#'),
-    # ),
-    # task_default_queue='default',
-    # task_default_exchange='default',
-    # task_default_routing_key='default',
 )
 
 # --- Định nghĩa Celery Tasks ---
 
-# Mapping từ tên model (string) sang class model thực tế
 MODEL_MAP = {
     'Individual': Individual,
     'SocialAccount': SocialAccount,
     'Report': Report,
 }
 
+def check_meilisearch_health():
+    """Kiểm tra health của Meilisearch client."""
+    if not meilisearch_client:
+        logger.warning("Meilisearch client (from app.search) is None.")
+        return False
+    try:
+        health = meilisearch_client.health()
+        return health.get('status') == 'available'
+    except Exception as e:
+        logger.warning(f"Meilisearch health check failed in Celery: {e}")
+        return False
+
 @celery.task(
-    bind=True, # Cho phép truy cập task instance (self)
-    autoretry_for=(Exception,), # Tự động retry cho các Exception cơ bản
-    retry_kwargs={'max_retries': 5, 'countdown': 5}, # Thử lại 5 lần, chờ 5s giữa các lần
-    name='tasks.update_meilisearch_document' # Tên task rõ ràng
+    bind=True, 
+    autoretry_for=(Exception,), 
+    retry_kwargs={'max_retries': 5, 'countdown': 5}, 
+    name='tasks.update_meilisearch_document' 
 )
 def update_meilisearch_document_task(self, model_name: str, record_id: any):
     """
@@ -87,7 +88,7 @@ def update_meilisearch_document_task(self, model_name: str, record_id: any):
     """
     logger.info(f"Task received: Update Meilisearch for {model_name} with ID {record_id}")
 
-    if not is_meilisearch_available():
+    if not check_meilisearch_health():
         logger.warning(f"Meilisearch unavailable. Retrying task for {model_name} ID {record_id}...")
         # `autoretry_for` sẽ tự động retry khi có Exception, nhưng có thể retry thủ công nếu muốn
         # raise ConnectionError("Meilisearch is unavailable")
@@ -96,7 +97,8 @@ def update_meilisearch_document_task(self, model_name: str, record_id: any):
             # Chờ theo cấp số nhân: 2, 4, 8, 16, 32 giây (tối đa 1 phút)
             countdown = 2 ** self.request.retries
             logger.info(f"Retrying in {countdown} seconds...")
-            raise self.retry(countdown=countdown, exc=ConnectionError("Meilisearch unavailable"))
+            # Ném một Exception để Celery tự động retry dựa trên autoretry_for
+            raise ConnectionError(f"Meilisearch unavailable, retrying task for {model_name} ID {record_id}")
         except self.MaxRetriesExceededError:
             logger.error(f"Max retries exceeded for {model_name} ID {record_id}. Giving up.")
             return 
@@ -106,45 +108,37 @@ def update_meilisearch_document_task(self, model_name: str, record_id: any):
         logger.error(f"Unknown model name '{model_name}' received in task. Cannot process ID {record_id}.")
         return 
 
-    db: Session = SessionLocal() # Tạo session DB mới cho task này
+    db: Session = SessionLocal() 
     record = None
     try:
         logger.debug(f"Fetching {model_name} with ID {record_id} from database...")
         if model_name == 'Individual':
             record = db.query(ModelClass).filter(ModelClass.id == record_id).first()
         elif model_name == 'SocialAccount':
-             # ID truyền vào là uid (string)
             record = db.query(ModelClass).filter(ModelClass.uid == str(record_id)).first()
         elif model_name == 'Report':
-             # ID truyền vào là id (int) => TODO: Xem lại tại trong DB gốc của anh là Integer
-            record = db.query(ModelClass).filter(ModelClass.id == int(record_id)).first()
+            record = db.query(ModelClass).filter(ModelClass.id == int(record_id)).first() # TODO: Xem lại tại trong DB gốc của anh là Integer
 
         if record:
-            logger.debug(f"Record found. Converting {model_name} ID {record_id} for Meilisearch.")
-            doc = convert_to_searchable_dict(record)
-            if doc:
-                index_name = ""
-                pk_field = 'id'
-                if model_name == 'Individual': index_name = INDEX_INDIVIDUALS
-                elif model_name == 'SocialAccount': index_name = INDEX_SOCIAL_ACCOUNTS
-                elif model_name == 'Report': index_name = INDEX_REPORTS
+            logger.debug(f"Record found. Preparing to update Meilisearch for {model_name} ID {record_id}.")
+            index_name = ""
+            if model_name == 'Individual': index_name = INDEX_INDIVIDUALS
+            elif model_name == 'SocialAccount': index_name = INDEX_SOCIAL_ACCOUNTS
+            elif model_name == 'Report': index_name = INDEX_REPORTS
 
-                if index_name:
-                    logger.debug(f"Adding/Updating document in Meilisearch index '{index_name}'...")
-                    add_or_update_document(index_name, doc, pk_field=pk_field)
-                    logger.info(f"Successfully updated Meilisearch for {model_name} ID {record_id}.")
-                else:
-                     logger.error(f"No index name configured for model {model_name}.")
+            if index_name:
+                logger.debug(f"Calling add_or_update_document for Meilisearch index '{index_name}'...")
+                
+                add_or_update_document(index_name=index_name, obj=record, db=db)
+                logger.info(f"Successfully processed Meilisearch update for {model_name} ID {record_id}.")
             else:
-                logger.warning(f"Failed to convert {model_name} ID {record_id} to searchable dict.")
+                logger.error(f"No index name configured for model {model_name}.")
         else:
-            # Record không tìm thấy trong DB (có thể đã bị xóa trước khi task chạy)
             logger.warning(f"{model_name} with ID {record_id} not found in DB. It might have been deleted. Skipping Meilisearch update.")
 
     except Exception as exc:
         logger.error(f"Error processing task for {model_name} ID {record_id}: {exc}", exc_info=True)
         try:
-            # Tăng thời gian chờ giữa các lần retry
             countdown = 10 * (self.request.retries + 1)
             logger.info(f"Retrying task due to error in {countdown} seconds...")
             raise self.retry(exc=exc, countdown=countdown)
@@ -167,12 +161,12 @@ def delete_meilisearch_document_task(self, model_name: str, record_id: any):
     """
     logger.info(f"Task received: Delete Meilisearch document for {model_name} with ID {record_id}")
 
-    if not is_meilisearch_available():
+    if not check_meilisearch_health():
         logger.warning(f"Meilisearch unavailable. Retrying delete task for {model_name} ID {record_id}...")
         try:
             countdown = 2 ** self.request.retries
             logger.info(f"Retrying in {countdown} seconds...")
-            raise self.retry(countdown=countdown, exc=ConnectionError("Meilisearch unavailable"))
+            raise ConnectionError(f"Meilisearch unavailable, retrying delete task for {model_name} ID {record_id}")
         except self.MaxRetriesExceededError:
             logger.error(f"Max retries exceeded for delete task {model_name} ID {record_id}. Giving up.")
             return
@@ -187,13 +181,12 @@ def delete_meilisearch_document_task(self, model_name: str, record_id: any):
 
         if index_name:
             logger.debug(f"Deleting document ID {doc_id} from Meilisearch index '{index_name}'...")
-            delete_document(index_name, doc_id)
+            delete_document(index_name, doc_id) 
             logger.info(f"Successfully sent delete request to Meilisearch for {model_name} ID {doc_id}.")
         else:
-             logger.error(f"No index name configured for model {model_name} to delete ID {doc_id}.")
+            logger.error(f"No index name configured for model {model_name} to delete ID {doc_id}.")
 
     except Exception as exc:
-        # Lỗi document_not_found thường không cần retry, các lỗi khác thì nên retry
         if "document_not_found" in str(exc).lower():
             logger.warning(f"Document {model_name} ID {record_id} already deleted or never existed in Meilisearch.")
         else:

@@ -14,8 +14,7 @@ from app.search import (
     convert_to_searchable_dict,
     INDEX_INDIVIDUALS,
     INDEX_SOCIAL_ACCOUNTS,
-    INDEX_REPORTS,
-    is_meilisearch_available
+    INDEX_REPORTS
 )
 
 from app.celery_app import (
