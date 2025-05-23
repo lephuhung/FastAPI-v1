@@ -149,22 +149,22 @@ services:
       - redis 
 
       
-  # front-end:
-  #   build: 
-  #     context: ./front-end
-  #     dockerfile: ../Dockerfile.front-end
-  #   ports:
-  #     - "3011:3011"
-  #   environment:
-  #     - WDS_SOCKET_HOST=127.0.0.1 
-  #     - CHOKIDAR_USEPOLLING=true
-  #     - WATCHPACK_POLLING=true 
-  #     - NODE_ENV=development
-  #   volumes:
-  #     - ./front-end:/app
-  #     - /app/node_modules
-  #   networks:
-  #     - elk
+  front-end:
+    build: 
+      context: ./front-end
+      dockerfile: ../Dockerfile.front-end
+    ports:
+      - "3011:3011"
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1 
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true 
+      - NODE_ENV=development
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
+    networks:
+      - elk
 
 
 networks:

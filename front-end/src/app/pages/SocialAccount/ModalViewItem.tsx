@@ -9,7 +9,7 @@ import { useQuery } from 'react-query'
 import Avatar from 'react-avatar'
 import {useNavigate} from 'react-router-dom'
 import { SocialAccountResponse } from './SocialAccount';
-
+import { account_type, SocialAccountModal, status, unit, task, characteristics } from './SocialAccount'
 type Report = {
   id: number;
   social_account_uid: string;
@@ -40,7 +40,16 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
   const navigate = useNavigate()
   const [data, setData] = useState<Report[]>([]);
   const [error, setError]=useState('');
-  
+  const unitsString = localStorage.getItem('units')
+  const units: unit[] = typeof unitsString === 'string' ? JSON.parse(unitsString) : []
+  const account_typeString = localStorage.getItem('account_types')
+  const account_type: account_type[] = typeof account_typeString === 'string' ? JSON.parse(account_typeString) : []
+  const characteristicsString = localStorage.getItem('characteristics')
+  const characteristics: characteristics[] = typeof characteristicsString === 'string' ? JSON.parse(characteristicsString) : []
+  const tasksString = localStorage.getItem('tasks')
+  const tasks: task[] = typeof tasksString === 'string' ? JSON.parse(tasksString) : []
+  const statusString = localStorage.getItem('statuses')
+  const status: status[] = typeof statusString === 'string' ? JSON.parse(statusString) : []
   useEffect(() => {
     if (item?.uid) {
       console.log('Fetching reports for UID:', item.uid);
