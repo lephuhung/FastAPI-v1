@@ -10,7 +10,7 @@ class Report(Base):
     """
     __tablename__ = "reports"
     id = Column(Integer, primary_key=True, index=True)
-    social_account_uid = Column(String(255), ForeignKey("social_accounts.uid"), index=True)
+    social_account_uid = Column(String(255), index=True)
     content_note = Column(String(1000))
     comment = Column(String(1000))
     action = Column(String(1000))
@@ -24,5 +24,5 @@ class Report(Base):
     )
     
     # Relationships
-    social_account = relationship("SocialAccount", back_populates="reports")
+    # social_account = relationship("SocialAccount", back_populates="reports")
     user = relationship("User", back_populates="reports") 

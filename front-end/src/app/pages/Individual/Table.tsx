@@ -236,16 +236,15 @@ export const IndividualTable: React.FC<Props> = ({ className }) => {
                       )}
                     </td>
                     <td>
-                      <a
-                        href='#'
-                        className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'
+                    <span
+                        className='btn btn-bg-light btn-secondary btn-active-color-primary btn-sm px-4 me-1'
                         onClick={() => {
                           setSelectedIndividual(el)
                           setshowModalDoituong(true)
                         }}
                       >
-                        <KTSVG path="media/icons/duotune/general/gen036.svg" className="svg-icon-3" />
-                      </a>
+                        Hiện thị
+                      </span>
                       <a
                         href='#'
                         className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'

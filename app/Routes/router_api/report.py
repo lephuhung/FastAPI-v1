@@ -54,10 +54,6 @@ async def create_report(
             "user_id": report_obj.user_id,
             "created_at": report_obj.created_at,
             "updated_at": report_obj.updated_at,
-            "user": {
-                "id": str(report_obj.user.id),
-                "name": report_obj.user.name
-            } if report_obj.user else None
         }
         
         return response_data
@@ -69,7 +65,7 @@ async def create_report(
 async def update_report(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     report_in: ReportUpdate,
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
@@ -86,7 +82,7 @@ async def update_report(
 async def get_report(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
@@ -101,7 +97,7 @@ async def get_report(
 async def delete_report(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """

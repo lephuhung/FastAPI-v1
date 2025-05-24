@@ -31,7 +31,7 @@ class SocialAccount(Base):
     group_statuses = relationship("GroupStatus", back_populates="social_account")
     group_characteristics = relationship("GroupCharacteristic", back_populates="social_account")
     unit_groups = relationship("UnitGroup", back_populates="social_account")
-    reports = relationship("Report", back_populates="social_account")
+    # reports = relationship("Report", back_populates="social_account")
     group_links = relationship("SocialAccountLink", foreign_keys="[SocialAccountLink.group_social_account_uid]", back_populates="group_social_account")
     linked_links = relationship("SocialAccountLink", foreign_keys="[SocialAccountLink.linked_social_account_uid]", back_populates="linked_social_account")
     administrators = relationship("Administrator", back_populates="social_account") 

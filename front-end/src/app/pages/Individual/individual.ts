@@ -26,7 +26,20 @@ export const deleteIndividual = async (id: number) => {
   const response = await axios.delete(`${URL}/individuals/${id}`)
   return response.data
 }
-
+export interface Report {
+  id: number;
+  social_account_uid: string;
+  content_note: string;
+  comment: string;
+  action: string;
+  linked_social_account_uid: string;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: string;
+    name: string;
+  } | null;
+}
 export interface individual {
   full_name: string
   national_id: string | null

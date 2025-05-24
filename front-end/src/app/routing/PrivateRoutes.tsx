@@ -48,6 +48,7 @@ const PrivateRoutes = () => {
         <Route path='summary-individual-unit' element={<Thongkephanloai/>} />
         <Route path='summary-social-account-unit' element={<Thongkectnv/>} />
         <Route path='reports/social-account/:id' element={<ReportWrap/>}/>
+        <Route path='reports/individuals/:id' element={<ReportWrap/>}/>
         <Route path='search-uid' element={<UIDSearch/>} />
         <Route path='search-trichtin' element={<TrichTinSearch/>} />
         <Route path='search-doituong' element={<DoituongSearch/>} />

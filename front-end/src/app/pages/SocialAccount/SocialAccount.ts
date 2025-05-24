@@ -38,7 +38,20 @@ export interface SocialAccountResponse {
         name: string
     }
 }
-
+export interface Report  {
+    id: number;
+    social_account_uid: string;
+    content_note: string;
+    comment: string;
+    action: string;
+    linked_social_account_uid: string;
+    created_at: string;
+    updated_at: string;
+    user: {
+      id: string;
+      name: string;
+    } | null;
+  }
 export interface SocialAccountSimple {
     uid: string
     name: string

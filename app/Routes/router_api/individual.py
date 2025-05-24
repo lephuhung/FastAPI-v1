@@ -9,6 +9,8 @@ from app.crud.crud_unit import unit
 from app.crud.crud_task import task
 from app.Routes import deps
 from sqlalchemy.orm import Session
+from app.crud.crud_report import report as report_crud
+from app.crud.crud_individual_social_account import individual_social_account
 
 router = APIRouter(prefix="/individuals", tags=["Individuals"])
 
@@ -161,4 +163,47 @@ async def delete_individual(
     if not individual_obj:
         raise HTTPException(status_code=404, detail="Individual not found")
     individual_obj = individual.remove(db=db, id=id)
-    return individual_obj 
+    return individual_obj
+
+
+@router.get("/{id}/reports")
+async def get_reports_by_individual(
+    *,
+    db: Session = Depends(deps.get_db),
+    id: UUID4,
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    """
+    Get all reports for an individual by aggregating all social_account_uids for the individual.
+    """
+    try:
+        # Get all social accounts for the individual
+        social_accounts = individual_social_account.get_by_individual_id(db=db, individual_id=id)
+        social_account_uids = [sa.social_account_uid for sa in social_accounts]
+        
+        # Get all reports for these social_account_uids
+        result = []
+        for uid in social_account_uids:
+            reports = report_crud.get_by_social_account_uid(db=db, social_account_uid=uid)
+            for report in reports:
+                try:
+                    report_dict = {
+                        "id": report.id,
+                        "social_account_uid": report.social_account_uid,
+                        "content_note": report.content_note,
+                        "comment": report.comment,
+                        "action": report.action,
+                        "related_social_account_uid": report.related_social_account_uid,
+                        "created_at": report.created_at,
+                        "updated_at": report.updated_at,
+                        "user": {
+                            "id": str(report.user.id),
+                            "name": getattr(report.user, "name", getattr(report.user, "username", None))
+                        } if report.user else None
+                    }
+                    result.append(report_dict)
+                except Exception as e:
+                    continue
+        return result
+    except Exception as e:
+        return [] 

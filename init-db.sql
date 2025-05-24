@@ -179,8 +179,6 @@ CREATE TABLE "reports" (
   "user_id" uuid,
   "created_at" timestamp DEFAULT NOW(),
   "updated_at" timestamp DEFAULT NOW(),
-  CONSTRAINT fk_reports_social_account FOREIGN KEY ("social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE CASCADE,
-  CONSTRAINT fk_reports_related_social_account FOREIGN KEY ("related_social_account_uid") REFERENCES "social_accounts" ("uid") ON DELETE SET NULL,
   CONSTRAINT fk_reports_user FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE SET NULL
 );
 CREATE INDEX idx_reports_social_account_uid ON "reports" ("social_account_uid");
