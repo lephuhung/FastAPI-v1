@@ -65,10 +65,17 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
     }
   })
   if (isLoading) {
-    <div>Loading</div>
+    return (
+      <div className='d-flex justify-content-center align-items-center' style={{minHeight: '400px'}}>
+        <div className='spinner-border text-primary' role='status' style={{width: '3rem', height: '3rem'}}>
+          <span className='visually-hidden'>Loading...</span>
+        </div>
+      </div>
+    )
   }
   if (error) {
     console.log(error)
+    window.location.reload()
   }
 
   const handleSearch = () => {
@@ -150,8 +157,8 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
                 {/* <th className='min-w-150px'>CẬP NHẬT</th> */}
                 <th className='min-w-100px text-center'>TRẠNG THÁI</th>
                 <th className='min-w-100px text-center'>SĐT</th>
-                <th className='min-w-100px'>HOẠT ĐỘNG</th>
-                <th className='min-w-100px'>ĐƠN VỊ</th>
+                <th className='min-w-100px text-center'>HOẠT ĐỘNG</th>
+                <th className='min-w-100px text-center'>ĐƠN VỊ</th>
                 <th className='min-w-100px text-center'>CTNV</th>
                 <th className='min-w-200px text-center'>HOẠT ĐỘNG</th>
               </tr>
@@ -183,35 +190,47 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
                       </div>
                     </td>
                     <td className='text-center align-middle'>
-                      <span className='badge badge-primary fs-7 fw-semibold'>
+                      <span className='badge badge-primary fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                         {el.status_name?.toUpperCase()}
                       </span>
                     </td>
                     <td className='text-center align-middle'>
-                      <span className='badge badge-primary fs-7 fw-semibold'>
+                      <span className='badge badge-primary fs-7 fw-semibold' style={{ display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} >
                         {el.phone_number === '0' ? 'Chưa có' : el.phone_number}
                       </span>
                     </td>
                     <td className='align-middle'>
                       {el.is_active ? (
-                        <span className='badge badge-primary fs-7 fw-semibold'>
+                        <span className='badge badge-primary fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                           HOẠT ĐỘNG
                         </span>
                       ) : (
-                        <span className='badge badge-warning fs-7 fw-semibold'>
+                        <span className='badge badge-warning fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                           KHÔNG HOẠT ĐỘNG
                         </span>
                       )}
                     </td>
-                    <td className='align-middle'>
-                      <span className='badge badge-danger fs-7 fw-semibold'>
-                        {el.unit?.name || 'Chưa có'}
-                      </span>
+                    <td className='align-middle'> 
+                      {el.unit?.name ? (
+                        <span className='badge badge-primary fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                          {el.unit?.name}
+                        </span>
+                      ) : (
+                        <span className='badge badge-danger fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                          KHÔNG
+                        </span>
+                      )}
                     </td>
                     <td className='text-center align-middle'>
-                      <span className='badge badge-success fs-7 fw-semibold'>
-                        {el.task?.name || 'Chưa có'}
-                      </span>
+                      {el.task?.name ? (
+                        <span className='badge badge-success fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                          {el.task?.name}
+                        </span>
+                      ) : (
+                        <span className='badge badge-danger fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                          CHƯA PHÂN CÔNG
+                        </span>
+                      )}
                     </td>
                     <td className='text-center align-middle'>
                       <span

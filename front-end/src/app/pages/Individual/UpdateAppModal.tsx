@@ -129,7 +129,7 @@ const UpdateModal = ({show, handleClose, title, individual}: Props) => {
                   {individual.image_url ? 
                   <img src={individual.image_url} width={250} height={250} alt='Ảnh đại diện' />:<Avatar name={individual.full_name}  size='100' />
 }
-                  <ImagUploder name='Image' />
+                  {/* <ImagUploder name='Image' /> */}
                 </div>
                 <div style={{marginLeft: '30px'}}>
                   <div style={{display: 'flex', flexDirection: 'row'}}>

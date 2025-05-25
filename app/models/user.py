@@ -26,3 +26,8 @@ class User(Base):
     permissions = relationship("UserPermission", back_populates="user")
     units = relationship("UserUnit", back_populates="user")
     reports = relationship("Report", back_populates="user")
+
+    @property
+    def is_superadmin(self) -> bool:
+        """Check if user has superadmin role"""
+        return any(user_role.role.name == "superadmin" for user_role in self.roles)

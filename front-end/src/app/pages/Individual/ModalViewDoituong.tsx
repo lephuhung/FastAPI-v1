@@ -30,7 +30,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
   const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
   useEffect(() => {
     individual && axios
-      .get(`${URL}/reports/${individual?.id}`)
+      .get(`${URL}/reports/social-account/${individual?.id}`)
       .then((res) => {
         if (res.data.STATUS === '200') console.log('details' + res.data)
         setData(res.data)
@@ -163,7 +163,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                           className='svg-icon-3 svg-icon-danger me-2'
                         />
                         <div className='fs-2 fw-bolder'>
-                          {data ? data.trichtin_count[0].count : '0'}
+                          {data?.length}
                         </div>
                       </div>
 

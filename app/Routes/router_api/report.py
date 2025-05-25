@@ -72,7 +72,7 @@ async def update_report(
     """
     Update a report.
     """
-    report_obj = report_crud.get(db=db, id=id)
+    report_obj = report_crud.get_by_social_account_uid(db=db, social_account_uid=id)
     if not report_obj:
         raise HTTPException(status_code=404, detail="Report not found")
     report_obj = report_crud.update(db=db, db_obj=report_obj, obj_in=report_in)
@@ -88,7 +88,7 @@ async def get_report(
     """
     Get report by ID.
     """
-    report_obj = report_crud.get(db=db, id=id)
+    report_obj = report_crud.get_by_social_account_uid(db=db, social_account_uid=id)
     if not report_obj:
         raise HTTPException(status_code=404, detail="Report not found")
     return report_obj

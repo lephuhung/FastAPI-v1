@@ -1,11 +1,10 @@
 import {Navigate, Routes, Route, Outlet} from 'react-router-dom'
-import {PageLink, PageTitle} from '../../../_metronic/layout/core'
+import { PageTitle} from '../../../_metronic/layout/core'
 import {TableTasks} from './Table-tasks'
 import {TableCharacteristics} from './Table-characteristics'
 import {TableStatus} from './Table-status'
 import {ProfileHeader} from './ProfileHeader'
 import {TableTags} from './Table-tags'
-import {Overview} from '../../modules/profile/components/Overview'
 
 
 const ConfigPage = () => (

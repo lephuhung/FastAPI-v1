@@ -1,16 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-import { KTSVG, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { KTSVG} from '../../../_metronic/helpers'
 import axios from 'axios'
-import { individual, individualResponse } from './individual'
 import Avatar from 'react-avatar'
-import { ModalViewDoituong } from './ModalViewDoituong'
-import clsx from 'clsx'
-import { CreateAppModal } from './CreateAppModal'
-import { UpdateModal } from './UpdateAppModal'
 import { ToastContainer, toast } from 'react-toastify'
-import { CreateModelMLH } from './CreateAppModalMLH'
 
 const URL = process.env.REACT_APP_API_URL
 
@@ -59,7 +53,7 @@ interface IndividualResponse {
 
 export type { IndividualResponse }
 
-export const IndividualTable: React.FC<Props> = ({ className }) => {
+export const RoleBasePermissionTable: React.FC<Props> = ({ className }) => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [showModalDoituong, setshowModalDoituong] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -74,7 +68,7 @@ export const IndividualTable: React.FC<Props> = ({ className }) => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [loadingSearch, setLoadingSearch] = useState<boolean>(false)
   const { isLoading, data, error } = useQuery({
-    queryKey: 'individuals',
+    queryKey: 'role-permission',
     queryFn: async () => {
       const respone = await axios.get(`${URL}/individuals`)
       const { data } = respone
@@ -314,7 +308,7 @@ export const IndividualTable: React.FC<Props> = ({ className }) => {
             </tbody>
             {/* end::Table body */}
           </table>
-          <ModalViewDoituong
+          {/* <ModalViewDoituong
             show={showModalDoituong}
             handleClose={() => setshowModalDoituong(false)}
             title='THÔNG TIN CHI TIẾT ĐỐI TƯỢNG'
@@ -350,7 +344,7 @@ export const IndividualTable: React.FC<Props> = ({ className }) => {
             draggable
             pauseOnHover
             theme='light'
-          />
+          /> */}
 
           {/* end::Table */}
         </div>
