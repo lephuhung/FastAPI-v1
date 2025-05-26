@@ -104,8 +104,8 @@ export function AsideMenuMain() {
         fontIcon='bi-person'
       >
         <AsideMenuItem to='/permission' title='Phân Quyền' hasBullet={true} />
-        <AsideMenuItem to='/user' title='Tài khoản' hasBullet={true} />
-        <AsideMenuItem to='/donvi' title='Đơn vị' hasBullet={true} />
+        <AsideMenuItem to='/users' title='Danh sách tài khoản' hasBullet={true} />
+        <AsideMenuItem to='/units' title='Danh sách đơn vị' hasBullet={true} />
       </AsideMenuItemWithSub>
       <AsideMenuItem
         to='/tele'

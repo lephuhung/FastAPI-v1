@@ -336,7 +336,7 @@ INSERT INTO "units" ("name") VALUES
 
 
 INSERT INTO "roles" ("name") VALUES
-('superadmin'), ('admin'), ('Phong'), ('CAX'), ('DOI');
+('superadmin'), ('admin'), ('phong'), ('cax'), ('doi');
 
 
 INSERT INTO "permissions" ("name") VALUES

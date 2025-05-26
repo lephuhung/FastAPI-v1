@@ -1,19 +1,26 @@
-import React, { FC } from "react";
-import {Table} from "./Table";
-import { useIntl } from 'react-intl'
-import { PageTitle } from '../../../_metronic/layout/core'
-const WrapTable : FC = ()=>{
-    return (
-        <Table className="mb-5 mb-xl-8"/>
-    )
-}
-const User: FC = () => {
-    const intl = useIntl()
-    return (
-        <>
-        <PageTitle breadcrumbs={[]}>{intl.formatMessage({ id: 'MENU.USERS' })}</PageTitle>
-       <WrapTable/>
-        </>
-    );
-}
-export { User }
+import React from 'react';
+import UserTable from './Table';
+import { useIntl } from 'react-intl';
+import { PageTitle } from '../../../_metronic/layout/core';
+// import './Table.css';
+
+const Users: React.FC = () => {
+  // You would typically get this from your routing or state management
+  const unitId = 'd3a98a7e-8535-4ab0-aaa1-69aed21c16de'; // Replace with actual unit ID
+
+  return (
+    <>
+      {/* <PageTitle breadcrumbs={[]}>{intl.formatMessage({ id: 'MENU.USERS' })}</PageTitle>  */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">Unit Users Management</h3>
+        </div>
+        <div className="card-body">
+          <UserTable />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export { Users };

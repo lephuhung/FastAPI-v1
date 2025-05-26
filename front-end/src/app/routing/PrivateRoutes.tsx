@@ -5,7 +5,7 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
-import {User} from '../pages/Users'
+import {Users} from '../pages/Users'
 import Search from '../pages/Search-datadoc'
 import SearchPost from '../pages/Search-post'
 import ConfigPage from '../pages/Config'
@@ -13,9 +13,10 @@ import {IndividualPage} from '../pages/Individual'
 import {IndividualDetailsPage} from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
 import {Phanloai} from '../pages/Utils/Phanloai'
-import {Thongkephanloai} from '../pages/Summary/Summary_individual_unit'
-import {Thongkectnv} from '../pages/Summary/Summary_social_account_unit'
-import {Details_donvi} from '../pages/Summary/details-donvi'
+import {Units} from '../pages/Units'
+// import {Thongkephanloai} from '../pages/Summary/Summary_individual_unit'
+// import {Thongkectnv} from '../pages/Summary/Summary_social_account_unit'
+// import {Details_donvi} from '../pages/Summary/details-donvi'
 import {ReportWrap} from '../pages/Report'
 import {UIDSearch} from '../pages/Search/uid-search'
 import {TrichTinSearch} from '../pages/Search/trichtin-search'
@@ -38,16 +39,15 @@ const PrivateRoutes = () => {
         <Route path='ssh' element={<SSH />} />
         <Route path='phanloai' element={<Phanloai />} />
         <Route path='dashboard' element={<DashboardWrapper />} />
-        <Route path='users' element={<User />} />
+        <Route path='users' element={<Users />} />
         <Route path='social-account/:uid' element={<SocialAccount />} />
         <Route path='search-datadoc' element={<Search />} />
         <Route path='search-post' element={<SearchPost />} />
-        <Route path='user' element={<User />} />
         <Route path='individual/details/:id' element={<IndividualDetailsPage />} />
         <Route path='individual' element={<IndividualPage />} />
-        <Route path='thongke-donvi/details/:id' element={<Details_donvi />} />
-        <Route path='summary-individual-unit' element={<Thongkephanloai />} />
-        <Route path='summary-social-account-unit' element={<Thongkectnv />} />
+        <Route path='units' element={<Units />} />
+        {/* <Route path='summary-individual-unit' element={<Thongkephanloai />} />
+        <Route path='summary-social-account-unit' element={<Thongkectnv />} />  */}
         <Route path='reports/social-account/:id' element={<ReportWrap />} />
         <Route path='reports/individuals/:id' element={<ReportWrap />} />
         <Route path='search-uid' element={<UIDSearch />} />
