@@ -14,6 +14,7 @@ const CardItemIndividual: FC<Props> = ({
   title,
   count,
   item,
+
 }) => {
   return (
     <Link

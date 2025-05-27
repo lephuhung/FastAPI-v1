@@ -32,7 +32,7 @@ const Thongkephanloai: React.FC = () => {
               <div className='col-md-6 col-xl-4' key={index}>
                 <CardItemIndividual
                   title={el.unit.name}
-                  count = {0}
+                  count = {index}
                   item={el}
                 />
               </div>
