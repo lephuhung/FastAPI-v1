@@ -4,20 +4,40 @@ from app.schemas.unit import UnitCreate, UnitUpdate, Unit
 from app.crud.crud_unit import unit
 from app.Routes import deps
 from sqlalchemy.orm import Session
+from app import models
+from pydantic import BaseModel
+from sqlalchemy import func
+from sqlalchemy.orm import aliased
+from uuid import UUID
 
 router = APIRouter(prefix="/units", tags=["Units"])
 
-@router.get("/", response_model=List[Unit])
-def get_units(
+class UnitWithCount(BaseModel):
+    id: UUID
+    name: str
+    user_count: int
+
+@router.get("/", response_model=List[UnitWithCount])
+def get_units_with_user_count(
     db: Session = Depends(deps.get_db),
-    skip: int = 0,
-    limit: int = 100,
 ):
-    """
-    Get all units.
-    """
-    units = unit.get_multi(db, skip=skip, limit=limit)
-    return units
+    UserUnit = models.user_unit.UserUnit
+    Unit = models.unit.Unit
+
+    results = (
+        db.query(
+            Unit.id,
+            Unit.name,
+            func.count(UserUnit.user_id).label("user_count")
+        )
+        .outerjoin(UserUnit, UserUnit.unit_id == Unit.id)
+        .group_by(Unit.id, Unit.name)
+        .all()
+    )
+    return [
+        {"id": r.id, "name": r.name, "user_count": r.user_count}
+        for r in results
+    ]
 
 @router.post("/", response_model=Unit)
 def create_unit(

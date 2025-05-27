@@ -14,8 +14,8 @@ import {IndividualDetailsPage} from '../pages/Individual/details'
 import {SSH} from '../pages/Utils/Ssh'
 import {Phanloai} from '../pages/Utils/Phanloai'
 import {Units} from '../pages/Units'
-// import {Thongkephanloai} from '../pages/Summary/Summary_individual_unit'
-// import {Thongkectnv} from '../pages/Summary/Summary_social_account_unit'
+import {Thongkephanloai} from '../pages/Summary/Summary_individual_unit'
+import {Thongkectnv} from '../pages/Summary/Summary_social_account_unit'
 // import {Details_donvi} from '../pages/Summary/details-donvi'
 import {ReportWrap} from '../pages/Report'
 import {UIDSearch} from '../pages/Search/uid-search'
@@ -46,8 +46,8 @@ const PrivateRoutes = () => {
         <Route path='individual/details/:id' element={<IndividualDetailsPage />} />
         <Route path='individual' element={<IndividualPage />} />
         <Route path='units' element={<Units />} />
-        {/* <Route path='summary-individual-unit' element={<Thongkephanloai />} />
-        <Route path='summary-social-account-unit' element={<Thongkectnv />} />  */}
+        <Route path='summary-individual-unit' element={<Thongkephanloai />} />
+        <Route path='summary-social-account-unit' element={<Thongkectnv />} /> 
         <Route path='reports/social-account/:id' element={<ReportWrap />} />
         <Route path='reports/individuals/:id' element={<ReportWrap />} />
         <Route path='search-uid' element={<UIDSearch />} />
