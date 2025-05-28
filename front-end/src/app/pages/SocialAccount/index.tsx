@@ -14,7 +14,7 @@ const SocialAccountWrap: FC<{uid: string, socialAccount: any, isLoading: boolean
 
     return (
         <>
-            <Table className="mb-5 mb-xl-8" socialAccount={socialAccount}/>
+            <Table className="mb-5 mb-xl-8" socialAccount={socialAccount} typeId={uid}/>
         </>
     )
 }

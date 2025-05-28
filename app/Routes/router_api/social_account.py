@@ -200,6 +200,36 @@ async def get_social_accounts_by_type(
         "data": [get_social_account_with_relations(account, db) for account in social_accounts]
     }
 
+@router.get("/search/{type_id}/{uid}", response_model=Dict[str, Any])
+async def search_social_accounts_by_uid_and_type(
+    *,
+    db: Session = Depends(deps.get_db),
+    type_id: int,
+    uid: str,
+    current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    """
+    Search social accounts by UID and type ID.
+    Returns accounts where UID contains the search string.
+    """
+    # Get all accounts of the specified type
+    accounts = social_account.get_all_by_type_id(db=db, type_id=type_id)
+    
+    # Filter accounts where UID contains the search string
+    filtered_accounts = [
+        account for account in accounts
+        if uid.lower() in account.uid.lower()
+    ]
+    
+    # Get account type name
+    account_type = db.query(AccountType).filter(AccountType.id == type_id).first()
+    account_type_name = account_type.name if account_type else ""
+    
+    return {
+        "account_type_name": account_type_name,
+        "data": [get_social_account_with_relations(account, db) for account in filtered_accounts]
+    }
+
 @router.get("/status/{status_id}", response_model=List[SocialAccount])
 async def get_social_accounts_by_status(
     *,

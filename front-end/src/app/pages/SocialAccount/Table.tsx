@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, FC } from 'react'
+import React, { useState, FC, useEffect } from 'react'
 import { KTSVG, toAbsoluteUrl } from '../../../_metronic/helpers'
 import { CreateAppModal } from './CreateAppModal'
 import { useQuery } from 'react-query'
@@ -15,6 +15,7 @@ const URL = process.env.REACT_APP_API_URL
 interface Props {
   className: string
   socialAccount?: SocialAccountListResponse
+  typeId: string
 }
 
 const exampleData = {
@@ -39,7 +40,7 @@ const exampleData = {
   }
 }
 
-export const Table: FC<Props> = ({ className, socialAccount }) => {
+export const Table: FC<Props> = ({ className, socialAccount, typeId }) => {
   const PUBLIC_URL = process.env.PUBLIC_URL
   const [showCreateAppModal, setShowCreateAppModal] = useState<boolean>(false)
   const [showModalGroup, setShowModalGroup] = useState<boolean>(false)
@@ -50,12 +51,14 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
   const navigate = useNavigate()
   const [ifacebookupdate, setIfacebookupdate] = useState<SocialAccountResponse>(exampleData)
   const [loading, setloading] = useState<boolean>(false)
+  const [tableData, setTableData] = useState<SocialAccountResponse[]>([])
+  const [accountTypeName, setAccountTypeName] = useState<string>('')
 
+  // Fetch data by type ID
   const { isLoading, data, error } = useQuery({
-    queryKey: ['facebook', loading],
+    queryKey: ['social-accounts', typeId],
     queryFn: async () => {
-      setloading(false)
-      const response = await axios.get(`${URL}/social-accounts`)
+      const response = await axios.get(`${URL}/social-accounts/type/${typeId}`)
       return response.data
     },
     onError: (error: any) => {
@@ -64,6 +67,36 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
       }
     }
   })
+
+  useEffect(() => {
+    if (data) {
+      setTableData(data.data || [])
+      setAccountTypeName(data.account_type_name || '')
+    }
+  }, [data])
+
+  const handleSearch = async () => {
+    if (!searchValue.trim()) return
+
+    try {
+      setloading(true)
+      const response = await axios.get(`${URL}/social-accounts/search/${typeId}/${searchValue.trim()}`)
+      setTableData(response.data.data || [])
+      setAccountTypeName(response.data.account_type_name || '')
+    } catch (error) {
+      console.error('Error searching accounts:', error)
+      toast.error('Có lỗi xảy ra khi tìm kiếm tài khoản')
+    } finally {
+      setloading(false)
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
   if (isLoading) {
     return (
       <div className='d-flex justify-content-center align-items-center' style={{minHeight: '400px'}}>
@@ -73,33 +106,22 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
       </div>
     )
   }
+
   if (error) {
     console.log(error)
     window.location.reload()
-  }
-
-  const handleSearch = () => {
-    setloading(true)
-    // Thực hiện tìm kiếm ở đây
-    console.log('Searching for:', searchValue)
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
   }
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
-        <div className='card-toolbar d-flex justify-content-between w-100'>
-          {/* Phần input search căn trái */}
+
+        <div className='card-toolbar'>
           <div className='d-flex align-items-center position-relative'>
             <KTSVG
               path='/media/icons/duotune/general/gen021.svg'
-              className='svg-icon-3 position-absolute ms-4'
+              className='svg-icon-1 position-absolute ms-6'
             />
             <input
               type='text'
@@ -109,37 +131,17 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-            <button
-              className='btn btn-icon btn-light-primary btn-active-light-primary ms-2'
-              onClick={handleSearch}
-            >
-              <KTSVG path='/media/icons/duotune/general/gen021.svg' className='svg-icon-2' />
-            </button>
           </div>
-
-          {/* Phần 2 button căn phải */}
-          <div className='d-flex'>
-            <a
-              href='#'
-              className='btn btn-sm btn-light-primary me-3'
-              onClick={() => {
-                setShowCreateAppModal(true)
-              }}
-            >
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Tạo tài khoản Mạng xã hội
-            </a>
-            <a
-              href='#'
-              className='btn btn-sm btn-light-primary'
-              onClick={() => {
-                setShowModalMLH(true)
-              }}
-            >
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Tạo mối liên hệ
-            </a>
-          </div>
+          <button
+            type='button'
+            className='btn btn-sm btn-light-primary ms-3'
+            onClick={() => {
+              setShowCreateAppModal(true)
+            }}
+          >
+            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+            Thêm mới tài khoản
+          </button>
         </div>
       </div>
       {/* end::Header */}
@@ -154,7 +156,6 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
               <tr className='fw-bold text-muted'>
                 <th className='min-w-50px text-center'>STT</th>
                 <th className='ps-4 min-w-250px rounded-start text-center'>TÊN</th>
-                {/* <th className='min-w-150px'>CẬP NHẬT</th> */}
                 <th className='min-w-100px text-center'>TRẠNG THÁI</th>
                 <th className='min-w-100px text-center'>SĐT</th>
                 <th className='min-w-100px text-center'>HOẠT ĐỘNG</th>
@@ -166,125 +167,111 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {socialAccount?.data &&
-                socialAccount.data.map((el: SocialAccountResponse, index: number) => (
-                  <tr key={index} className='fw-bold fs-6 text-gray-800 border-bottom border-gray-200'>
-                    <td className='text-center align-middle'>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        {index + 1}
-                      </span>
-                    </td>
-                    <td className='align-middle'>
-                      <div className='d-flex align-items-center'>
-                        <div className='symbol symbol-50px me-5'>
-                          <img src={toAbsoluteUrl('/media/facebook.png')} className='' alt='' />
-                        </div>
-                        <div className='d-flex justify-content-start flex-column'>
-                          <span className='text-dark fw-bold text-hover-primary mb-1 fs-6'>
-                            {el.name.toUpperCase()}
-                          </span>
-                          <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                            {`UID: ${el.uid}`}
-                          </span>
-                        </div>
+              {tableData.map((el: SocialAccountResponse, index: number) => (
+                <tr key={index} className='fw-bold fs-6 text-gray-800 border-bottom border-gray-200'>
+                  <td className='text-center align-middle'>
+                    <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                      {index + 1}
+                    </span>
+                  </td>
+                  <td className='align-middle'>
+                    <div className='d-flex align-items-center'>
+                      <div className='symbol symbol-50px me-5'>
+                        <img src={toAbsoluteUrl('/media/facebook.png')} className='' alt='' />
                       </div>
-                    </td>
-                    <td className='text-center align-middle'>
+                      <div className='d-flex justify-content-start flex-column'>
+                        <span className='text-dark fw-bold text-hover-primary mb-1 fs-6'>
+                          {el.name.toUpperCase()}
+                        </span>
+                        <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                          {`UID: ${el.uid}`}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className='text-center align-middle'>
+                    <span className='badge badge-primary fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                      {el.status_name?.toUpperCase()}
+                    </span>
+                  </td>
+                  <td className='text-center align-middle'>
+                    <span className='badge badge-primary fs-7 fw-semibold' style={{ display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} >
+                      {el.phone_number === '0' ? 'Chưa có' : el.phone_number}
+                    </span>
+                  </td>
+                  <td className='align-middle'>
+                    {el.is_active ? (
                       <span className='badge badge-primary fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                        {el.status_name?.toUpperCase()}
+                        HOẠT ĐỘNG
                       </span>
-                    </td>
-                    <td className='text-center align-middle'>
-                      <span className='badge badge-primary fs-7 fw-semibold' style={{ display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} >
-                        {el.phone_number === '0' ? 'Chưa có' : el.phone_number}
+                    ) : (
+                      <span className='badge badge-warning fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                        KHÔNG HOẠT ĐỘNG
                       </span>
-                    </td>
-                    <td className='align-middle'>
-                      {el.is_active ? (
-                        <span className='badge badge-primary fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          HOẠT ĐỘNG
-                        </span>
-                      ) : (
-                        <span className='badge badge-warning fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          KHÔNG HOẠT ĐỘNG
-                        </span>
-                      )}
-                    </td>
-                    <td className='align-middle'> 
-                      {el.unit?.name ? (
-                        <span className='badge badge-primary fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          {el.unit?.name}
-                        </span>
-                      ) : (
-                        <span className='badge badge-danger fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          KHÔNG
-                        </span>
-                      )}
-                    </td>
-                    <td className='text-center align-middle'>
-                      {el.task?.name ? (
-                        <span className='badge badge-success fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          {el.task?.name}
-                        </span>
-                      ) : (
-                        <span className='badge badge-danger fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                          CHƯA PHÂN CÔNG
-                        </span>
-                      )}
-                    </td>
-                    <td className='text-center align-middle'>
-                      <span
-                        className='btn btn-bg-light btn-secondary btn-active-color-primary btn-sm px-4 me-1'
-                        onClick={() => {
-                          setIfacebook(el)
-                          setShowModalGroup(true)
-                        }}
-                      >
-                        Hiện thị
+                    )}
+                  </td>
+                  <td className='align-middle'> 
+                    {el.unit?.name ? (
+                      <span className='badge badge-primary fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                        {el.unit?.name}
                       </span>
-                      <a
-                        href='#'
-                        className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'
-                        onClick={() => {
-                          setIfacebookupdate(el)
-                          setShowModalUpdate(true)
-                        }}
-                      >
-                        <KTSVG path='/media/icons/duotune/art/art005.svg' className='svg-icon-3' />
-                      </a>
-                      <a
-                        href='#'
-                        className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm'
-                        onClick={() => {
-                          axios
-                            .delete(`${URL}/social-accounts/${el.uid}`)
-                            .then((res) => {
-                              if (res.status === 200) {
-                                toast.success('Xóa thành công', {
-                                  position: 'bottom-right',
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: 'light',
-                                })
-                              }
-                              if (res.status === 400) {
-                                toast.warning('Xóa không thành công', {
-                                  position: 'bottom-right',
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: 'light',
-                                })
-                              }
-                            })
-                            .catch((e) => {
+                    ) : (
+                      <span className='badge badge-danger fs-7 fw-semibold' style={{width: '80px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                        KHÔNG
+                      </span>
+                    )}
+                  </td>
+                  <td className='text-center align-middle'>
+                    {el.task?.name ? (
+                      <span className='badge badge-success fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                        {el.task?.name}
+                      </span>
+                    ) : (
+                      <span className='badge badge-danger fs-7 fw-semibold' style={{width: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                        CHƯA PHÂN CÔNG
+                      </span>
+                    )}
+                  </td>
+                  <td className='text-center align-middle'>
+                    <span
+                      className='btn btn-bg-light btn-secondary btn-active-color-primary btn-sm px-4 me-1'
+                      onClick={() => {
+                        setIfacebook(el)
+                        setShowModalGroup(true)
+                      }}
+                    >
+                      Hiện thị
+                    </span>
+                    <a
+                      href='#'
+                      className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm me-1'
+                      onClick={() => {
+                        setIfacebookupdate(el)
+                        setShowModalUpdate(true)
+                      }}
+                    >
+                      <KTSVG path='/media/icons/duotune/art/art005.svg' className='svg-icon-3' />
+                    </a>
+                    <a
+                      href='#'
+                      className='btn btn-icon btn-bg-light btn-secondary btn-active-color-primary btn-sm'
+                      onClick={() => {
+                        axios
+                          .delete(`${URL}/social-accounts/${el.uid}`)
+                          .then((res) => {
+                            if (res.status === 200) {
+                              toast.success('Xóa thành công', {
+                                position: 'bottom-right',
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: 'light',
+                              })
+                            }
+                            if (res.status === 400) {
                               toast.warning('Xóa không thành công', {
                                 position: 'bottom-right',
                                 autoClose: 5000,
@@ -295,17 +282,30 @@ export const Table: FC<Props> = ({ className, socialAccount }) => {
                                 progress: undefined,
                                 theme: 'light',
                               })
+                            }
+                          })
+                          .catch((e) => {
+                            toast.warning('Xóa không thành công', {
+                              position: 'bottom-right',
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: 'light',
                             })
-                        }}
-                      >
-                        <KTSVG
-                          path='/media/icons/duotune/general/gen027.svg'
-                          className='svg-icon-3'
-                        />
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                          })
+                      }}
+                    >
+                      <KTSVG
+                        path='/media/icons/duotune/general/gen027.svg'
+                        className='svg-icon-3'
+                      />
+                    </a>
+                  </td>
+                </tr>
+              ))}
             </tbody>
             {/* end::Table body */}
           </table>
