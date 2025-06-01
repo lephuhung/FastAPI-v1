@@ -1,73 +1,50 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import {useState, useEffect} from 'react'
-import {createPortal} from 'react-dom'
-import {Modal} from 'react-bootstrap'
-import {KTSVG} from '../../../_metronic/helpers'
+import {FC, useEffect, useState} from 'react'
+import {PageTitle} from '../../../_metronic/layout/core'
+import {IndividualTable} from './Table'
+import Flow from '../Flow'
+import {individual} from './individual'
+import {report} from './individual'
+import {SocialAccountResponse} from '../SocialAccount/SocialAccount'
+import { useParams } from 'react-router-dom'
 import Avatar from 'react-avatar'
-import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
-import {account_type} from '../SocialAccount/SocialAccount'
-import {Report} from './individual'
-import {IndividualResponse} from './Table'
-
-type Props = {
-  show: boolean
-  handleClose: () => void
-  title: string
-  individual: IndividualResponse | undefined
-}
-
-const PUBLIC_URL = process.env.PUBLIC_URL
+import { KTSVG } from '../../../_metronic/helpers'
 const URL = process.env.REACT_APP_API_URL
-const modalsRoot = document.getElementById('root-modals') || document.body
-
-export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, individual}) => {
-  const [data, setData] = useState<any>()
-  const navigate = useNavigate()
-  const [error, setError] = useState('')
-  const typeString = localStorage.getItem('type')
-  const type: account_type[] = typeof typeString === 'string' ? JSON.parse(typeString) : []
+const IndividualDetailPage: FC = () => {
+  const {uid_administrator} = useParams()
+  const [dataIndividual, setDataIndividual] = useState<individual>()
+  const [data, setData] = useState<report[]>()
   useEffect(() => {
-    individual && axios
-      .get(`${URL}/reports/social-account/${individual?.id}`)
-      .then((res) => {
-        if (res.data.STATUS === '200') console.log('details' + res.data)
-        setData(res.data)
-        if (res.data.STATUS === '400') setError('TAI KHOAN DA BI KHOA')
-      })
-      .catch(() => {})
-  }, [individual])
-  function findItemById(id: string) {
-    return type.find((item:account_type) => item.id === id);
-  }
-  return createPortal(
-    <Modal
-      id='kt_modal_create_app'
-      tabIndex={-1}
-      aria-hidden='true'
-      dialogClassName='modal-dialog modal-dialog-centered mw-900px'
-      show={show}
-      onHide={handleClose}
-    >
-      <div className='modal-header'>
-        <h2>{title}</h2>
-        {error === '' ? <span>{error}</span> : <></>}
-        {/* begin::Close */}
-        <div className='btn btn-sm btn-icon btn-active-color-primary' onClick={handleClose}>
-          <KTSVG className='svg-icon-1' path='/media/icons/duotune/arrows/arr061.svg' />
-        </div>
-        {/* end::Close */}
-      </div>
+    axios
+        .get(`${URL}/individuals/${uid_administrator}`)
+        .then((res) => {
+            if (res.data.STATUS === '200') console.log('details' + res.data)
+            setDataIndividual(res.data)
+        })
+        axios
+        .get(`${URL}/reports/social-account/${uid_administrator}`)
+        .then((res) => {
+          if (res.data.STATUS === '200') console.log('details' + res.data)
+          setData(res.data)
+          if (res.data.STATUS === '400') {
+            console.log('TAI KHOAN DA BI KHOA')
+          }
+        })
+        .catch(() => {})
+    
+  }, [uid_administrator])
+  return (
+    <div>
+      <PageTitle breadcrumbs={[]}>Thông tin đối tượng/KOL/Tài khoản</PageTitle>
       <div className='card mb-5 mb-xl-10'>
         <div className='card-body pt-9 pb-0'>
           <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
             <div className='me-7 mb-4'>
               <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative'>
-                {individual?.image_url ? (
-                  <img src={individual.image_url} className='' alt={individual.full_name} />
+                {dataIndividual?.image_url ? (
+                  <img src={dataIndividual.image_url} className='' alt={dataIndividual.full_name} />
                 ) : (
-                  <Avatar name={individual?.full_name} size='100' />
+                  <Avatar name={dataIndividual?.full_name} size='100' />
                 )}
 
                 <div className='position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px'></div>
@@ -79,7 +56,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                 <div className='d-flex flex-column'>
                   <div className='d-flex align-items-center mb-2'>
                     <a href='#' className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'>
-                      {individual?.full_name.toUpperCase()}
+                      {dataIndividual?.full_name.toUpperCase()}
                     </a>
                     <a href='#'>
                       <KTSVG
@@ -98,7 +75,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                         path='/media/icons/duotune/communication/com006.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {individual?.is_kol ? 'KOL' : 'KHÔNG PHẢI KOL'}
+                      {dataIndividual?.is_kol ? 'KOL' : 'KHÔNG PHẢI KOL'}
                     </a>
                     <a
                       href='#'
@@ -108,7 +85,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                         path='/media/icons/duotune/general/gen018.svg'
                         className='svg-icon-4 me-1'
                       />
-                      {individual?.hometown || 'N/A'}
+                      {dataIndividual?.hometown || 'N/A'}
                     </a>
                     <a
                       href='#'
@@ -118,26 +95,12 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                         path='/media/icons/duotune/communication/com011.svg'
                         className='svg-icon-4 me-1'
                       />
-                     {individual?.phone_number}
+                     {dataIndividual?.phone_number}
                     </a>
                   </div>
                 </div>
                   <div className='card-toolbar' style={{marginLeft: 'auto'}}>
-                    <button
-                        type='button'
-                        className='btn btn-sm btn-secondary'
-                        onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/reports/individuals/${individual?.id}`)
-                        }}
-                        style={{marginRight: '10px'}}
-                      >
-                        Mở Trích tin
-                      </button>
-                      <button type='button' className='btn btn-sm btn-secondary' onClick={(e) => {
-                          navigate(`${PUBLIC_URL}/individual/details/${individual?.id}`)
-                        }}>
-                        Mở hồ sơ chi tiết
-                      </button>
+                    
                     </div>
               </div>
 
@@ -151,7 +114,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                           className='svg-icon-3 svg-icon-success me-2'
                         />
                         <div className='fs-2 fw-bolder'>
-                          {individual ? individual.national_id : ''}
+                          {dataIndividual ? dataIndividual.national_id : ''}
                         </div>
                       </div>
 
@@ -178,7 +141,7 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                           path='/media/icons/duotune/arrows/arr066.svg'
                           className='svg-icon-3 svg-icon-success me-2'
                         />
-                        <div className='fs-4 fw-bolder'>{individual?.updated_at.split('T')[0]}</div>
+                        <div className='fs-4 fw-bolder'>{dataIndividual?.updated_at.split('T')[0]}</div>
                       </div>
 
                       <div className='fw-bold fs-6 text-gray-400'>Cập nhật cuối</div>
@@ -186,13 +149,13 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
                   </div>
                 </div>
 
+              </div>
                 <div className='card card-flush card-px-0 card-border'>
                   <div className='card-header'>
                     <h4 className='fs-4 fw-bolder card-title'>THÔNG TIN ĐỐI TƯỢNG</h4>
-                  <span className='card-body py-1 fs-5'>{individual?.additional_info}</span>
+                  <span className='card-body py-1 fs-5'>{dataIndividual?.additional_info}</span>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -213,62 +176,68 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
           {/* end::Table head */}
           {/* begin::Table body */}
           <tbody>
-            {data && data.map((report: Report, index: number) =>
-              <tr key={index}>
-                <td>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7 text-center'>{index+1}</span>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span className='text-dark text-hover-primary mb-1 fs-6'>
-                        {report.user?.name || 'Không xác định'}
-                      </span>
+            {data && data.length > 0 ? (
+              data.map((report: report, index: number) => (
+                <tr key={index}>
+                  <td>
+                    <span className='text-muted fw-semibold text-muted d-block fs-7 text-center'>{index+1}</span>
+                  </td>
+                  <td>
+                    <div className='d-flex align-items-center'>
+                      <div className='d-flex justify-content-start flex-column'>
+                        <span className='text-dark text-hover-primary mb-1 fs-6'>
+                          {report.user?.name || 'Không xác định'}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    {new Date(report.updated_at).toLocaleString()}
-                  </span>
-                </td>
-                <td>
-                  <div className='d-flex flex-column'>
-                    <div className='text-wrap text-break' style={{
-                      maxWidth: '300px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      fontSize: '0.9rem',
-                      lineHeight: '1.4'
-                    }}>
-                      {report.content_note || report.comment || 'Không có nội dung'}
+                  </td>
+                  <td>
+                    <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                      {new Date(report.updated_at).toLocaleString()}
+                    </span>
+                  </td>
+                  <td>
+                    <div className='d-flex flex-column'>
+                      <div className='text-wrap text-break' style={{
+                        maxWidth: '300px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.4'
+                      }}>
+                        {report.content_note || report.comment || 'Không có nội dung'}
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex flex-column'>
-                    <div className='text-wrap text-break' style={{
-                      maxWidth: '300px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      fontSize: '0.9rem',
-                      lineHeight: '1.4'
-                    }}>
-                      {report.action || 'Chưa có nội dung'}
+                  </td>
+                  <td>
+                    <div className='d-flex flex-column'>
+                      <div className='text-wrap text-break' style={{
+                        maxWidth: '300px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.4'
+                      }}>
+                        {report.action || 'Chưa có nội dung'}
+                      </div>
                     </div>
-                  </div>
-                </td>
-                {/* <td>
-                  <span className='badge badge-light-primary fs-7 fw-semibold'>
-                    {report.action || 'Không có hành động'}
-                  </span>
-                </td> */}
+                  </td>
+                  {/* <td>
+                    <span className='badge badge-light-primary fs-7 fw-semibold'>
+                      {report.action || 'Không có hành động'}
+                    </span>
+                  </td> */}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className='text-center'>Không có trích tin</td>
               </tr>
             )}
           </tbody>
@@ -276,7 +245,15 @@ export const ModalViewDoituong: React.FC<Props> = ({show, handleClose, title, in
         </table>
       </div>
       </div>
-    </Modal>,
-    modalsRoot
+      <div className='separator my-10'></div>
+      <span className='badge badge-light mb-8'> SƠ ĐỒ HỘI NHÓM ĐỐI TƯỢNG LIÊN QUAN</span>
+      <Flow uid_administrator={uid_administrator || ''} />
+    </div>
   )
 }
+
+export {IndividualDetailPage}
+
+
+
+

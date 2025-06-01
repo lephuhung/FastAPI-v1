@@ -1,13 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
-from typing import List
+from typing import List, Dict, Any
 from app.schemas.administrator import AdministratorCreate, AdministratorUpdate, Administrator
 from app.crud.crud_administrator import administrator
 from app.Routes import deps
 from sqlalchemy.orm import Session
 from app.models.social_account import SocialAccount
 from app.models.relationship import Relationship
+from app.models.administrator import Administrator as AdministratorModel
+from app.models.individual import Individual
+import uuid
 
 router = APIRouter(prefix="/administrators", tags=["Administrators"])
+
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False
 
 @router.get("/", response_model=List[Administrator])
 async def get_administrators(
@@ -145,4 +155,68 @@ async def delete_administrator(
     if not administrator_obj:
         raise HTTPException(status_code=404, detail="Administrator not found")
     administrator_obj = administrator.remove(db=db, id=id)
-    return administrator_obj 
+    return administrator_obj
+
+@router.get("/flow/{uid_administrator}", response_model=Dict[str, Any])
+async def get_administrator_flow(
+    *,
+    db: Session = Depends(deps.get_db),
+    uid_administrator: str,
+):
+    admins = db.query(AdministratorModel).filter(AdministratorModel.uid_administrator == uid_administrator).all()
+
+    if not admins:
+        return {
+            "nodes": [],
+            "edges": []
+        }
+
+    nodes = set()
+    edges = []
+
+    for admin in admins:
+        nodes.add((admin.uid_administrator, "administrator"))
+        nodes.add((admin.social_account_uid, "social_account"))
+        relationship = db.query(Relationship).filter(Relationship.id == admin.relationship_id).first()
+        edges.append({
+            "from": admin.uid_administrator,
+            "to": admin.social_account_uid,
+            "relationship_id": admin.relationship_id,
+            "relationship_name": relationship.name if relationship else None
+        })
+
+        other_admins = db.query(AdministratorModel).filter(AdministratorModel.uid_administrator == admin.social_account_uid).all()
+        for other in other_admins:
+            nodes.add((other.uid_administrator, "administrator"))
+            nodes.add((other.social_account_uid, "social_account"))
+            relationship = db.query(Relationship).filter(Relationship.id == other.relationship_id).first()
+            edges.append({
+                "from": other.uid_administrator,
+                "to": other.social_account_uid,
+                "relationship_id": other.relationship_id,
+                "relationship_name": relationship.name if relationship else None
+            })
+
+    # Add names to nodes
+    node_list = []
+    for node_id, node_type in nodes:
+        node_info = {"id": node_id, "type": node_type}
+        if node_type == "administrator":
+            if is_valid_uuid(node_id):
+                individual_obj = db.query(Individual).filter(Individual.id == node_id).first()
+                if individual_obj and getattr(individual_obj, "full_name", None):
+                    node_info["name"] = individual_obj.full_name
+                else:
+                    node_info["name"] = node_id
+            else:
+                sa_obj = db.query(SocialAccount).filter(SocialAccount.uid == node_id).first()
+                node_info["name"] = getattr(sa_obj, "name", node_id) if sa_obj else node_id
+        elif node_type == "social_account":
+            sa_obj = db.query(SocialAccount).filter(SocialAccount.uid == node_id).first()
+            node_info["name"] = getattr(sa_obj, "name", None) if sa_obj else None
+        node_list.append(node_info)
+
+    return {
+        "nodes": node_list,
+        "edges": edges
+    } 

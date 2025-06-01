@@ -56,9 +56,9 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
       <div className='modal-body py-lg-10 px-lg-10'>
         <Formik
           initialValues={{
-            doituong_id: '',
-            uid: '',
-            moiquanhe_id: 0,
+            uid_administrator: '',
+            relationship_id: 0,
+            social_account_uid: ''
           }}
           onSubmit={(values: any) => {
             const token = localStorage.getItem('token')
@@ -67,7 +67,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
             }
             
             axios
-              .post(`${URL}/individual-social-accounts`, values, { headers })
+              .post(`${URL}/administrators`, values, { headers })
               .then((res) => {
                 if (res.status === 200) {
                   handleLoading()
@@ -126,7 +126,7 @@ const CreateModelMLH = ({show, handleClose, handleLoading, title}: Props) => {
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{marginRight: '30px'}}>
                   <label className='form-label'>ĐỐI TƯỢNG</label>
-                  <MySelect label='Job Type' name='individual_id' width={250}>
+                  <MySelect label='Job Type' name='uid_administrator' width={250}>
                     <option value=''>Lựa chọn đối tượng</option>
                     {datadoituong.map((data: individualResponse, index: number) => {
                       return (

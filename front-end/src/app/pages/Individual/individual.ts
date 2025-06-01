@@ -101,3 +101,17 @@ export interface ResponseSocialAccounts {
   uid: string
   name: string
 }
+export interface report {
+  id: number
+  social_account_uid: string
+  content_note: string
+  comment: string
+  action: string
+  related_social_account_uid: string
+  created_at: string;
+  updated_at: string;
+  user: {
+      id: string
+      name: string
+  } | null
+}

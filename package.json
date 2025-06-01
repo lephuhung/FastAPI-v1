@@ -8,6 +8,7 @@
     "@types/react-router-dom": "^5.3.3"
   },
   "dependencies": {
+    "@xyflow/react": "^12.6.4",
     "axios": "^1.9.0",
     "formik": "^2.4.6",
     "react-avatar": "^5.0.3",

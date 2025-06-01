@@ -142,6 +142,16 @@ export const Table: FC<Props> = ({ className, socialAccount, typeId }) => {
             <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
             Thêm mới tài khoản
           </button>
+          <button
+            type='button'
+            className='btn btn-sm btn-light-primary ms-3'
+            onClick={() => {
+              setShowModalMLH(true)
+            }}
+          >
+            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+            Thêm mối liên hệ
+          </button>
         </div>
       </div>
       {/* end::Header */}

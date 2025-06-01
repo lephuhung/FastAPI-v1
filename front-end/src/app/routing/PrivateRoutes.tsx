@@ -10,7 +10,7 @@ import Search from '../pages/Search-datadoc'
 import SearchPost from '../pages/Search-post'
 import ConfigPage from '../pages/Config'
 import {IndividualPage} from '../pages/Individual'
-import {IndividualDetailsPage} from '../pages/Individual/details'
+import {IndividualDetailPage} from '../pages/Individual/IndividualDetail'
 import {SSH} from '../pages/Utils/Ssh'
 import {Phanloai} from '../pages/Utils/Phanloai'
 import {Units} from '../pages/Units'
@@ -43,7 +43,7 @@ const PrivateRoutes = () => {
         <Route path='social-account/:uid' element={<SocialAccount />} />
         <Route path='search-datadoc' element={<Search />} />
         <Route path='search-post' element={<SearchPost />} />
-        <Route path='individual/details/:id' element={<IndividualDetailsPage />} />
+        <Route path='individual/details/:uid_administrator' element={<IndividualDetailPage />} />
         <Route path='individual' element={<IndividualPage />} />
         <Route path='units' element={<Units />} />
         <Route path='summary-individual-unit' element={<Thongkephanloai />} />
