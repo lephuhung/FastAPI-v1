@@ -11,6 +11,7 @@ from app.Routes import deps
 from sqlalchemy.orm import Session
 from app.crud.crud_report import report as report_crud
 from app.crud.crud_individual_social_account import individual_social_account
+from app.models.individual import Individual as IndividualModel
 
 router = APIRouter(prefix="/individuals", tags=["Individuals"])
 
@@ -35,7 +36,7 @@ def get_individuals(
             task_data = task.get(db=db, id=individual_units[0].task_id)
             
             # Tạo đối tượng Individual với thông tin bổ sung
-            ind_dict = ind.__dict__
+            ind_dict = {c.name: getattr(ind, c.name) for c in ind.__table__.columns}
             if unit_data:
                 ind_dict["unit"] = UnitBase(id=unit_data.id, name=unit_data.name)
             if task_data:
@@ -78,7 +79,7 @@ async def create_individual(
     individual_units = individual_unit.get_by_individual_id(db=db, individual_id=individual_obj.id)
     
     # Tạo đối tượng Individual với thông tin bổ sung
-    ind_dict = individual_obj.__dict__
+    ind_dict = {c.name: getattr(individual_obj, c.name) for c in individual_obj.__table__.columns}
     if individual_units:
         unit_data = unit.get(db=db, id=individual_units[0].unit_id)
         task_data = task.get(db=db, id=individual_units[0].task_id)
@@ -131,6 +132,32 @@ async def update_individual(
             individual_unit.create(db=db, obj_in=admin_data)
     
     return individual_obj
+
+
+@router.get("/search", response_model=List[Individual])
+def search_individual_by_id_number(
+    id_number: str = None,
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    if not id_number:
+        raise HTTPException(status_code=400, detail="id_number query parameter is required.")
+    query = db.query(IndividualModel)
+    individuals = query.filter(
+        (IndividualModel.national_id == id_number) | (IndividualModel.citizen_id == id_number)
+    ).all()
+    result = []
+    for ind in individuals:
+        individual_units = individual_unit.get_by_individual_id(db=db, individual_id=ind.id)
+        ind_dict = {c.name: getattr(ind, c.name) for c in ind.__table__.columns}
+        if individual_units:
+            unit_data = unit.get(db=db, id=individual_units[0].unit_id)
+            task_data = task.get(db=db, id=individual_units[0].task_id)
+            if unit_data:
+                ind_dict["unit"] = UnitBase(id=unit_data.id, name=unit_data.name)
+            if task_data:
+                ind_dict["task"] = TaskBase(id=task_data.id, name=task_data.name)
+        result.append(Individual(**ind_dict))
+    return result
 
 
 @router.get("/{id}", response_model=Individual)
@@ -206,4 +233,5 @@ async def get_reports_by_individual(
                     continue
         return result
     except Exception as e:
-        return [] 
+        return []
+

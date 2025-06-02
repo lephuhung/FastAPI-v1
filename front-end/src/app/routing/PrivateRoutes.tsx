@@ -23,6 +23,7 @@ import {TrichTinSearch} from '../pages/Search/trichtin-search'
 import {DoituongSearch} from '../pages/Search/doituong-search'
 import {SocialAccount} from '../pages/SocialAccount'
 import RoleBasePermissionPage from '../pages/RoleBasePermission'
+import { SocialAccountDetailPage } from '../pages/SocialAccount/SocialAccountDetail'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -44,6 +45,7 @@ const PrivateRoutes = () => {
         <Route path='search-datadoc' element={<Search />} />
         <Route path='search-post' element={<SearchPost />} />
         <Route path='individual/details/:uid_administrator' element={<IndividualDetailPage />} />
+        <Route path='social-accounts/details/:uid_administrator' element={<SocialAccountDetailPage />} />
         <Route path='individual' element={<IndividualPage />} />
         <Route path='units' element={<Units />} />
         <Route path='summary-individual-unit' element={<Thongkephanloai />} />

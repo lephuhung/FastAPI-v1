@@ -157,7 +157,9 @@ const ModalViewItem = ({ show, handleClose, title, item }: Props) => {
                       >
                         Mở Trích tin
                       </button>
-                      <button type='button' className='btn btn-sm btn-secondary'>
+                      <button type='button' className='btn btn-sm btn-secondary' onClick={(e) => {
+                        navigate(`${PUBLIC_URL}/social-accounts/details/${item?.uid}`)
+                      }}>
                         Mở hồ sơ chi tiết
                       </button>
                     </div>

@@ -251,7 +251,7 @@ async def get_social_account(
     current_user=Security(deps.get_current_active_user, scopes=[]),
 ):
     """
-    Get social account by UID with unit and task information.
+    Get social account by UID with unit and task information (same structure as list route).
     """
     social_account_obj = social_account.get_by_uid(db=db, uid=uid)
     if not social_account_obj:
