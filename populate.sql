@@ -399,6 +399,7 @@ INSERT INTO "characteristics" ("name", "color") VALUES
 
 INSERT INTO "tasks" ("name") VALUES -- Removed description
 ('Theo dõi'),
+('Vai ảo'),
 ('Điều tra cơ bản'),
 ('Quản lý nghiệp vụ'),
 ('Kiểm tra nghiệp vụ'),

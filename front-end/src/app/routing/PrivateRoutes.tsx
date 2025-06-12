@@ -11,8 +11,6 @@ import SearchPost from '../pages/Search-post'
 import ConfigPage from '../pages/Config'
 import {IndividualPage} from '../pages/Individual'
 import {IndividualDetailPage} from '../pages/Individual/IndividualDetail'
-import {SSH} from '../pages/Utils/Ssh'
-import {Phanloai} from '../pages/Utils/Phanloai'
 import {Units} from '../pages/Units'
 import {Thongkephanloai} from '../pages/Summary/Summary_individual_unit'
 import {Thongkectnv} from '../pages/Summary/Summary_social_account_unit'
@@ -37,8 +35,6 @@ const PrivateRoutes = () => {
       <Route element={<MasterLayout />}>
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
-        <Route path='ssh' element={<SSH />} />
-        <Route path='phanloai' element={<Phanloai />} />
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='users' element={<Users />} />
         <Route path='social-account/:uid' element={<SocialAccount />} />

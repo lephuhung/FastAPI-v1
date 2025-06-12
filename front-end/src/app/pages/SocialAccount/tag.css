@@ -1,0 +1,80 @@
+html {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+      sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  }
+  
+  .rti--container {
+    max-width: 300px;
+  }
+  .react-tags {
+    min-height: 60px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  
+  .react-tags__selected {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .react-tags__tag {
+    background: #29a6f6;
+    color: #fff;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 15px;
+    margin: 0 4px 8px 0;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  .react-tags__remove {
+    color: #fff;
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.2s;
+  }
+  
+  .react-tags__remove:hover {
+    color: #ff5252;
+  }
+  
+  .react-tags__input {
+    border: none;
+    outline: none;
+    font-size: 15px;
+    margin: 4px 0;
+    min-width: 120px;
+    padding: 4px;
+  }
+  
+  .react-tags__suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 10;
+    margin-top: 2px;
+    width: 250px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  
+  .react-tags__suggestion {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .react-tags__suggestion--active {
+    background: #29a6f6;
+    color: #fff;
+  }

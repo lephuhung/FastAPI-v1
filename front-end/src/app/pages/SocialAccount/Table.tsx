@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, FC, useEffect } from 'react'
 import { KTSVG, toAbsoluteUrl } from '../../../_metronic/helpers'
-import { CreateAppModal } from './CreateAppModal'
+import { CreateSocialAccountModal } from './CreateSocialAccountModal'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import { UpdateModal } from './UpdateAppModal'
@@ -324,7 +324,7 @@ export const Table: FC<Props> = ({ className, socialAccount, typeId }) => {
         {/* end::Table container */}
       </div>
       {/* begin::Body */}
-      <CreateAppModal
+      <CreateSocialAccountModal
         show={showCreateAppModal}
         handleClose={() => setShowCreateAppModal(false)}
         handleLoading={() => setloading(true)}

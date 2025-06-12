@@ -96,3 +96,10 @@ export interface relationship extends unit{
 export interface characteristics extends unit{
 
 }
+export interface tag {
+    id: number,
+    name: string,
+    color: string,
+    created_at: string,
+    updated_at: string
+}

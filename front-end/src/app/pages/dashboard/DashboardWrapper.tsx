@@ -193,6 +193,9 @@ const DashboardWrapper: FC = () => {
     axios.get(`${URL}/statuses`).then((response:any) => {
       localStorage.setItem('statuses', JSON.stringify(response.data))
     })
+    axios.get(`${URL}/tags`).then((response:any) => {
+      localStorage.setItem('tags', JSON.stringify(response.data))
+    })
   }, [])
   return (
     <>

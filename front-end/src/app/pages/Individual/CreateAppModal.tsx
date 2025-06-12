@@ -364,7 +364,7 @@ const StyledErrorMessage = styled.div`
   }
 `
 const ImagUploder: React.FC<ImageuploadProps> = ({ name, ...props }) => {
-  const [field, meta, helpers] = useField(name)
+  const [field, meta, helpers] = useField({ name, ...props })
   const { value } = meta
   const { setValue } = helpers
   return (
@@ -414,7 +414,7 @@ const MySelect: React.FC<MySelectProps> = ({ label, width, ...props }) => {
   )
 }
 const MyCheckbox: React.FC<MyCheckboxProps> = ({ children, setKOL, KOL, name, ...props }) => {
-  const [field, meta, helpers] = useField(props as any)
+  const [field, meta, helpers] = useField({ name, ...props })
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked; // Get the new value of the checkbox
     helpers.setValue(newValue); // Update the formik field value
