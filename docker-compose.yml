@@ -160,6 +160,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true 
       - NODE_ENV=development
+      - REACT_APP_MEILI_HOST=http://localhost:7700
+      - REACT_APP_MEILI_KEY=TODO_SECURE_MASTER_KEY
     volumes:
       - ./front-end:/app
       - /app/node_modules

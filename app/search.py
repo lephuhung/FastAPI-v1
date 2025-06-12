@@ -36,8 +36,8 @@ def setup_meilisearch_indexes():
     try:
         # Index Individuals
      
-        index_individuals = client.index(INDEX_INDIVIDUALS)
-        index_individuals.update_settings({
+        client.create_index(INDEX_INDIVIDUALS, {'primaryKey': 'id'})
+        client.index(INDEX_INDIVIDUALS).update_settings({
             'searchableAttributes': ['full_name', 'national_id', 'citizen_id', 'additional_info', 'phone_number', 'hometown'],
             'filterableAttributes': ['is_kol', 'created_at', 'updated_at'],
             'sortableAttributes': ['created_at', 'updated_at', 'full_name']
@@ -45,8 +45,8 @@ def setup_meilisearch_indexes():
         logger.info(f"Index '{INDEX_INDIVIDUALS}' setup complete.")
 
         # Index Social Accounts
-        index_social_accounts = client.index(INDEX_SOCIAL_ACCOUNTS)
-        index_social_accounts.update_settings({
+        client.create_index(INDEX_SOCIAL_ACCOUNTS, {'primaryKey': 'id'})
+        client.index(INDEX_SOCIAL_ACCOUNTS).update_settings({
             'searchableAttributes': ['uid', 'name', 'phone_number', 'note'],
             'filterableAttributes': ['status_id', 'type_id', 'is_active', 'created_at', 'updated_at'],
             'sortableAttributes': ['created_at', 'updated_at', 'reaction_count', 'name']
@@ -54,8 +54,8 @@ def setup_meilisearch_indexes():
         logger.info(f"Index '{INDEX_SOCIAL_ACCOUNTS}' setup complete.")
 
         # Index Reports
-        index_reports = client.index(INDEX_REPORTS)
-        index_reports.update_settings({
+        client.create_index(INDEX_REPORTS, {'primaryKey': 'id'})
+        client.index(INDEX_REPORTS).update_settings({
             'searchableAttributes': ['social_account_uid', 'content_note', 'comment', 'action', 'related_social_account_uid', 'username'],
             'filterableAttributes': ['social_account_uid', 'user_id', 'username', 'related_social_account_uid', 'created_at', 'updated_at'],
             'sortableAttributes': ['created_at', 'updated_at']
@@ -133,7 +133,7 @@ def index_all_data():
 
         individual_docs = [convert_to_searchable_dict(ind, db) for ind in individuals if ind]
         if individual_docs:
-            task = client.index(INDEX_INDIVIDUALS).add_documents(individual_docs)
+            task = client.index(INDEX_INDIVIDUALS).add_documents(individual_docs, primary_key='id')
             logger.info(f"Sent {len(individual_docs)} individuals to Meilisearch. Task: {task.task_uid if hasattr(task, 'task_uid') else task['uid']}")
         else:
             logger.info("No individuals found to index.")
@@ -142,7 +142,7 @@ def index_all_data():
         social_accounts = db.query(SocialAccount).all()
         social_account_docs = [convert_to_searchable_dict(acc, db) for acc in social_accounts if acc]
         if social_account_docs:
-            task = client.index(INDEX_SOCIAL_ACCOUNTS).add_documents(social_account_docs)
+            task = client.index(INDEX_SOCIAL_ACCOUNTS).add_documents(social_account_docs, primary_key='id')
             logger.info(f"Sent {len(social_account_docs)} social accounts to Meilisearch. Task: {task.task_uid if hasattr(task, 'task_uid') else task['uid']}")
         else:
             logger.info("No social accounts found to index.")
@@ -151,7 +151,7 @@ def index_all_data():
         reports = db.query(Report).all()
         report_docs = [convert_to_searchable_dict(rep, db) for rep in reports if rep]
         if report_docs:
-            task = client.index(INDEX_REPORTS).add_documents(report_docs)
+            task = client.index(INDEX_REPORTS).add_documents(report_docs, primary_key='id')
             logger.info(f"Sent {len(report_docs)} reports to Meilisearch. Task: {task.task_uid if hasattr(task, 'task_uid') else task['uid']}")
         else:
             logger.info("No reports found to index.")
@@ -212,7 +212,7 @@ def add_or_update_document(index_name: str, obj: Any, db: Session):
             logger.error(f"Document missing 'id' field for Meilisearch primary key in index {index_name}: {document}")
             return
 
-        task = client.index(index_name).add_documents([document])
+        task = client.index(index_name).add_documents([document], primary_key='id')
         logger.info(f"Add/Update task for document id={primary_key_value} in {index_name}. Task: {task.task_uid if hasattr(task, 'task_uid') else task['uid']}")
     except Exception as e:
         logger.error(f"Error adding/updating document id={document.get('id', 'UNKNOWN')} in {index_name}: {e}", exc_info=True)

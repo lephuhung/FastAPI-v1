@@ -166,7 +166,7 @@ def delete_meilisearch_document_task(self, model_name: str, record_id: any):
         try:
             countdown = 2 ** self.request.retries
             logger.info(f"Retrying in {countdown} seconds...")
-            raise ConnectionError(f"Meilisearch unavailable, retrying delete task for {model_name} ID {record_id}")
+            raise self.retry(countdown=countdown, exc=ConnectionError("Meilisearch unavailable"))
         except self.MaxRetriesExceededError:
             logger.error(f"Max retries exceeded for delete task {model_name} ID {record_id}. Giving up.")
             return
