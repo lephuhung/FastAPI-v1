@@ -13,7 +13,7 @@ from app.models.user import User
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MEILI_HOST = os.getenv("MEILI_HOST", "http://localhost:7700")
+MEILI_HOST = os.getenv("MEILI_HOST", "http://meilisearch:7700")
 MEILI_MASTER_KEY = os.getenv("MEILI_MASTER_KEY", "TODO_SECURE_MASTER_KEY")
 
 try:

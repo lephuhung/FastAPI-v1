@@ -12,6 +12,7 @@ class SocialAccountBase(BaseModel):
     type_id: Optional[int] = None
     note: Optional[str] = None
     is_active: Optional[bool] = True
+    tags: Optional[List[int]] = None
 
 
 class SocialAccountCreate(SocialAccountBase):

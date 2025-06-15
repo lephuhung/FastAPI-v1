@@ -11,6 +11,7 @@ from app.models.task import Task
 from app.models.account_type import AccountType
 from app.models.social_account import SocialAccount as SocialAccountModel
 from app.models.status import Status
+from app.models.model_has_tags import model_has_tags
 
 router = APIRouter(prefix="/social-accounts", tags=["Social Accounts"])
 
@@ -77,6 +78,11 @@ async def create_social_account(
     Create new social account.
     """
     social_account_obj = social_account.create(db=db, obj_in=social_account_in)
+    # Save tags relations if tags are provided
+    if getattr(social_account_in, 'tags', None):
+        for tag_id in social_account_in.tags:
+            db.add(model_has_tags(model_id=social_account_obj.uid, tags_id=tag_id))
+        db.commit()
     return social_account_obj
 
 @router.put("/{uid}", response_model=SocialAccount)
@@ -94,6 +100,12 @@ async def update_social_account(
     if not social_account_obj:
         raise HTTPException(status_code=404, detail="Social account not found")
     social_account_obj = social_account.update(db=db, db_obj=social_account_obj, obj_in=social_account_in)
+    # Update tags relations
+    db.query(model_has_tags).filter(model_has_tags.model_id == uid).delete()
+    if getattr(social_account_in, 'tags', None):
+        for tag_id in social_account_in.tags:
+            db.add(model_has_tags(model_id=uid, tags_id=tag_id))
+    db.commit()
     return social_account_obj
 
 @router.get("/admin-accounts", response_model=Dict[str, Any])
@@ -272,4 +284,17 @@ async def delete_social_account(
     if not social_account_obj:
         raise HTTPException(status_code=404, detail="Social account not found")
     social_account_obj = social_account.remove(db=db, id=social_account_obj.id)
-    return social_account_obj 
+    return social_account_obj
+
+@router.get("/{uid}/tags", response_model=List[int])
+async def get_tags_for_social_account(
+    *,
+    db: Session = Depends(deps.get_db),
+    uid: str,
+    # current_user=Security(deps.get_current_active_user, scopes=[]),
+):
+    """
+    Get all tag ids for a given social account uid (model_id).
+    """
+    tag_rows = db.query(model_has_tags).filter(model_has_tags.model_id == uid).all()
+    return [row.tags_id for row in tag_rows] 

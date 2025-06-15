@@ -130,7 +130,7 @@ CREATE TABLE "social_accounts" (
   "uid" varchar(100) NOT NULL,
   "name" varchar(255),
   "reaction_count" int DEFAULT 0,
-  "phone_number" varchar(15) CHECK ("phone_number" ~ '^[0-9]{10,15}$'),
+  "phone_number" varchar(15) CHECK ("phone_number" ~ '^[0-9]{10,15}$') DEFAULT NULL,
   "status_id" int,
   "type_id" int,
   "note" text, 

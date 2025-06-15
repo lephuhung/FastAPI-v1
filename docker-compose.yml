@@ -97,7 +97,7 @@ services:
     networks:
       - elk
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:7700/health"]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://meilisearch:7700/health"]
       interval: 5s
       timeout: 1s
       retries: 10

@@ -15,6 +15,9 @@ class TagCreate(TagBase):
 class TagUpdate(TagBase):
     pass
 
+class TagwithoutTime(TagBase):
+    id: int
+    pass
 
 class TagInDBBase(TagBase):
     id: int

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from typing import List
-from app.schemas.tag import TagCreate, TagUpdate, Tag
+from app.schemas.tag import TagCreate, TagUpdate, Tag, TagwithoutTime
 from app.crud.crud_tag import tag
 from app.Routes import deps
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/tags", tags=["Tags"])
 
-@router.get("/", response_model=List[Tag])
+@router.get("/", response_model=List[TagwithoutTime])
 def get_tags(
     db: Session = Depends(deps.get_db),
     skip: int = 0,

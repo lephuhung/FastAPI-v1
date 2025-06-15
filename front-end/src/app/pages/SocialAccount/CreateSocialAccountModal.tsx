@@ -27,6 +27,8 @@ import {WithContext as ReactTags, SEPARATORS} from 'react-tag-input'
 // import 'react-tag-input/example/reactTags.css'
 // import styled from 'styled-components';
 import './tag.css'
+import React from "react";
+
 type Props = {
   show: boolean
   handleClose: () => void
@@ -41,7 +43,7 @@ const ValidateUid = Yup.object().shape({
     .max(17, 'Quá dài!')
     .required('uid is required')
     .matches(/^\d+$/, 'uid chỉ nhận ký tự số'),
-  reaction_count: Yup.string()
+  reaction_number: Yup.string()
     .required('Số bạn bè cần nhập')
     .matches(/^\d+$/, 'Số lượng bạn bè chỉ nhận ký tự số'),
   phone_number: Yup.string()
@@ -67,45 +69,12 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
   const status: status[] = typeof statusString === 'string' ? JSON.parse(statusString) : []
   const tagsString = localStorage.getItem('tags')
   const tagsdata: tag[] = typeof tagsString === 'string' ? JSON.parse(tagsString) : []
-  const [tags, setTags] = useState<Array<tag>>(tagsdata);
-  const handleDelete = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
 
-  const onTagUpdate = (index: number, newTag: tag) => {
-    const updatedTags = [...tags];
-    updatedTags.splice(index, 1, newTag);
-    setTags(updatedTags);
-  };
 
-  const handleAddition = (tag: tag) => {
-    setTags((prevTags) => {
-      return [...prevTags, tag];
-    });
-  };
-
-  const handleDrag = (tag: tag, currPos: number, newPos: number) => {
-    const newTags = tags.slice();
-
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
-
-    // re-render
-    setTags(newTags);
-  };
-
-  const handleTagClick = (index: number) => {
-    console.log('The tag at index ' + index + ' was clicked');
-  };
-
-  const onClearAll = () => {
-    setTags([]);
-  };
   return createPortal(
     <Modal
       id='kt_modal_create_app'
       tabIndex={-1}
-      aria-hidden='true'
       dialogClassName='modal-dialog modal-dialog-centered mw-900px'
       show={show}
       onHide={handleClose}
@@ -125,7 +94,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
           initialValues={{
             uid: '',
             name: '',
-            phone_number: '0',
+            phone_number: '',
             reaction_number: 0,
             type_id: 0,
             characteristics_id: 0,
@@ -138,6 +107,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
           }}
           validationSchema={ValidateUid}
           onSubmit={(values: SocialAccountModal) => {
+            console.log(values)
             axios
               .post(`${URL}/social-accounts`, values)
               .then((respone) => {
@@ -189,6 +159,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
           }}
         >
           {({errors, touched}) => (
+            console.log("errors", errors),
             <Form>
               <div
                 className='mb-5'
@@ -242,7 +213,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
               </div>
               <div className='mb-5' style={{display: 'flex', flexDirection: 'row'}}>
                 <div className='mr-5' style={{marginRight: '10px'}}>
-                  <label className='form-label'>SỐ LƯỢNG BẠN B/THEO DÕI</label>
+                  <label className='form-label'>SỐ LƯỢNG BẠN BÈ/THEO DÕI</label>
                   <Field
                     type='text'
                     name='reaction_number'
@@ -257,7 +228,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
                   <label className='form-label'>SỐ ĐIỆN THOẠI</label>
                   <Field
                     type='text'
-                    name='SDT'
+                    name='phone_number'
                     className='form-control form-control-white'
                     placeholder='0912345678'
                   />
@@ -283,7 +254,7 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
                 <label className='form-label'>GHI CHÚ</label>
                 <MyTextArea
                   label='Ghi chú'
-                  name='ghichu'
+                  name='note'
                   rows='6'
                   placeholder='Once upon a time there was a princess who lived at the top of a glass hill.'
                 />
@@ -322,26 +293,10 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
                 <div>
                   <Field name="tags">
                     {({ field, form }) => (
-                      <ReactTags
-                        tags={field.value}
-                        suggestions={tagsdata}
-                        delimiters={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
-                        handleDelete={(i:any) => {
-                          const newTags = field.value.filter((tag:any, idx:any) => idx !== i)
-                          form.setFieldValue('tags', newTags)
-                        }}
-                        handleAddition={(tag:any) => {
-                          form.setFieldValue('tags', [...field.value, tag])
-                        }}
-                        handleDrag={(tag:any, currPos:any, newPos:any) => {
-                          const newTags = [...field.value]
-                          newTags.splice(currPos, 1)
-                          newTags.splice(newPos, 0, tag)
-                          form.setFieldValue('tags', newTags)
-                        }}
-                        inputFieldPosition="bottom"
-                        placeholder="Nhập tag và nhấn Enter"
-                        autocomplete
+                      <TagSelector
+                        tagsdata={tagsdata}
+                        value={field.value || []}
+                        onChange={val => form.setFieldValue("tags", val)}
                       />
                     )}
                   </Field>
@@ -363,6 +318,96 @@ const CreateSocialAccountModal = ({show, handleClose, handleLoading, title}: Pro
     modalsRoot
   )
 }
+const TagSelector = ({ tagsdata, value, onChange }: { tagsdata: tag[], value: number[], onChange: (value: number[]) => void }) => {
+  const [input, setInput] = useState("");
+
+  const filtered = tagsdata.filter(
+    tag =>
+      !value.includes(tag.id) &&
+      tag.name.toLowerCase().includes(input.toLowerCase())
+  );
+
+  return (
+    <div style={{ position: "relative" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+        {value.map(id => {
+          const tag = tagsdata.find(t => t.id === id);
+          if (!tag) return null;
+          return (
+            <span
+              key={tag.id}
+              style={{
+                background: tag.color,
+                color: "#fff",
+                borderRadius: 16,
+                padding: "4px 12px",
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              {tag.name}
+              <button
+                type="button"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#fff",
+                  marginLeft: 8,
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                }}
+                onClick={() => onChange(value.filter(tid => tid !== tag.id))}
+              >
+                ×
+              </button>
+            </span>
+          );
+        })}
+      </div>
+      <input
+        type="text"
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onFocus={() => {}}
+        onBlur={() => {}}
+        placeholder="Nhập tag để tìm kiếm..."
+        style={{ minWidth: 180, padding: 6, borderRadius: 8, border: "1px solid #ccc" }}
+      />
+      {input && filtered.length > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            background: "#fff",
+            border: "1px solid #ddd",
+            borderRadius: 8,
+            zIndex: 10,
+            width: "100%",
+            maxHeight: 180,
+            overflowY: "auto",
+            marginTop: 2
+          }}
+        >
+          {filtered.map(tag => (
+            <div
+              key={tag.id}
+              style={{
+                padding: "8px 12px",
+                cursor: "pointer",
+                color: "#333"
+              }}
+              onMouseDown={() => {
+                onChange([...value, tag.id]);
+                setInput("");
+              }}
+            >
+              {tag.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 interface MyTextAreaProps extends FieldAttributes<any> {
   label: string
 }

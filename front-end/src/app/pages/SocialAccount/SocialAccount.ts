@@ -9,6 +9,7 @@ export interface SocialAccountModal {
     characteristics_id: number,
     unit_id: string,
     task_id: number,
+    tags?: number[],
     is_active: Boolean,
 }
 export interface SocialAccount extends SocialAccountModal {
@@ -99,7 +100,5 @@ export interface characteristics extends unit{
 export interface tag {
     id: number,
     name: string,
-    color: string,
-    created_at: string,
-    updated_at: string
+    color: string
 }

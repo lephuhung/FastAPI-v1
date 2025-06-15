@@ -14,7 +14,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // React 18 JSX transform, compatible with Emotion and styled-components
+    // No changes needed for Emotion or React 18
+    // Optional: "skipDefaultLibCheck": true,
   },
   "include": ["src"]
 }

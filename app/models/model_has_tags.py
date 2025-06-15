@@ -1,4 +1,5 @@
 from uuid import uuid4
+from sqlalchemy.sql import func
 
 from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
